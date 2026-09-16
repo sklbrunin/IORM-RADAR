@@ -1,0 +1,157 @@
+{
+  "_embedded": {
+    "incentivadores": [
+      {
+        "nome": "ACDC Factoring Mercantil Ltda",
+        "municipio": "Guarulhos",
+        "UF": "SP",
+        "responsavel": "",
+        "total_doado": 2000,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "96612809000143",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/83a20342f28bb00b23745319d0b5171adc13d89b1850310c2509d9e28687",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/329937a3d5e23d5b0387f8ae80880fa92db1422102a4b332906c5969903e/doacoes"
+        }
+      },
+      {
+        "nome": "TDS Logistica S/A",
+        "municipio": "Santo André",
+        "UF": "SP",
+        "responsavel": "",
+        "total_doado": 63560.46,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "96643473001409",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/84e536fcce9eff0587241043c8c7b7864671413aee44a7a8eb816437f236",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/74fdbd10099d6fcdb15bfa0aa0ae7da8c3e24a8ceb758313b5e9c4df172a/doacoes"
+        }
+      },
+      {
+        "nome": "Editora Toda Lista Brasil Ltda",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": " ",
+        "total_doado": 1000,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "96663364000120",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/9db5299abd5627e6d30db751a3504a71faed980f57c5c9217086c1d8dc37",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/4e59eda6d8514a100347d57dbed974240f64139dd06466475a1e2a15ccbf/doacoes"
+        }
+      },
+      {
+        "nome": "Z500 LOCACAO DE ESTANDES LTDA",
+        "municipio": "Osasco",
+        "UF": "SP",
+        "responsavel": " ",
+        "total_doado": 2903.13,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "96665930000133",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/d252922fa3b86981d1234e27c25d24595913349ce8d6d71c2bbcf8c9f1b1",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/2f4f39b241fd38b3959c7f41463b3c6b762917904971542da056b4cd3236/doacoes"
+        }
+      },
+      {
+        "nome": "Votorantim Cimentos Brasil Ltda",
+        "municipio": "Piracicaba",
+        "UF": "SP",
+        "responsavel": "",
+        "total_doado": 11924925.91,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "96824594000124",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/d71a77f512659e59ffca3955b01000926078bc00d4c9f541ff9b6179c2b6",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/8ca9b7da6f7476754064d8d72be358c04ad995d8ec6bf0c3edda4d345886/doacoes"
+        }
+      },
+      {
+        "nome": "GMC & C COBERTURAS E CENOGRAFIA LTDA - EPP",
+        "municipio": "SAO PAULO",
+        "UF": "SP",
+        "responsavel": " ",
+        "total_doado": 12885,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "97519044000164",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/1147d8cba1070154f362398df3d9826aa094ec108fb58e33f44381ae9558",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/c069e4773502f40fba9c36a1fd075c54d16fa75531c551df1d419bc75004/doacoes"
+        }
+      },
+      {
+        "nome": "SUPERMERCADO CONVEM DE PERDOES LTDA",
+        "municipio": "Bom Jesus dos Perdões",
+        "UF": "SP",
+        "responsavel": " ",
+        "total_doado": 9453.55,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "97536721000152",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/56774d6f44a639149b6264049a6873ecc4c4aaf23c99663cde46e8bc7994",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/1722c3a5fc7ca1984b76c2bd176e2b719e52c638a64dd0a7c1d12081ae10/doacoes"
+        }
+      },
+      {
+        "nome": "POWERTRUCKS - COMERCIO DE CAMINHOES LTDA",
+        "municipio": "Guarulhos",
+        "UF": "SP",
+        "responsavel": "",
+        "total_doado": 13261.99,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "97538376000196",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/0188bc9655425f33d9ab5117e17bbe21df2e7b9181eb39c23bffcf75c037",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/be23802f2e0001d7beeaa874f854cf8a06565ad2b1f87be72cb50d698b60/doacoes"
+        }
+      },
+      {
+        "nome": "Duratex S. A.",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": "Henry Penchas",
+        "total_doado": 7863970.02,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "97837181000147",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/5fa9b5664e231517dc1a2e371ee7afaf02c59f81d84c22fc0ad3067e7067",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/22e34c80e301d7118ea8c97f2a65989aa6d1c37a1336e36ac45ae8a111da/doacoes"
+        }
+      },
+      {
+        "nome": "Satipel Minas Ltda",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": " ",
+        "total_doado": 14000,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "97837181001542",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/25118e66defa7ca6103270c1654e2eb23931ec44da3fdc5a3fa7b1f2c195",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/9c725210aa4aeb9b0506421a432d2767858c6128896c192ac078266683c4/doacoes"
+        }
+      },
+      {
+        "nome": "Rodoviario Schio Ltda.",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": "",
+        "total_doado": 121000,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "98522246000128",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/3b25c32bcd617d5412a3cb23f66a7ebdadb819c177c1812ae728eaf71d02",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/15a4628ffa0c2b172a36d41d69c68a5ea849850bde9bcb4531e6e85c532a/doacoes"
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": "http://api.salic.cultura.gov.br/api/v1/incentivadores",
+    "first": "https://api.salic.cultura.gov.br/api/v1/incentivadores?limit=100&offset=0&UF=SP&tipo_pessoa=juridica",
+    "last": "https://api.salic.cultura.gov.br/api/v1/incentivadores?limit=100&offset=8200&UF=SP&tipo_pessoa=juridica",
+    "prev": "https://api.salic.cultura.gov.br/api/v1/incentivadores?limit=100&offset=8100&UF=SP&tipo_pessoa=juridica"
+  },
+  "count": 11,
+  "total": 8211
+}

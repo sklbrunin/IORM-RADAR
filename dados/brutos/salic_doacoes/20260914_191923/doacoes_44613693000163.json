@@ -1,0 +1,61 @@
+{
+  "_embedded": {
+    "doacoes": [
+      {
+        "PRONAC": "065655",
+        "valor": 1392,
+        "data_recibo": "2006-12-28",
+        "nome_projeto": "Usina da Dança",
+        "cgccpf": "44613693000163",
+        "nome_doador": "COLORADO VEICULOS LIMITADA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/065655",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/ce2eaea8532ec6b885438bffd27099b958bbebb03d81de4db2f110c0d6a5"
+        }
+      },
+      {
+        "PRONAC": "081076",
+        "valor": 4995.26,
+        "data_recibo": "2009-12-28",
+        "nome_projeto": "Usina da Dança 2009/2010",
+        "cgccpf": "44613693000163",
+        "nome_doador": "COLORADO VEICULOS LIMITADA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/081076",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/8e45e2c85f718d3ca5702932cfdbf1261c9ebeb9b6f3f5a9a675a22aebc6"
+        }
+      },
+      {
+        "PRONAC": "098147",
+        "valor": 2600,
+        "data_recibo": "2011-12-27",
+        "nome_projeto": "Museu do Açucar - Piracicaba",
+        "cgccpf": "44613693000163",
+        "nome_doador": "COLORADO VEICULOS LIMITADA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/098147",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/af5922f79981b738a6f2b15b94bbe1903dd6e15d67c18bba96e0564dc0ff"
+        }
+      },
+      {
+        "PRONAC": "248359",
+        "valor": 1000,
+        "data_recibo": "2024-12-30",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2025",
+        "cgccpf": "44613693000163",
+        "nome_doador": "COLORADO VEICULOS LIMITADA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/248359",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/eac3120fb0571b94ff018fab1145ce03a5f442cf0867972a64c407ba3f94"
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": "http://api.salic.cultura.gov.br/api/v1/incentivadores/44613693000163/doacoes",
+    "first": "https://api.salic.cultura.gov.br/api/v1/incentivadores/d794b59813a55248a00b8fe284052b7f9687234b372328/doacoes?limit=100&offset=0",
+    "last": "https://api.salic.cultura.gov.br/api/v1/incentivadores/d794b59813a55248a00b8fe284052b7f9687234b372328/doacoes?limit=100&offset=0"
+  },
+  "count": 4,
+  "total": 1
+}

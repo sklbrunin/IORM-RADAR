@@ -1,0 +1,349 @@
+{
+  "_embedded": {
+    "doacoes": [
+      {
+        "PRONAC": "983104",
+        "valor": 15000,
+        "data_recibo": "1999-12-20",
+        "nome_projeto": "Arte Eurítmica",
+        "cgccpf": "53309845000120",
+        "nome_doador": "Produtos Alimentícios Orlândia S/A Comércio Industrias",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/983104",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/5bd818c5a368ebc35cdf59c57bdc9462bf60ae19d63edc5232900ebe52f0"
+        }
+      },
+      {
+        "PRONAC": "026780",
+        "valor": 20000,
+        "data_recibo": "2003-09-29",
+        "nome_projeto": "Teatro Alfa em Cena",
+        "cgccpf": "53309845000120",
+        "nome_doador": "Produtos Alimentícios Orlândia S/A Comércio Industrias",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/026780",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/11fd13720729372e26e177c04da99782ac288d39fe4a3c525575acb331c2"
+        }
+      },
+      {
+        "PRONAC": "021299",
+        "valor": 20000,
+        "data_recibo": "2003-12-18",
+        "nome_projeto": "Instituto Cultural \"Orensy Rodrigues da Silva\"",
+        "cgccpf": "53309845000120",
+        "nome_doador": "Produtos Alimentícios Orlândia S/A Comércio Industrias",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/021299",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/73d8cbc3e9f59a461676d19e0aa0c02cd40b46a74bfce247340c64694890"
+        }
+      },
+      {
+        "PRONAC": "021299",
+        "valor": 4000,
+        "data_recibo": "2003-12-30",
+        "nome_projeto": "Instituto Cultural \"Orensy Rodrigues da Silva\"",
+        "cgccpf": "53309845000120",
+        "nome_doador": "Produtos Alimentícios Orlândia S/A Comércio Industrias",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/021299",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/ae041155888f9b2eddc7cc83e843fe774116d8f449d8357b279b43d33891"
+        }
+      },
+      {
+        "PRONAC": "153825",
+        "valor": 9000,
+        "data_recibo": "2015-12-17",
+        "nome_projeto": "Plano Anual Cultura Artística 2016",
+        "cgccpf": "53309845000120",
+        "nome_doador": "Produtos Alimentícios Orlândia S/A Comércio Industrias",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/153825",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/e163aae0ccc349fb4f2109499f4ec4f872ad009ff55063944c5f571d097a"
+        }
+      },
+      {
+        "PRONAC": "158632",
+        "valor": 346.69,
+        "data_recibo": "2016-02-04",
+        "nome_projeto": "Projeto Agenda Cultural",
+        "cgccpf": "53309845000120",
+        "nome_doador": "Produtos Alimentícios Orlândia S/A Comércio Industrias",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/158632",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/f8ed8b108b1f9499c3b9f1257be47936c240357c471bbf59df8078e25c61"
+        }
+      },
+      {
+        "PRONAC": "158632",
+        "valor": 214.41,
+        "data_recibo": "2016-04-27",
+        "nome_projeto": "Projeto Agenda Cultural",
+        "cgccpf": "53309845000120",
+        "nome_doador": "Produtos Alimentícios Orlândia S/A Comércio Industrias",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/158632",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/529490b2edade275fc5fc25348c38b3e7a96ee2cc6d54185f8298d73a104"
+        }
+      },
+      {
+        "PRONAC": "158632",
+        "valor": 107.66,
+        "data_recibo": "2016-07-28",
+        "nome_projeto": "Projeto Agenda Cultural",
+        "cgccpf": "53309845000120",
+        "nome_doador": "Produtos Alimentícios Orlândia S/A Comércio Industrias",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/158632",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/1c1f764b710c308d97240057cf5a7d41a54932b950edbadce2f40d0cd60a"
+        }
+      },
+      {
+        "PRONAC": "158632",
+        "valor": 313.88,
+        "data_recibo": "2016-10-27",
+        "nome_projeto": "Projeto Agenda Cultural",
+        "cgccpf": "53309845000120",
+        "nome_doador": "Produtos Alimentícios Orlândia S/A Comércio Industrias",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/158632",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/f7dc26a164d84aab7aaf6072fa9c19cb7bbdcf2e622bf8a268624531499c"
+        }
+      },
+      {
+        "PRONAC": "163926",
+        "valor": 20000,
+        "data_recibo": "2016-12-28",
+        "nome_projeto": "Plano Anual Cultura Artística 2017",
+        "cgccpf": "53309845000120",
+        "nome_doador": "Produtos Alimentícios Orlândia S/A Comércio Industrias",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/163926",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/fdf9cf42527fd1af90ea6546110cedda0ca30052f361201d974fec74a258"
+        }
+      },
+      {
+        "PRONAC": "158632",
+        "valor": 681.2,
+        "data_recibo": "2017-02-02",
+        "nome_projeto": "Projeto Agenda Cultural",
+        "cgccpf": "53309845000120",
+        "nome_doador": "Produtos Alimentícios Orlândia S/A Comércio Industrias",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/158632",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/584f85f522400cc648d73a68fcd3e1f591c27b1f77ac3805204aa5ab517c"
+        }
+      },
+      {
+        "PRONAC": "158632",
+        "valor": 274.7,
+        "data_recibo": "2017-04-20",
+        "nome_projeto": "Projeto Agenda Cultural",
+        "cgccpf": "53309845000120",
+        "nome_doador": "Produtos Alimentícios Orlândia S/A Comércio Industrias",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/158632",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/d982b89131a2b0a179d6e9cfc34ed49100d56ceb26e030de2d35ea3c955b"
+        }
+      },
+      {
+        "PRONAC": "158632",
+        "valor": 474.9,
+        "data_recibo": "2017-07-28",
+        "nome_projeto": "Projeto Agenda Cultural",
+        "cgccpf": "53309845000120",
+        "nome_doador": "Produtos Alimentícios Orlândia S/A Comércio Industrias",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/158632",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/a830453b687a0ebf902485303f126b5f1c3abb34af838ebc9e3afad4b457"
+        }
+      },
+      {
+        "PRONAC": "158632",
+        "valor": 202.4,
+        "data_recibo": "2017-10-31",
+        "nome_projeto": "Projeto Agenda Cultural",
+        "cgccpf": "53309845000120",
+        "nome_doador": "Produtos Alimentícios Orlândia S/A Comércio Industrias",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/158632",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/66973731d3d2b6ac58de4b12b752604ef887a4e62f629705d1a0c0659ef6"
+        }
+      },
+      {
+        "PRONAC": "177301",
+        "valor": 40000,
+        "data_recibo": "2017-12-27",
+        "nome_projeto": "Cultura Artística 2018",
+        "cgccpf": "53309845000120",
+        "nome_doador": "Produtos Alimentícios Orlândia S/A Comércio Industrias",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/177301",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/40284b47643f538696ba9ddbbc262eb4b5b2000848ba735671b73bf05bd4"
+        }
+      },
+      {
+        "PRONAC": "176531",
+        "valor": 8811.39,
+        "data_recibo": "2018-01-18",
+        "nome_projeto": "Agenda Cultural Guaira",
+        "cgccpf": "53309845000120",
+        "nome_doador": "Produtos Alimentícios Orlândia S/A Comércio Industrias",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/176531",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/b2e80de4dae3d2a1008d2eb958fced53ab18688c798338f42bd18d6e9e16"
+        }
+      },
+      {
+        "PRONAC": "176531",
+        "valor": 635.41,
+        "data_recibo": "2018-04-27",
+        "nome_projeto": "Agenda Cultural Guaira",
+        "cgccpf": "53309845000120",
+        "nome_doador": "Produtos Alimentícios Orlândia S/A Comércio Industrias",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/176531",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/be0c39dfb61e5aca4375cb7bc7441630ca994f94345ab62c00eaae6ef647"
+        }
+      },
+      {
+        "PRONAC": "181567",
+        "valor": 120000,
+        "data_recibo": "2018-12-26",
+        "nome_projeto": "Plano Anual Cultura Artística 2019",
+        "cgccpf": "53309845000120",
+        "nome_doador": "Produtos Alimentícios Orlândia S/A Comércio Industrias",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/181567",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/f5a8e52e69bd3652dccc123f4838980d6d3c966cd911fa82c90dcc988a0a"
+        }
+      },
+      {
+        "PRONAC": "204005",
+        "valor": 120000,
+        "data_recibo": "2020-11-24",
+        "nome_projeto": "Plano Anual Cultura Artística 2021/2022",
+        "cgccpf": "53309845000120",
+        "nome_doador": "Produtos Alimentícios Orlândia S/A Comércio Industrias",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/204005",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/b965f0900f668b5860d0ff26ff1d7f042c41ed7702911a91cf2a97e34068"
+        }
+      },
+      {
+        "PRONAC": "182314",
+        "valor": 300000,
+        "data_recibo": "2021-11-29",
+        "nome_projeto": "Reconstrução do Teatro Cultura Artística - Segunda Fase",
+        "cgccpf": "53309845000120",
+        "nome_doador": "Produtos Alimentícios Orlândia S/A Comércio Industrias",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/182314",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/4959d43da0b095c50ec97059c5e22450d0c9155a108dd8d75931b3875ea3"
+        }
+      },
+      {
+        "PRONAC": "182314",
+        "valor": 200000,
+        "data_recibo": "2021-12-15",
+        "nome_projeto": "Reconstrução do Teatro Cultura Artística - Segunda Fase",
+        "cgccpf": "53309845000120",
+        "nome_doador": "Produtos Alimentícios Orlândia S/A Comércio Industrias",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/182314",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/ab9a4bbfb8c38e891ed48e3db4c5a76e6eec06759204eb4b3f080d121a80"
+        }
+      },
+      {
+        "PRONAC": "182314",
+        "valor": 120000,
+        "data_recibo": "2022-11-29",
+        "nome_projeto": "Reconstrução do Teatro Cultura Artística - Segunda Fase",
+        "cgccpf": "53309845000120",
+        "nome_doador": "Produtos Alimentícios Orlândia S/A Comércio Industrias",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/182314",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/6529dffc88ae3de0240fd73a39c3577745c7c353c55f5da5a73635657a8d"
+        }
+      },
+      {
+        "PRONAC": "235321",
+        "valor": 300000,
+        "data_recibo": "2023-12-14",
+        "nome_projeto": "Plano Bianual Cultura Artística 2024/2025",
+        "cgccpf": "53309845000120",
+        "nome_doador": "Produtos Alimentícios Orlândia S/A Comércio Industrias",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/235321",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/08f3eac73cab7394d4c83b6856895217c96d4e9ba6e00cd544a8e55de2e4"
+        }
+      },
+      {
+        "PRONAC": "235321",
+        "valor": 200000,
+        "data_recibo": "2024-12-09",
+        "nome_projeto": "Plano Bianual Cultura Artística 2024/2025",
+        "cgccpf": "53309845000120",
+        "nome_doador": "Produtos Alimentícios Orlândia S/A Comércio Industrias",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/235321",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/a1869267ced578c7dda2e7488d77dbefe7aa4cb5d97ebd6b34a86a5e889f"
+        }
+      },
+      {
+        "PRONAC": "248359",
+        "valor": 28500,
+        "data_recibo": "2024-12-27",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2025",
+        "cgccpf": "53309845000120",
+        "nome_doador": "Produtos Alimentícios Orlândia S/A Comércio Industrias",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/248359",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/db3924f627d773199f9697d641eff0fb16db85329efa6384f5b22b4ade89"
+        }
+      },
+      {
+        "PRONAC": "248359",
+        "valor": 28500,
+        "data_recibo": "2025-10-10",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2025",
+        "cgccpf": "53309845000120",
+        "nome_doador": "Produtos Alimentícios Orlândia S/A Comércio Industrias",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/248359",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/8c436ceb44a23095d49d6ae14f1107247bc1f32227dc8206f7373c960705"
+        }
+      },
+      {
+        "PRONAC": "248359",
+        "valor": 28500,
+        "data_recibo": "2025-10-10",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2025",
+        "cgccpf": "53309845000120",
+        "nome_doador": "Produtos Alimentícios Orlândia S/A Comércio Industrias",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/248359",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/bc0b11c5f4dc494c189f011dadcd4f19d8b648f3459233baf4e9274424b7"
+        }
+      },
+      {
+        "PRONAC": "259751",
+        "valor": 16276.15,
+        "data_recibo": "2026-05-15",
+        "nome_projeto": "IORM CULTURAL 2026",
+        "cgccpf": "53309845000120",
+        "nome_doador": "Produtos Alimentícios Orlândia S/A Comércio Industrias",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/259751",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/335226fdcf9494d0075f6c43e53d73c1159ae03081a593b2eef71662d46b"
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": "http://api.salic.cultura.gov.br/api/v1/incentivadores/53309845000120/doacoes",
+    "first": "https://api.salic.cultura.gov.br/api/v1/incentivadores/b95752fe6e6a849a62d69f5a689bf10e43f67da2eb4451/doacoes?limit=100&offset=0",
+    "last": "https://api.salic.cultura.gov.br/api/v1/incentivadores/b95752fe6e6a849a62d69f5a689bf10e43f67da2eb4451/doacoes?limit=100&offset=0"
+  },
+  "count": 28,
+  "total": 1
+}

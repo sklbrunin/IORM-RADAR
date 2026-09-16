@@ -1,0 +1,1315 @@
+{
+  "_embedded": {
+    "incentivadores": [
+      {
+        "nome": "QUADRA GESTAO DE RECURSOS S.A",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": " ",
+        "total_doado": 151500,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "17707098000114",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/d92eb35b255681260ea5f3d2d0fb92411a236832540ad939da0b1d1f80f7",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/bf9f5317bd6db6954843a7227ead4fbb25a6b0624dc6ca939858aa9bcd39/doacoes"
+        }
+      },
+      {
+        "nome": "OHMINI COMERCIO, IMPORTACAO E EXPORTACAO DE PRODUTOS LIMITADA - EPP",
+        "municipio": "São Bernardo do Campo",
+        "UF": "SP",
+        "responsavel": "",
+        "total_doado": 1375.5,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "17734901000100",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/9fe50de4ee753ad6d0c1752e24f1ab8ffdccbd7fdf46925349d01da7e102",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/189f43ad3e1690ea4b26b2a789c54cea6470d20954d8071e17939dc3af9b/doacoes"
+        }
+      },
+      {
+        "nome": "ECOCARTA EMBALAGENS LTDA.",
+        "municipio": "Indaiatuba",
+        "UF": "SP",
+        "responsavel": "Marcio Amaro Malvares",
+        "total_doado": 84133.34,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "17756873000121",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/a3163e37365d9f389766376465be0930d90bb098bbb2f676c4c03f37bddb",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/c2119348854e65aeb4b4450150aaef60eae82550d731e61e3386fa31bf9f/doacoes"
+        }
+      },
+      {
+        "nome": "SAM TRANSMEDIA PRODUTORA LTDA.",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": "",
+        "total_doado": 13000,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "17765426000139",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/3a8ed3c6aa3db1c7e026e4fbdc3dccbfa0619173dd9638555b86cc4259d9",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/a95144d3e004772d01c20da10d0ed312d3be71e12ba7fc784872eea663ed/doacoes"
+        }
+      },
+      {
+        "nome": "SAO PAULO CINCO LOCACAO DE TORRES LTDA",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": "Marcio Amaro Malvares",
+        "total_doado": 553668.08,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "17766018000100",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/9f37accf801994a536ce00fcf08897eb072b21c1eb1eb10178bf2d02035c",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/50b429590bfd7b4a2b28dda6374884ee46ebf3ccd9f309ff18e3c2b53a98/doacoes"
+        }
+      },
+      {
+        "nome": "SICES BRASIL LTDA",
+        "municipio": "Barueri",
+        "UF": "SP",
+        "responsavel": "",
+        "total_doado": 47931.32,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "17774501000128",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/4663cf4f7b4f793f1255c8f92339b8711c09304288e7c56fa3862faa992f",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/d4d6264d3cf24cc177c1baa6641bd620babc98796a1f2c8d765fcdce426c/doacoes"
+        }
+      },
+      {
+        "nome": "NUR CLINICA DE SERVICOS MEDICOS LIMITADA",
+        "municipio": "Americana",
+        "UF": "SP",
+        "responsavel": " ",
+        "total_doado": 10158.36,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "17784277000155",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/66fb56351788c3d127322083d98abc01f1b46a828edbea10a9e7fa4dfb4a",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/3237db2e1ee635ce744917fc110b2b1ca0966884d738de5f75b47ce3d95a/doacoes"
+        }
+      },
+      {
+        "nome": "JTZ INDUSTRIA E COMERCIO DE VEICULOS LTDA",
+        "municipio": "Jundiaí",
+        "UF": "SP",
+        "responsavel": "",
+        "total_doado": 352311.5,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "17799666000235",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/dd793ea156eb58ed2477fad3287919ce08ccb8a03f10a3445ef3e7ae6fad",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/6b19c91f7ebe4b1221fc6933bef030f8a319826f9974726016b0d779ee43/doacoes"
+        }
+      },
+      {
+        "nome": "JSL HOLDING FINANCEIRA LTDA",
+        "municipio": "Mogi das Cruzes",
+        "UF": "SP",
+        "responsavel": "",
+        "total_doado": 37028.39,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "17804156000128",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/41742642e74a6dc6851bb1edace4e208b724dd6b02ceaf6432016f0bd9ae",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/63eff6f58bc4fd774a4597cb0b83e050d80bc2c76bd53ac23619645d6c38/doacoes"
+        }
+      },
+      {
+        "nome": "NERY SOCIEDADE DE ADVOGADOS",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": " ",
+        "total_doado": 30000,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "17830780000108",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/f8741e5d416c077e383a02c58d3534654c3731cd45e77a6f42f5129cd31d",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/a41144d29a0299728a9bb165a2bb0e8bfe684e2b3cc4ded1bfb41cf7fa61/doacoes"
+        }
+      },
+      {
+        "nome": "CAMPSEG SERVICOS DE FACILITIES LTDA",
+        "municipio": "Campinas",
+        "UF": "SP",
+        "responsavel": "Marcio Amaro Malvares",
+        "total_doado": 101965.79,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "17834328000106",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/7f4f9947e3c5ba33867aa606a8c25ec8f7bd84e5bc97900458f57e091586",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/3ecb8613fb8fec5ea9b34a641ab3fe023b03d092016484413231efe55d2a/doacoes"
+        }
+      },
+      {
+        "nome": "Vale Vitoria Serviços Ltda",
+        "municipio": "Barueri",
+        "UF": "SP",
+        "responsavel": "Fabrício Inácio de Oliveira",
+        "total_doado": 4215.11,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "17836771000116",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/067ad72f301ae18087ee554a2c69982d47f18dfbd38a8134cef3edab158a",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/90e87132e55b511882db3b4b97d3d409f6927aeff50922b407396aaa0252/doacoes"
+        }
+      },
+      {
+        "nome": "MADEIRANIT COMERCIO DE MADEIRAS E FERRAGENS LTDA.",
+        "municipio": "São José do Rio Preto",
+        "UF": "SP",
+        "responsavel": "adriano dos santos padilha",
+        "total_doado": 87837.19,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "17858282000165",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/35d47684fe0bbeed410860d7f244becd06dd655cd8ed35726b74ea439663",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/382a751e185fd80e6f716c42a691562de72b3f91b81284303e55bfc78477/doacoes"
+        }
+      },
+      {
+        "nome": "MATRIX COMERCIALIZADORA DE ENERGIA ELETRICA LTDA",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": "Ricardo Reichmann",
+        "total_doado": 446500,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "17858631000149",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/2d96cae1889a17c2a73ba3ee855d53f75a20d19f51830f24784cc70492b0",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/0a8ba5f203d3a77398372ab1406d49f8c311b3b758800669d6eca29ec300/doacoes"
+        }
+      },
+      {
+        "nome": "DIGESTO PESQUISA E BANCO DE DADOS LTDA",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": " ",
+        "total_doado": 20000,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "17866399000190",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/95f4ae02302ddec663c4fce7ef4b281972df38afefd7e78e7298817fd255",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/cd046ae2196115e97f37aeee70cb2a663da9a739bd1a3a60f7b93449f8b7/doacoes"
+        }
+      },
+      {
+        "nome": "FAVORITA PRODUCOES LTDA - ME",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": "josé luiz orçatti gioia",
+        "total_doado": 2,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "17873620000138",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/95eda9658fd818dd50e2c4f04ead7862310f30ce3f7636d22a4d3632cee5",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/cc8cf19d8e5501b1de2caeb9396b38dddcf4180e1ef833e5b7923d49bf27/doacoes"
+        }
+      },
+      {
+        "nome": "SAPE SERVICOS DE ANESTESIA PEDIATRICA S/S LTDA - EPP",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": "",
+        "total_doado": 3761.23,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "17891591000137",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/d21ace2d0705e1ce82531e5eca34b26ff17f06c6e4735a18e8ddff5df682",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/a032e0797f2ae8cc155804e1082361f10ba32ca059c1850f06748dbbdaed/doacoes"
+        }
+      },
+      {
+        "nome": "ELMAZ JABOTICABAL COMERCIO DE VEICULOS LTDA",
+        "municipio": "Jaboticabal",
+        "UF": "SP",
+        "responsavel": "",
+        "total_doado": 9000,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "17933576000104",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/a695062c4730ac335c3e9a7c949ed35fc332245a6045ec34b46a5339df65",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/00b9c2f85ec9e0345953f4b4dd7b7f5a449c269d9386102792a3088dd2c3/doacoes"
+        }
+      },
+      {
+        "nome": "LUIZA LAB CONSULTORIA EM INOVACAO LTDA.",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": "Roseli Siewert",
+        "total_doado": 3377765.52,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "17948578000177",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/2f6102508b6d41203a7f9409618061f69fc6c54725add7112170bc92a935",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/e502d0e5fe2b931b81df975e909278dd61b684a0b203cbd32ed39440292d/doacoes"
+        }
+      },
+      {
+        "nome": "Mangels Indústria e Comércio Ltda. ",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": "",
+        "total_doado": 244031.68,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "17958315000149",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/35d4047a7f91d028a0b94b9d5e134ddfcda553d9e510162b232e90f3165e",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/292bb712789e840f30985efb2f4b7f94617afa2ff9c9c681483667d8b6bb/doacoes"
+        }
+      },
+      {
+        "nome": "HUIA PRODUCOES LTDA",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": "",
+        "total_doado": 5000,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "17961586000153",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/10f417089aa67c15aa1ef2ae575ac185d066514250517131715326700ad3",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/8bfba5d20d514c0aa8f969406bceff7046d9b08668a388bfaed1a297ef97/doacoes"
+        }
+      },
+      {
+        "nome": "LOI BRASIL COMERCIO ELETRONICO LTDA",
+        "municipio": "Santo André",
+        "UF": "SP",
+        "responsavel": " ",
+        "total_doado": 10675.49,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "17973898000187",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/20d32e6ba0631b6a8d9c721b476767832a466f18aef5d741fc31c1f154e7",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/f6bf9ead2afad3012d7e412e1968913ebdb79fa598ded7f1438fe43eeb8c/doacoes"
+        }
+      },
+      {
+        "nome": "INEPAR CAPACITORES S.A.",
+        "municipio": "Araraquara",
+        "UF": "SP",
+        "responsavel": "adriano dos santos padilha",
+        "total_doado": 12268.22,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "17995592000121",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/21720fb62b883a96021b4e12a4a259978a62961a017c4482b0b8e9383788",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/52cbc6806935487e22da5c49c0f6161b9e541fa4a4d7b2e03b5dbc70bd38/doacoes"
+        }
+      },
+      {
+        "nome": "Tratho Metal Quimica LTDA",
+        "municipio": "Arujá",
+        "UF": "SP",
+        "responsavel": " ",
+        "total_doado": 19998.5,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18001764000167",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/e292a5b5b4fcb895ea198b146cf12a00974eadf271a4b78fabeb9a6dd752",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/5401158366f2b63db35f3397b55487b036be3701e845e5b72d2d1affb992/doacoes"
+        }
+      },
+      {
+        "nome": "HOGARTH WORLDWIDE PUBLICIDADE BRASIL LTDA.",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": " ",
+        "total_doado": 182100.88,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18009420000102",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/04145ac6e3b416b3b94c2d2d49026090777fc4d082a84ea30b778ba48a0a",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/a22177f032c4cc6171915c040b08180014a2be23ac80757dc830a502fee1/doacoes"
+        }
+      },
+      {
+        "nome": "SAVEGNAGO ADMINISTRADORA DE CARTOES LTDA",
+        "municipio": "Sertãozinho",
+        "UF": "SP",
+        "responsavel": "Marcio Amaro Malvares",
+        "total_doado": 169500,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18026984000145",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/8a665a8a185c9878f5d77958874f5c982628e9010d1bd4c955825adc37e1",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/28276939f63ab63db8519953b1e5ecc5bbccc88dc0a8149ec11889ae1634/doacoes"
+        }
+      },
+      {
+        "nome": "99 TECNOLOGIA LTDA",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": "Bergson Nunes Santana",
+        "total_doado": 730000,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18033552000161",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/a1fd8ac38fed649298dacb16590e16307f14abfb4c6ef6888a5fd82139ab",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/73e4247db5d892f38799a438d076f074962ee11b99c878d30a57d8451bc2/doacoes"
+        }
+      },
+      {
+        "nome": "DUO JK EMPREENDIMENTO IMOBILIARIO  SPE LTDA",
+        "municipio": "São José do Rio Preto",
+        "UF": "SP",
+        "responsavel": "",
+        "total_doado": 21301.59,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18061021000182",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/0945bc30ed3d6b3f028b5a845cadec46975759f06b22dcc3e9f37b82da31",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/102f45457d1e2dd2ee92ddeb10641f1ff2f01078626ea76031e5aff8959e/doacoes"
+        }
+      },
+      {
+        "nome": "INTERNATIONAL SCHOOL SERVICOS DE ENSINO TREINAMENTO E EDITORACAO FRANQUEADORA SA",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": "Marcio Amaro Malvares",
+        "total_doado": 690000,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18082788000198",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/46bc15db8d293567157f8bfcab5c3a3f251718c46f6fac3756d3cf7199c5",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/9b38b84d12e43db2a859dd21c250834a44f8aa7caef28cd15d576f1588b1/doacoes"
+        }
+      },
+      {
+        "nome": "HDI GLOBAL SEGUROS S.A.",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": ".",
+        "total_doado": 820127.27,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18096627000153",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/c3c1af61025d95c8e41a241b9a95586329c79a4a70ead75b42f31dda9c82",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/27a5782cc189f7f5402b4f9d869a3b08cb617560a37aee24f34578cac95b/doacoes"
+        }
+      },
+      {
+        "nome": "POSTO CALIFORNIA DE GUAIRA LTDA",
+        "municipio": "Guaíra",
+        "UF": "SP",
+        "responsavel": "Rafael Albuquerque Braghiroli",
+        "total_doado": 13800,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18104061000164",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/dd83c4d0913633069c328439944abc86d8331cb7fadfb3dcf2c4b911fd84",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/6bbb76270d15b2f792b13a49b8715ee15e8f25b8f847fe4fac7855878476/doacoes"
+        }
+      },
+      {
+        "nome": "SERVTEC OPERACAO E MANUTENCAO LTDA",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": "",
+        "total_doado": 13427.79,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18108143000187",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/5b863a8eb9d5a646338bba6d94749731bb08913ad4f10d7c15f773670db2",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/57dba5022e3e2c44a4b106db4d0790b25338c78dd52e64de016ec38dc1fd/doacoes"
+        }
+      },
+      {
+        "nome": "SOVENA BRASIL   SERVICOS DE CONSULTORIA E COMERCIO DE ALIMENTOS LTDA.",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": " ",
+        "total_doado": 303000,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18132062000112",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/b68f42e22988ca91223acaa366b1274ecf0d51a112024d5051eda6b31417",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/766827c63c007d219f0336a0176b3dd967c7dea4f2fddbc33ec8304383de/doacoes"
+        }
+      },
+      {
+        "nome": "OBJECTIVE GLOBAL SERVICES LTDA.",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": " ",
+        "total_doado": 39211.73,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18151403000105",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/cb0a3d407b46929752fad76796708804ac1816034139091fccfbe49f3d34",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/d3549e5c63a82e3a5ccc0d6ee9740b3a84c29971b0858b15249c7c17f088/doacoes"
+        }
+      },
+      {
+        "nome": "VAMOS SEMINOVOS S/A",
+        "municipio": "Ribeirão Preto",
+        "UF": "SP",
+        "responsavel": "",
+        "total_doado": 22094.14,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18163414000105",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/afbd54921c092ee6041deace2aef62bc0586de051964db09499248694d4d",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/9deaf4bf17fd46fd1092fb5ef2f099bb7899181c09d3011d30553e544370/doacoes"
+        }
+      },
+      {
+        "nome": "A.C.J. IMPORTACAO E EXPORTACAO DE EQUIPAMENTOS PARA INFORMATICA LTDA",
+        "municipio": "Campinas",
+        "UF": "SP",
+        "responsavel": " ",
+        "total_doado": 800,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18167855000177",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/59a27c6d5312b3eb154658dfaa8c857efe8fee5d19b095a1053b256f0243",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/c7e5e1c058cefb5bb3f8a384e44a5db54c1399417da53cab1a7c68419fc9/doacoes"
+        }
+      },
+      {
+        "nome": "CLOUDWALK INSTITUICAO DE PAGAMENTO E SERVICOS LTDA",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": " ",
+        "total_doado": 8636423.47,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18189547000142",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/38e534f9b3e59a78e2b44868b5e6ba65c54b63a24b00af5151ab900ecc55",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/42dc4f6f845ca8e42295a9270e9d5306a228d3e21a0b21dd69eec6c9c377/doacoes"
+        }
+      },
+      {
+        "nome": "PJBANK PAGAMENTOS S.A.",
+        "municipio": "Barueri",
+        "UF": "SP",
+        "responsavel": "PJBANK PAGAMENTOS S.A.",
+        "total_doado": 100000,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18191228000171",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/2fce5147b3fe4a019cf88e966b3e33eeb6579fe28bb19eb65df5490c705c",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/9a039a02ff0ba0f1e0f899f7c5d8030cb226acc3d29c8926017624fedef1/doacoes"
+        }
+      },
+      {
+        "nome": "SCHIPPERS DO BRASIL IMPORTACAO EXPORTACAO E COMERCIO DE PRODUTOS AGROPECUARIOS E SERVICOS DE REVISAO E MANUTENCAO EM EQUIPAMENTOS LTDA",
+        "municipio": "Ribeirão Preto",
+        "UF": "SP",
+        "responsavel": "Ingrid Lemos Costa",
+        "total_doado": 5355,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18192113000100",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/10061afc9f48a54563eae7d8926eb3a2acc52934e6fce4cbeed11bbb7029",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/9e38b3b43e2f89699792c88b7149abe5b5c8f80a35a804e5b674cab6e799/doacoes"
+        }
+      },
+      {
+        "nome": "BETA CORRESPONDENTE E TECNOLOGIA LTDA",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": " ",
+        "total_doado": 83490,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18225006000122",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/27a81ee808e6ee57bbaba32584cf2875890df237e576c8f63121003cb865",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/0d3010835e4ecfe3c43053cefabdf96231f9e61e9de4307168195375ad85/doacoes"
+        }
+      },
+      {
+        "nome": "C.I.Y.S.P.E. EMPREENDIMENTOS E PARTICIPACOES LTDA.",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": "",
+        "total_doado": 157000,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18225199000111",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/b0d724415eb3acd4d18f5862091c521273da6bf9acb3a2b1c827e87be33e",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/404bb50541e764bb68db401f6716a9b55ad0d63fc03b2396214da01696c5/doacoes"
+        }
+      },
+      {
+        "nome": "FLYTOUR EVENTOS E TURISMO LTDA",
+        "municipio": "Barueri",
+        "UF": "SP",
+        "responsavel": "fabiola brandão",
+        "total_doado": 2500,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18237465000126",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/6f3763ac1195f7661018d1590fc23c470b512344f004e7f64aa637e872f9",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/f6fe2192654e5d3d4e73f1d77fb66064f9f74d7c45f24058c0ea5d3b7504/doacoes"
+        }
+      },
+      {
+        "nome": "ESQUADRIAS E VIDROS ESQUADRIMAXXI LTDA",
+        "municipio": "Santa Bárbara D'Oeste",
+        "UF": "SP",
+        "responsavel": " ",
+        "total_doado": 2000,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18261732000109",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/543a5ca0de9ec04e5e5abdd70ea1a138610b62f2e5413fa73e765d71d1ee",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/1f7b536770e2360bc09f6e29aa800e3196b3c91f6850a397c81de0a58f7c/doacoes"
+        }
+      },
+      {
+        "nome": "Vita it Comercio e Servicos de Solucoes em ti LTDA",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": "",
+        "total_doado": 200000,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18261828000169",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/46a228ff10102ba5a08ea8ac3bfcfc677e57af840311da86336021b63ee4",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/a6e34797930c0082551d5c843787c5f5099c82284d1cac789ec3907fc283/doacoes"
+        }
+      },
+      {
+        "nome": "JLL CORRETAGEM E TRANSACOES IMOBILIARIAS LTDA",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": "",
+        "total_doado": 53142.86,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18279029000110",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/1e5de9bca5d0dae3c915c2f3e26380632639fadfba1ce8f44bad2bd48dda",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/cd58a5497034ac82b4f500123a4c8c9661d00c65f5169e87cc999a85fd60/doacoes"
+        }
+      },
+      {
+        "nome": "CELTA - Administradora e Corretora de Seguros Ltda",
+        "municipio": "SÃO PAULO",
+        "UF": "SP",
+        "responsavel": " ",
+        "total_doado": 32500,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18288472000157",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/6b2743c3136ab84c0be270b7e6904d8f8cf835b5b6567a34bf39431ba5b2",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/9a096169cff6a0156fc1352826fedef545a11d62b6e88330767478cfcda5/doacoes"
+        }
+      },
+      {
+        "nome": "HEALTH LOGISTICA HOSPITALAR SA",
+        "municipio": "Cajamar",
+        "UF": "SP",
+        "responsavel": ".",
+        "total_doado": 18615.77,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18320396000110",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/f06b9357841a5b1f07e7bcd58eab046618f3d02468ca210893af9db9cf5e",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/af146d5c67e7713f66545ac7f2955ef370cafa84a93e568ec94393af830c/doacoes"
+        }
+      },
+      {
+        "nome": "ELLECE VAREJO DE ALIMENTOS LTDA",
+        "municipio": "Guarulhos",
+        "UF": "SP",
+        "responsavel": "ana angelica manhani",
+        "total_doado": 18898.8,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18345969000160",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/7e475527415f9d43fb54cc39f4cd5b755a5d911a9b4309b466113adbf368",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/fcf5657729b3055e65d1e83193d88d948120fefe53b6abb93afc4fe11809/doacoes"
+        }
+      },
+      {
+        "nome": "Rotorbrás Com. e Ind. de Helicópteros",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": " ",
+        "total_doado": 64999.9979,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18364885000173",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/47592f4a3ac437b30a9e2d966f44d4b1fb3b104f6c1a35a10b5b8ff56536",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/9dda39d3770897ea7399c7206f351cb73084a1ca1e093f0f64e11d2eabad/doacoes"
+        }
+      },
+      {
+        "nome": "DATORA MOBILE TELECOMUNICACOES LTDA",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": "Marcio Amaro Malvares",
+        "total_doado": 382637.72,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18384930000151",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/14012a500ff26af895fcaa437143b98f63fa9ef1fbdc12e929c4d459df7d",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/29e72d942605745a99ed05002c780ebd95ec12ee6b9067a6d09220008ee0/doacoes"
+        }
+      },
+      {
+        "nome": "ENERCORE TRADING LTDA",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": " ",
+        "total_doado": 125800,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18416364000112",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/f549aaee7a3a2c79fb0865f3a35f6bbcbf06b4f2a0547ab4d6e26f8c5e64",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/bc278c2b4094343cd2f93d9f6cf0a6635fc0109a79dd8f70e6df10b50763/doacoes"
+        }
+      },
+      {
+        "nome": "MEISYSTEM DO BRASIL LTDA",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": " ",
+        "total_doado": 6000,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18427387000122",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/43e164127ed886c9002a13ae5000b9d9c74dcb9c62fbed9e3c783cbe1097",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/6468edea1e0391cea326a5acffe1f058282623e3b3b9337339a06922ca26/doacoes"
+        }
+      },
+      {
+        "nome": "Bayer S/A",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": "",
+        "total_doado": 24784939.7584,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18459628000115",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/ab3ec0c4610b127883c6ace7063988f72d1b5d6bd493ef5b75e88c6c3b64",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/f88658d56f0b359c8b73ca59c4a6be665fe415a60b5bf9b16a3c6e41e3cb/doacoes"
+        }
+      },
+      {
+        "nome": "INSTITUTO GERANDO FALCOES",
+        "municipio": "Poá",
+        "UF": "SP",
+        "responsavel": ".",
+        "total_doado": 437.75,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18463148000128",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/f65b35499e92bfe4300ac360752f621dec899253c3d677ff8f92e355f5d6",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/3d572f3441c71c1ce0312a08c34bc239e8dd057eb5a7ee0f5ee2a07b8ce7/doacoes"
+        }
+      },
+      {
+        "nome": "HUMBERG AGRIBRASIL COMERCIO E EXPORTACAO DE GRAOS S.A.",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": "",
+        "total_doado": 178000,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18483666000103",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/b42f353ff70fc3cb56f50d90c4f4e97e0234d28ac9905e2ec41a036a9ed2",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/bb329368f9b24f35a02fd8e36d1057acc43b6f8dc6f9d1b075c74dbba203/doacoes"
+        }
+      },
+      {
+        "nome": "GARDE ASSET MANAGEMENT GESTAO DE RECURSOS LTDA.",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": "",
+        "total_doado": 400000,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18511433000177",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/e1e7640dec55b84e87f785c5e0e2b8518eb491b93a6ed2abaf44a9039407",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/416691f0420abb0c52b61e40166709176b7e5843c627dd00a9e21797c37e/doacoes"
+        }
+      },
+      {
+        "nome": "YABA GESTAO SUSTENTAVEL E ENGAJAMENTO SOCIAL LTDA",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": "Camila Alves da Silva",
+        "total_doado": 3,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18520427000186",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/0d88ca087755597f4a595659946af8e7e45ce830b895161055de4f1a59a9",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/1fc5031aa2f4668cdfc16018798b7fc13dd414f1b659652416e97e16ec08/doacoes"
+        }
+      },
+      {
+        "nome": "UBS BRASIL BANCO DE INVESTIMENTO S.A.",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": "fabiola brandão",
+        "total_doado": 86000,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18520834000193",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/8462a92c6e083e8cd152431b0e7508b04e7b1d785b340930ccc340c62fc8",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/16d1867498bd2fe9d27bdc0aaf2ff4887da8ea96a0255a550be197cec5fa/doacoes"
+        }
+      },
+      {
+        "nome": "NTWK Soluções e serviços em tecnologia Ltda",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": "J.S. Santos Produtora Artística & Literária",
+        "total_doado": 800,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18554929000128",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/27ccb226b18555e263b85a7e317278291e181af49c3045df0e03b6b52917",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/1520e36412677c04b4a69baa358fd88c616c0b019d9e8da9b44dfc2e08d1/doacoes"
+        }
+      },
+      {
+        "nome": "LVE - Locadora de Veículos e Equipamentos Ltda.",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": "Fabrício Inácio de Oliveira",
+        "total_doado": 117741.38,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18555186000100",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/4b3718f40d5ecf4264c7a7d0d3d32473818d3d6e63a46e266eeed2c9e291",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/2b5b923f5d4abb82ceea54879ad1ab05116df79413c183f36efd14acf1c5/doacoes"
+        }
+      },
+      {
+        "nome": "FERNANDO MARCELO MICAI TOLEDANO",
+        "municipio": "Salto",
+        "UF": "SP",
+        "responsavel": "",
+        "total_doado": 1200,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18573257000106",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/15b77065c50628c415bc74481059776b480c9a59cb355120b79f3c3dcafe",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/00d7cb0a248a459cc6412aa75811214d1e897faaa54e1cc21747d15a21aa/doacoes"
+        }
+      },
+      {
+        "nome": "CGGC CONSTRUTORA DO BRASIL LTDA.",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": " ",
+        "total_doado": 200000,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18582963000106",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/feada94acab57ff557bf55f31e5918b17232366027cd2ce0b9dd1b144a01",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/8bf6f14ce5f4c03684770dfb25431b45e900d609080c2682f3019447a7dd/doacoes"
+        }
+      },
+      {
+        "nome": "MAIORCA COMERCIO DE COSMETICOS LTDA",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": "",
+        "total_doado": 24000,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18583030000133",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/25d191e3031fe3a023514682042067d81f1007062af38356965a97a1e86a",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/63b15f21f5cfa77c6569133b6bd6e66ce4940534b3539d688a869201fe87/doacoes"
+        }
+      },
+      {
+        "nome": "BIBLIOTHECA SISTEMAS DO BRASIL LTDA",
+        "municipio": "Campinas",
+        "UF": "SP",
+        "responsavel": " ",
+        "total_doado": 10093.72,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18607653000107",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/9f9aaa9de79c953ecbddb408d65b963843ea97ef386391d4bb3acf19c2d3",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/01bc95efb85a10c2629c9a69604524916daab19d5f94e52c34eff43a153f/doacoes"
+        }
+      },
+      {
+        "nome": "FREE SPIRIT CONSULTORIA E EVENTOS LTDA ",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": "Fabrício Inácio de Oliveira",
+        "total_doado": 12500,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18625098000138",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/aeea7510aaeee84d9075e4540a65025c70f467af9de1afd42b2d80d70a34",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/4571ecf3bc21db926324415e5c9a42d7383e266b89b2e112b106a5c6ee54/doacoes"
+        }
+      },
+      {
+        "nome": "MASTER INDUSTRIA E COMERCIO LTDA",
+        "municipio": "Embu das Artes",
+        "UF": "SP",
+        "responsavel": ".",
+        "total_doado": 465000,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18627195000160",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/665865c13063bd9ab99c96cdbb1d841587beca785a8effdae7ec7dee5b72",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/852585c857887c959e34c55ab619546a8350baf521d0007c879d880c336b/doacoes"
+        }
+      },
+      {
+        "nome": "BIOENERGIA COSTA PINTO LTDA.",
+        "municipio": "Piracicaba",
+        "UF": "SP",
+        "responsavel": " ",
+        "total_doado": 100000,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18645875000106",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/01a42a05ec253722f6843586b014011af3902201a477fda0328c16e10cf0",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/434e4ca51af90e4362c5581b10a0cc3a8b0157cb079a7b902b98130a1685/doacoes"
+        }
+      },
+      {
+        "nome": "MERCO DISTRIBUIDORA DE TERMOPLASTICOS LTDA",
+        "municipio": "Barueri",
+        "UF": "SP",
+        "responsavel": ".",
+        "total_doado": 51000,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18669347000197",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/e9d100c0b7f3f5fff641c88a6368a1b8a793a3927c8375ed7b0c6a382522",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/e1b5d207d8e553fbac929d3eb129be884312b45fb890aeaf1567254aa4f7/doacoes"
+        }
+      },
+      {
+        "nome": "TOP FRITAS COMERCIO DE PRODUTOS ALIMENTICIOS LTDA",
+        "municipio": "Pirassununga",
+        "UF": "SP",
+        "responsavel": " ",
+        "total_doado": 25942.23,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18670991000185",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/d079cae8b340a169fde19b30d8887edfa1f55b76a531240e9ffa1da2a2fb",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/810af521e0e33998e77a43a1bc7771be2459dc3e1a354eeacdfde711823d/doacoes"
+        }
+      },
+      {
+        "nome": "CPM CONCESSIONARIA PAULISTA DE MEDICAMENTOS S/A",
+        "municipio": "Américo Brasiliense",
+        "UF": "SP",
+        "responsavel": "",
+        "total_doado": 328372,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18676762000178",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/11ce80edae8c6dcbccdc60f25018a1b94daa4b16bf109b5e6861b2a8a5da",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/9b69fbf584d1c82e1d6118e598ade9e9fe44ad0a39d50d0e4ff522a8af7e/doacoes"
+        }
+      },
+      {
+        "nome": "GSS - GESTAO DE SISTEMAS DE SANEAMENTO LTDA",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": "adriano dos santos padilha",
+        "total_doado": 107844.89,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18693554000187",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/875bca4aaad403ad71de257e153ebe47dae9d1d0eb6240b250c1c3b06b16",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/c22619eb54b9af7d936e2fc152da4f36e6fa5272141db977e0eb1c7e3642/doacoes"
+        }
+      },
+      {
+        "nome": "AUTO PLANALTO COMERCIO DE CAMINHOES LTDA.",
+        "municipio": "Guarulhos",
+        "UF": "SP",
+        "responsavel": "",
+        "total_doado": 75000.65,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18703805000167",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/072b3fc1b19068fc5089c5a0be57065a68c8955071c0a8b2edf3e57965ad",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/41bd955422d22faa4b34f082ce21c0b83b1fe40bdafc5871965851d6ebe6/doacoes"
+        }
+      },
+      {
+        "nome": "CPFL Eficiência Energética S.A.",
+        "municipio": "Jundiaí",
+        "UF": "SP",
+        "responsavel": "Ricardo Reichmann",
+        "total_doado": 226500,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18710670000167",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/8705b2d6366122f130a8c8bb405d37066acbd421c7315f4d68e2b4c88bf5",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/cfe766a8a00849db5132504eaa1162c981e4f8f56e15b3f9d9fbc1789f11/doacoes"
+        }
+      },
+      {
+        "nome": "Control Clean Serviços Especializados Ltda",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": "Fabrício Inácio de Oliveira",
+        "total_doado": 16250,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18712309000170",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/5aac7b09334720552aadb3ef36ff68532c3dfe237cf8a5e8383bde515aa3",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/7d20c819f27b8e8f54ac84a16d60f100056ecddf840e1da37d8ac2e460b7/doacoes"
+        }
+      },
+      {
+        "nome": "Eutectic do Brasil Ltda",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": " ",
+        "total_doado": 1102288.0174,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18715177000130",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/f0153174c94e5220c3d5f3c86701dc8b9c733caa68edf6a56ef406b795fe",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/98a936bd7759d287c913c068248a2d1a266795e063f8abed07edcc1d40d9/doacoes"
+        }
+      },
+      {
+        "nome": "PAGAR.ME PAGAMENTOS S.A.",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": "Rubia Mara Pappini",
+        "total_doado": 1747847.74,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18727053000174",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/ac6c5ac9d29f33829d18e6bb05f2bddcf51253813dfbce05972e063e18a3",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/2501fe336a20a0e18ca728d6dd94bc734b1e79fc46a3a0c82684b63c6144/doacoes"
+        }
+      },
+      {
+        "nome": "MOAT CAPITAL GESTAO DE RECURSOS EIRELI",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": "",
+        "total_doado": 733173.31,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18730786000168",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/6addc9a9d2aa196cb3dbbca8dd341562abe712c0cd15fa0400eeca419594",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/3cfe232ddf8eebd7848cc6422c1006cb472165122eb25368e2edf5e85ed2/doacoes"
+        }
+      },
+      {
+        "nome": "BIOENERGIA UNIVALEM LTDA",
+        "municipio": "Valparaíso",
+        "UF": "SP",
+        "responsavel": " ",
+        "total_doado": 75997.6,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18753150000131",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/607d0b96cfb74ccfd5af0e33e2583a4d5cc65ad9694a40938634d7a4ea3c",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/a08c6615e43203c52bf41f42a865a5fb3be2e7e76f903e4c877988f42e0a/doacoes"
+        }
+      },
+      {
+        "nome": "BIOENERGIA GASA S.A.",
+        "municipio": "Andradina",
+        "UF": "SP",
+        "responsavel": " ",
+        "total_doado": 126602.24,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18753157000153",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/d58d6f506e9e0f87c487c06259cffd961c52e594916ae39f57ebb5b07574",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/b2947125943f307ce765ded243b66adcbe19feaab09f4797ae9e9fbd89e6/doacoes"
+        }
+      },
+      {
+        "nome": "UOL EDUCACAO S.A.",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": "Marcio Amaro Malvares",
+        "total_doado": 57000,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18777517000157",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/8f7bd67c23549e8e8ec175e672dbeb2d7c9ec49572e6f5fb771f23be9d19",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/ff4ea248022df1e24a6776173f7e27b8c9871bcdc4e07c70176d75866133/doacoes"
+        }
+      },
+      {
+        "nome": "CINTITEC - AMBIENTAL LTDA",
+        "municipio": "Osasco",
+        "UF": "SP",
+        "responsavel": " ",
+        "total_doado": 480,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18782684000196",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/fcf02b409acfa9733fd0f11706124243d4891dc08f967b23a508d223aea4",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/90fd3882e0271e1dbc8c199a0cd52fd4534ef18f941cdde8f24ad1366078/doacoes"
+        }
+      },
+      {
+        "nome": "BIOENERGIA BARRA LTDA. ",
+        "municipio": "Barra Bonita",
+        "UF": "SP",
+        "responsavel": "Fabrício Inácio de Oliveira",
+        "total_doado": 1630000,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18788137000118",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/84b7600bd829c12d29042926b18cebfe06a71aa4385fecfc3282631ad86d",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/e5436189a002719fb9ad9248a8072be868c3a565829bf99f385451aa9114/doacoes"
+        }
+      },
+      {
+        "nome": "BIOENERGIA RAFARD LTDA.",
+        "municipio": "Rafard",
+        "UF": "SP",
+        "responsavel": " ",
+        "total_doado": 73693.2,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18794615000100",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/95bc207876e85836af2e5dc088f25c451628b1428a354720c5ed2e35a1c5",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/e03d0b70f72394c67f5df2008ab31408293a055f44327b9dfc6d6119bc86/doacoes"
+        }
+      },
+      {
+        "nome": "OMNI S/A ARRENDAMENTO MERCANTIL",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": "adriano dos santos padilha",
+        "total_doado": 58904.3,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18846364000152",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/4b0be548d4abda2fe6cb05b3ef01b267b67f87c2773a2e94ba6795e8499c",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/7e22e3afe84c40702187d18f5933774db0a367d8ff854c4857843c83aadc/doacoes"
+        }
+      },
+      {
+        "nome": "UVALE S/A ",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": "Arnaldo Cruz Machado de Araújo",
+        "total_doado": 6000,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18866111000140",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/591f050a70d0835f27fcb084abe5ccaf63376aff64f234c2adca6dbb54b3",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/8b57b5ea382ec4d826f146bcd76c0a7290ac461958dfa7dcc99269d49dfb/doacoes"
+        }
+      },
+      {
+        "nome": "INDUSTRIAS XHARA LTDA",
+        "municipio": "Limeira",
+        "UF": "SP",
+        "responsavel": " ",
+        "total_doado": 1308166.47,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18866111000493",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/94244ceb04ff00b6a3a6c8a47cf1bc6dca36a103feea1f2ac568fa8146de",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/6003a48bb0108f206137498eacb2bbc556acf292cd67da2ac01a7538f6c9/doacoes"
+        }
+      },
+      {
+        "nome": "SAVAS ASSESSORIA EMPRESARIAL IMPORTACAO E COMERCIO LTDA",
+        "municipio": "Barueri",
+        "UF": "SP",
+        "responsavel": "marcelo alexandre lelis pineo",
+        "total_doado": 1400,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18940311000104",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/b44bee3be92334a95e6b25c3b84970b5b4cae19796e33850f881ff817ecd",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/c5cecc0f46e9302bc3831235d85e80cf26e9fbb09ed9f8ff4c24cd729856/doacoes"
+        }
+      },
+      {
+        "nome": "SPE GL EVENTS CENTRO DE CONVENCOES IMIGRANTES S.A.",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": " ",
+        "total_doado": 1263788.29,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "18942023000180",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/c820d093e7a2ed3c12d1bb11520c165408f23f8065776d9e326283251e18",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/8f9e2925078e5b894c6fb969fa19bb2eaa2a70e14e268939a2850103f585/doacoes"
+        }
+      },
+      {
+        "nome": "BARRA AMERICAS EDITORA LTDA",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": "",
+        "total_doado": 160000,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "19002277000181",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/76c3dd5ffe32a91a79b4265f8f7e38bd3f8051c2d6856a775cf31c6f4f89",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/1c482f47eb39f47364bc84a8ce9c5f5423c4af550673f4785fb8103394f8/doacoes"
+        }
+      },
+      {
+        "nome": "DIEGO LUIS DA SILVA MOZER",
+        "municipio": "Amparo",
+        "UF": "SP",
+        "responsavel": " ",
+        "total_doado": 17410.6,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "19010518000134",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/4f45927820992e47206e17cfa54a219d2b7c11e5fe1e4621eb6a7f93f8d6",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/7d154d00cdde42da70edd94a6dfc4ca928547855760f4b0a8230ac93816b/doacoes"
+        }
+      },
+      {
+        "nome": "NAVESEG CORRETORA DE SEGUROS LTDA",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": "debora cristina araujo souza",
+        "total_doado": 750,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "19019321000166",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/ce9035e088a9ad13afb8afc2a124c0ba2b4eb7c3ad51be9b7ab4b0d0d654",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/3dc252c0217af9043eb15fb9b01ec05e607a34ef755d1290aa114e23d535/doacoes"
+        }
+      },
+      {
+        "nome": "COMPASS COMERCIALIZACAO SA",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": ".",
+        "total_doado": 1587000,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "19046324000199",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/486d88ac18ff9430f6b7202cb013453cc1e13ce3842e1ae3666d05ac3cd7",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/5c5b1014945d1998caa3accc6e3204cd284bacd7f3104c6a208a42b1e3b7/doacoes"
+        }
+      },
+      {
+        "nome": "PORTOSERV PROMOTORA DE SERVICOS LTDA",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": "",
+        "total_doado": 239000,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "19091996000116",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/4a86b94626159bdcfbcc28aaa9253464c155e332d743ede5e9b941a41684",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/cee3b5f5fadfdea8746dc8aee25b8885619e204ff2401373f625d340c852/doacoes"
+        }
+      },
+      {
+        "nome": "SKY.ONE TECNOLOGIA EM SOFTWARE S.A.",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": " ",
+        "total_doado": 4000,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "19093204000142",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/bf24b31fa76a913049be6535d5249219b7ac1050e1d6bef0e9bf385ce5a3",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/0725ce13c8d263b0d3330a48ef0d5f8edd59cb845e6fbb6d4de409fb184c/doacoes"
+        }
+      },
+      {
+        "nome": "AGUAS DE MATAO S.A",
+        "municipio": "Matão",
+        "UF": "SP",
+        "responsavel": " ",
+        "total_doado": 339902.79,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "19190721000130",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/0543845e690de5ea330487062233c86269c13529e77755fcbc562eb9c236",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/dcbaac05077727bbe7636101d968c1c9d550d42f144135e8e042a782ae0e/doacoes"
+        }
+      },
+      {
+        "nome": "FEAA PARTICIPACOES LTDA",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": "Marcio Amaro Malvares",
+        "total_doado": 3481846.82,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "19190773000106",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/3c097d7bdc9d25f3343105de6a6240bb0ea7bf9d0204107bd32033b6ba5f",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/0cc98ba697fd43514e0ccbc0ba314bac5824dbbf3528ee58569f1328c7f3/doacoes"
+        }
+      },
+      {
+        "nome": "SADA TRANSPORTES E ARMAZENAGENS LTDA",
+        "municipio": "São Bernardo do Campo",
+        "UF": "SP",
+        "responsavel": " ",
+        "total_doado": 4870897.9734,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "19199348000188",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/45a00cf478b2e7d117fe4e4c618cc859d9aabd0e8f5b4078f70a8a44626c",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/103b5e758e0775aa89e119ae3982f4d189decdd4086150285cdcbc9736c6/doacoes"
+        }
+      },
+      {
+        "nome": "RPH RADIOFARMACIA CENTRALIZADA LTDA.",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": " ",
+        "total_doado": 24888.24,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "19315658000110",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/5ab3b01c95f784addfcf38790d2a0081cd434decc189ff6b701d10b5700c",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/8f48b770e30b3ba1d78f15e7b2799cd8f51465265b529010ada96aca1b29/doacoes"
+        }
+      },
+      {
+        "nome": "AXA SEGUROS PARTICIPACOES LTDA.",
+        "municipio": "São Paulo",
+        "UF": "SP",
+        "responsavel": "Aniela Christina Jordan",
+        "total_doado": 690650,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "19323190000106",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/64faad4b66b77fe1d7ba644173d72472daa5ddf1606e7be8b940469b234f",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/335e4207750ba7c0384529307db4bf4dd1dee2462818ea93962e4a6c660f/doacoes"
+        }
+      },
+      {
+        "nome": "AOOP SOLUCOES DIGITAIS SA",
+        "municipio": "Barueri",
+        "UF": "SP",
+        "responsavel": " ",
+        "total_doado": 140754,
+        "tipo_pessoa": "juridica",
+        "cgccpf": "19375162000132",
+        "_links": {
+          "self": "https://api.salic.cultura.gov.br/api/v1/incentivadores/8ba6a790dfb8cd52270083f1aa7cfc4ed184b76a30d0346f5b706feeefb4",
+          "doacoes": "https://api.salic.cultura.gov.br/api/v1/incentivadores/d8385b8bdc0ba3574169c129ebd361e6fe27029cdcb0fbc0b834873ad9f3/doacoes"
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": "http://api.salic.cultura.gov.br/api/v1/incentivadores",
+    "first": "https://api.salic.cultura.gov.br/api/v1/incentivadores?limit=100&offset=0&UF=SP&tipo_pessoa=juridica",
+    "last": "https://api.salic.cultura.gov.br/api/v1/incentivadores?limit=100&offset=8200&UF=SP&tipo_pessoa=juridica",
+    "prev": "https://api.salic.cultura.gov.br/api/v1/incentivadores?limit=100&offset=3400&UF=SP&tipo_pessoa=juridica",
+    "next": "https://api.salic.cultura.gov.br/api/v1/incentivadores?limit=100&offset=3600&UF=SP&tipo_pessoa=juridica"
+  },
+  "count": 100,
+  "total": 8211
+}

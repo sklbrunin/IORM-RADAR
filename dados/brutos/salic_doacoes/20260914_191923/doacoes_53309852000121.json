@@ -1,0 +1,73 @@
+{
+  "_embedded": {
+    "doacoes": [
+      {
+        "PRONAC": "247415",
+        "valor": 1000,
+        "data_recibo": "2026-02-10",
+        "nome_projeto": "Brasil - O Poder da Cana de Açúcar",
+        "cgccpf": "53309852000121",
+        "nome_doador": "A ALVES SA INDUSTRIA E COMERCIO",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/247415",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/fdc3c1344d78e852dbf0c25eb1c92da09c885f34a410b89ccab4e131be7f"
+        }
+      },
+      {
+        "PRONAC": "247415",
+        "valor": 1000,
+        "data_recibo": "2026-03-10",
+        "nome_projeto": "Brasil - O Poder da Cana de Açúcar",
+        "cgccpf": "53309852000121",
+        "nome_doador": "A ALVES SA INDUSTRIA E COMERCIO",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/247415",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/8b7d73476c473d60d31957895e84dea8f0fe9e25bc4f544a03cfd00cd93f"
+        }
+      },
+      {
+        "PRONAC": "247415",
+        "valor": 1000,
+        "data_recibo": "2026-04-14",
+        "nome_projeto": "Brasil - O Poder da Cana de Açúcar",
+        "cgccpf": "53309852000121",
+        "nome_doador": "A ALVES SA INDUSTRIA E COMERCIO",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/247415",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/ddb0df32da1f58955324d89b5231b59b115de45791c5a9b10e5ca333edfb"
+        }
+      },
+      {
+        "PRONAC": "247415",
+        "valor": 1000,
+        "data_recibo": "2026-05-11",
+        "nome_projeto": "Brasil - O Poder da Cana de Açúcar",
+        "cgccpf": "53309852000121",
+        "nome_doador": "A ALVES SA INDUSTRIA E COMERCIO",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/247415",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/63a47c137c2b1e543913d2ac93b2a3701ddc2b3bc94cf876984463028c63"
+        }
+      },
+      {
+        "PRONAC": "247415",
+        "valor": 1000,
+        "data_recibo": "2026-06-10",
+        "nome_projeto": "Brasil - O Poder da Cana de Açúcar",
+        "cgccpf": "53309852000121",
+        "nome_doador": "A ALVES SA INDUSTRIA E COMERCIO",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/247415",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/cc71d6b3c11a7730355e35ff9311e82e7a008d3c81045f17d3c4c7d237d9"
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": "http://api.salic.cultura.gov.br/api/v1/incentivadores/53309852000121/doacoes",
+    "first": "https://api.salic.cultura.gov.br/api/v1/incentivadores/368d7f665cb8bad2f221b4c722b852045cab09bf19cb75/doacoes?limit=100&offset=0",
+    "last": "https://api.salic.cultura.gov.br/api/v1/incentivadores/368d7f665cb8bad2f221b4c722b852045cab09bf19cb75/doacoes?limit=100&offset=0"
+  },
+  "count": 5,
+  "total": 1
+}

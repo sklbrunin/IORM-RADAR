@@ -1,0 +1,376 @@
+[
+  {
+    "empresa_id": 5665,
+    "razao_social": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+    "status_pesquisa": "SUCESSO",
+    "observacoes": "Empresa integra o Grupo Colorado (setor sucroenergético e revenda de veículos), sediado em Orlândia/SP, com unidade fabril em Guaíra/SP. O grupo mantém vínculo institucional com o IORM (Instituto Oswaldo Ribeiro de Mendonça). Não foi encontrado site institucional exclusivo da razão social; o site oficial é o do grupo (colorado.com.br).",
+    "presenca_digital": [
+      {"tipo": "site", "url": "https://www.colorado.com.br", "fonte": "Site oficial Grupo Colorado", "nivel_confianca": "ALTO"},
+      {"tipo": "linkedin", "url": "https://br.linkedin.com/company/a%C3%A7%C3%BAcar-e-lcool-oswaldo-ribeiro-de-mendon%C3%A7a-ltda", "fonte": "Resultado de busca pública", "nivel_confianca": "MEDIO"},
+      {"tipo": "instagram", "url": "https://www.instagram.com/grupocolorado.oficial", "fonte": "Menção em colorado.com.br", "nivel_confianca": "MEDIO"},
+      {"tipo": "facebook", "url": "https://www.facebook.com/grupocolorado.oficial", "fonte": "Menção em colorado.com.br", "nivel_confianca": "MEDIO"}
+    ],
+    "contatos": [
+      {"nome": null, "cargo": null, "departamento": "Administração Grupo Colorado", "tipo_contato": "EMAIL_INSTITUCIONAL", "valor": "grupocolorado@colorado.com.br", "fonte": "Site oficial Grupo Colorado", "url_fonte": "https://www.colorado.com.br", "nivel_confianca": "ALTO"},
+      {"nome": null, "cargo": null, "departamento": "Administração Grupo Colorado", "tipo_contato": "TELEFONE_INSTITUCIONAL", "valor": "(16) 3820-3099", "fonte": "Site oficial Grupo Colorado", "url_fonte": "https://www.colorado.com.br", "nivel_confianca": "ALTO"},
+      {"nome": null, "cargo": null, "departamento": "Unidade industrial Guaíra", "tipo_contato": "TELEFONE_COMERCIAL", "valor": "(17) 3330-3377", "fonte": "Cadastro COGEN (associação de cogeração)", "url_fonte": "https://www.cogen.com.br/cogen/networking/acucar-e-alcool-oswaldo-ribeiro-de-mendonca-ltda", "nivel_confianca": "MEDIO"},
+      {"nome": null, "cargo": null, "departamento": "Ouvidoria/Canal de denúncias", "tipo_contato": "FORMULARIO_CONTATO", "valor": "https://www.contatoseguro.com.br/grupocolorado", "fonte": "Site oficial Grupo Colorado", "url_fonte": "https://www.colorado.com.br", "nivel_confianca": "ALTO"},
+      {"nome": "Josimara Ribeiro de Mendonça", "cargo": "Diretora de Responsabilidade Social do Grupo Colorado; Presidente da Casa da Criança Armanda Malvina Mendonça", "departamento": "Responsabilidade Social / Instituto IORM", "tipo_contato": "PESSOA_CARGO", "valor": null, "fonte": "Site oficial Grupo Colorado", "url_fonte": "https://www.colorado.com.br/comunidades/", "nivel_confianca": "ALTO"}
+    ],
+    "evidencias": [
+      {"categoria": "INSTITUTO", "descricao": "IORM (Instituto Oswaldo Ribeiro de Mendonça), fundado em 2005, atua em cultura, educação, esporte, assistência social e geração de renda para crianças, adolescentes e jovens em Guaíra, Ipuã, Miguelópolis e Orlândia; já atendeu mais de 14 mil pessoas.", "url": "https://www.colorado.com.br/comunidades/", "fonte": "Site oficial Grupo Colorado", "nivel_confianca": "ALTO"},
+      {"categoria": "RESPONSABILIDADE_SOCIAL", "descricao": "Grupo Colorado é certificado como 'Empresa Amiga da Criança' desde 1998 e mantém campanhas anuais de doação de cobertores em 8 municípios.", "url": "https://www.colorado.com.br/comunidades/", "fonte": "Site oficial Grupo Colorado", "nivel_confianca": "ALTO"},
+      {"categoria": "PATROCINIO", "descricao": "Festa Julina 'Sertanejos do Bem', criada pelo Grupo Colorado, reúne cerca de 1.200 pessoas e arrecada recursos em prol dos projetos do IORM.", "url": "https://www.colorado.com.br/a-forca-da-tradicao-e-do-afeto-festa-julina-sertanejos-do-bem-reune-cerca-de-1-200-pessoas-em-prol-dos-projetos-do-iorm/", "fonte": "Site oficial Grupo Colorado", "nivel_confianca": "ALTO"},
+      {"categoria": "COMUNICACAO", "descricao": "Grupo mantém departamento de Comunicação responsável por publicação interna 'InfORM' e divulgação institucional.", "url": "https://www.colorado.com.br", "fonte": "Site oficial Grupo Colorado", "nivel_confianca": "MEDIO"},
+      {"categoria": "SUSTENTABILIDADE", "descricao": "Projeto 'Energia do Bem' doa energia renovável produzida pelo grupo ao Hospital de Amor.", "url": "https://www.colorado.com.br/comunidades/", "fonte": "Site oficial Grupo Colorado", "nivel_confianca": "ALTO"}
+    ]
+  },
+  {
+    "empresa_id": 5814,
+    "razao_social": "Produtos Alimentícios Orlândia S/A Comércio Industrias (marca Brejeiro)",
+    "status_pesquisa": "SUCESSO",
+    "observacoes": "Empresa fundada em 1944, opera sob a marca comercial 'Brejeiro' (arroz, soja, óleos vegetais, biodiesel). Sede em Orlândia/SP.",
+    "presenca_digital": [
+      {"tipo": "site", "url": "https://brejeiro.com.br", "fonte": "Site oficial Brejeiro", "nivel_confianca": "ALTO"},
+      {"tipo": "facebook", "url": "https://www.facebook.com/brejeirooficial", "fonte": "Página oficial Facebook", "nivel_confianca": "ALTO"},
+      {"tipo": "instagram", "url": "https://www.instagram.com/brejeirooficial", "fonte": "Página oficial Instagram", "nivel_confianca": "ALTO"},
+      {"tipo": "linkedin", "url": "https://br.linkedin.com/company/produtos-aliment%C3%ADcios-orl%C3%A2ndia-s.a.-com%C3%A9rcio-e-ind%C3%BAstria", "fonte": "Resultado de busca pública", "nivel_confianca": "MEDIO"}
+    ],
+    "contatos": [
+      {"nome": null, "cargo": null, "departamento": "SAC", "tipo_contato": "EMAIL_CONTATO", "valor": "sac@brejeiro.com.br", "fonte": "Site oficial", "url_fonte": "https://brejeiro.com.br", "nivel_confianca": "MEDIO"},
+      {"nome": null, "cargo": null, "departamento": "SAC", "tipo_contato": "TELEFONE_INSTITUCIONAL", "valor": "0800 7070 738", "fonte": "Site oficial", "url_fonte": "https://brejeiro.com.br", "nivel_confianca": "MEDIO"},
+      {"nome": null, "cargo": null, "departamento": "Sede administrativa", "tipo_contato": "TELEFONE_COMERCIAL", "valor": "(16) 3820-5000", "fonte": "Site oficial", "url_fonte": "https://brejeiro.com.br", "nivel_confianca": "MEDIO"}
+    ],
+    "evidencias": [
+      {"categoria": "SUSTENTABILIDADE", "descricao": "Empresa comercializa biodiesel desde 2011 e recebeu o Selo Combustível Social em 2012 (renovado em 2017), concedido pelo Ministério do Desenvolvimento Agrário.", "url": "https://brejeiro.com.br", "fonte": "Site oficial Brejeiro", "nivel_confianca": "MEDIO"},
+      {"categoria": "SUSTENTABILIDADE", "descricao": "Empresa consta como membro da Roundtable on Sustainable Palm Oil (RSPO).", "url": "https://rspo.org/members/4-1520-23-000-00/", "fonte": "Listagem de membros RSPO.org", "nivel_confianca": "BAIXO"}
+    ]
+  },
+  {
+    "empresa_id": 5228,
+    "razao_social": "Mina Mercantil Industrial e Agrícola Ltda.",
+    "status_pesquisa": "SUCESSO",
+    "observacoes": "Empresa fundada em 1975, atua no setor agroindustrial (derivados de milho, nutrição animal), com sede em Guaíra/SP e filiais em Guaraci/SP e Riolândia/SP.",
+    "presenca_digital": [
+      {"tipo": "site", "url": "https://www.minamercantil.com.br", "fonte": "Site oficial", "nivel_confianca": "ALTO"},
+      {"tipo": "facebook", "url": "https://www.facebook.com/minamercantilindustrial/", "fonte": "Página oficial Facebook", "nivel_confianca": "ALTO"},
+      {"tipo": "instagram", "url": "https://www.instagram.com/minamercantilindustrial/", "fonte": "Página oficial Instagram", "nivel_confianca": "ALTO"},
+      {"tipo": "linkedin", "url": "https://br.linkedin.com/company/minamercantil", "fonte": "Resultado de busca pública", "nivel_confianca": "MEDIO"}
+    ],
+    "contatos": [
+      {"nome": null, "cargo": null, "departamento": "Matriz Guaíra", "tipo_contato": "EMAIL_INSTITUCIONAL", "valor": "minamercantil@minamercantil.com.br", "fonte": "Site oficial - página Contato", "url_fonte": "https://www.minamercantil.com.br/contato", "nivel_confianca": "ALTO"},
+      {"nome": null, "cargo": null, "departamento": "Matriz Guaíra", "tipo_contato": "TELEFONE_INSTITUCIONAL", "valor": "(17) 3330-2677", "fonte": "Site oficial - página Contato", "url_fonte": "https://www.minamercantil.com.br/contato", "nivel_confianca": "ALTO"},
+      {"nome": null, "cargo": null, "departamento": "Institucional", "tipo_contato": "FORMULARIO_CONTATO", "valor": "https://www.minamercantil.com.br/contato", "fonte": "Site oficial", "url_fonte": "https://www.minamercantil.com.br/contato", "nivel_confianca": "ALTO"},
+      {"nome": "Nelson Inomato", "cargo": "Assistente de Recursos Humanos", "departamento": "Recursos Humanos", "tipo_contato": "PESSOA_CARGO", "valor": "https://www.linkedin.com/in/nelson-inomato-81b9b24a/", "fonte": "Resultado de busca pública", "url_fonte": "https://www.linkedin.com/in/nelson-inomato-81b9b24a/", "nivel_confianca": "BAIXO"}
+    ],
+    "evidencias": [
+      {"categoria": "ESG", "descricao": "Empresa afirma estar comprometida com a Agenda 2030 da ONU e seus Objetivos de Desenvolvimento Sustentável (ODS), com guia de boas práticas e código de ética.", "url": "https://www.minamercantil.com.br/sustentabilidade", "fonte": "Site oficial", "nivel_confianca": "ALTO"},
+      {"categoria": "SUSTENTABILIDADE", "descricao": "Investe em energia solar para reduzir pegada de carbono e prioriza reciclagem/reutilização de resíduos.", "url": "https://www.minamercantil.com.br/sustentabilidade", "fonte": "Site oficial", "nivel_confianca": "ALTO"},
+      {"categoria": "RESPONSABILIDADE_SOCIAL", "descricao": "Empresa declara valorizar a diversidade e inclusão, garantindo oportunidades iguais para homens e mulheres, e mantém canal de ouvidoria.", "url": "https://www.minamercantil.com.br/sustentabilidade", "fonte": "Site oficial", "nivel_confianca": "ALTO"}
+    ]
+  },
+  {
+    "empresa_id": 5030,
+    "razao_social": "INTELLI INDUSTRIA DE TERMINAIS ELETRICOS LTDA",
+    "status_pesquisa": "SUCESSO",
+    "observacoes": "Fundada em 1973, líder nacional na fabricação de hastes de aterramento, terminais e conectores elétricos. Parte do Grupo Intelli, planta principal em Orlândia/SP.",
+    "presenca_digital": [
+      {"tipo": "site", "url": "https://www.intelli.com.br", "fonte": "Site oficial", "nivel_confianca": "ALTO"},
+      {"tipo": "linkedin", "url": "https://br.linkedin.com/company/grupo-intelli", "fonte": "Site oficial e busca pública", "nivel_confianca": "ALTO"},
+      {"tipo": "facebook", "url": "https://www.facebook.com/grupointelli", "fonte": "Site oficial", "nivel_confianca": "ALTO"},
+      {"tipo": "instagram", "url": "https://www.instagram.com/grupo_intelli", "fonte": "Site oficial", "nivel_confianca": "ALTO"},
+      {"tipo": "youtube", "url": "https://www.youtube.com/channel/UCFdrVQhIVt9th3dnPi8BN2g", "fonte": "Site oficial", "nivel_confianca": "ALTO"}
+    ],
+    "contatos": [
+      {"nome": null, "cargo": null, "departamento": "Institucional", "tipo_contato": "TELEFONE_INSTITUCIONAL", "valor": "+55 (16) 3820-1500", "fonte": "Site oficial - página Contato", "url_fonte": "https://www.intelli.com.br/en/contact", "nivel_confianca": "ALTO"},
+      {"nome": null, "cargo": null, "departamento": "Institucional", "tipo_contato": "FORMULARIO_CONTATO", "valor": "https://www.intelli.com.br/en/contact", "fonte": "Site oficial", "url_fonte": "https://www.intelli.com.br/en/contact", "nivel_confianca": "ALTO"}
+    ],
+    "evidencias": [
+      {"categoria": "ESG", "descricao": "Empresa declara priorizar sustentabilidade econômica, social e ambiental como valor central, com compromisso ético e de transparência.", "url": "https://www.intelli.com.br/en/about-us", "fonte": "Site oficial", "nivel_confianca": "ALTO"},
+      {"categoria": "SUSTENTABILIDADE", "descricao": "Possui certificações ISO 14001:2015 (Gestão Ambiental), ISO 50001:2018 (Gestão de Energia) e ISO 45001 (Saúde e Segurança Ocupacional).", "url": "https://www.intelli.com.br/en/about-us", "fonte": "Site oficial", "nivel_confianca": "ALTO"}
+    ]
+  },
+  {
+    "empresa_id": 4716,
+    "razao_social": "Usina Açucareira Guairá Limitada",
+    "status_pesquisa": "SUCESSO",
+    "observacoes": "Fundada em 1979 pela família Motta Luiz. Grupo empresarial DISTINTO do Grupo Colorado, apesar de atuar no mesmo setor/cidade. Alguns e-mails extraídos automaticamente do site pareciam placeholders de template e foram descartados por não parecerem contatos reais.",
+    "presenca_digital": [
+      {"tipo": "site", "url": "https://www.uag.com.br", "fonte": "Site oficial", "nivel_confianca": "ALTO"},
+      {"tipo": "site", "url": "http://usinaguaira.com.br", "fonte": "Site institucional alternativo (certificado SSL expirado no momento da consulta)", "nivel_confianca": "MEDIO"},
+      {"tipo": "linkedin", "url": "https://br.linkedin.com/company/usina-a-ucareira-gua-ra", "fonte": "Resultado de busca pública", "nivel_confianca": "MEDIO"}
+    ],
+    "contatos": [
+      {"nome": null, "cargo": null, "departamento": "Ouvidoria", "tipo_contato": "TELEFONE_INSTITUCIONAL", "valor": "(17) 3331-9299", "fonte": "Site oficial (extração automática, não reconfirmada por leitura direta)", "url_fonte": "https://www.uag.com.br/", "nivel_confianca": "MEDIO"},
+      {"nome": null, "cargo": null, "departamento": "Ouvidoria", "tipo_contato": "EMAIL_INSTITUCIONAL", "valor": "ouvidoria@uag.com.br", "fonte": "Site oficial (extração automática, não reconfirmada por leitura direta)", "url_fonte": "https://www.uag.com.br/", "nivel_confianca": "MEDIO"},
+      {"nome": "Heráclito da Motta Luiz", "cargo": "Fundador (empresário agropecuarista)", "departamento": "Fundação/Origem da empresa", "tipo_contato": "PESSOA_CARGO", "valor": null, "fonte": "Site oficial - página Nossa História", "url_fonte": "https://usinaguaira.com.br/htm/nossahistoria.htm", "nivel_confianca": "MEDIO"}
+    ],
+    "evidencias": [
+      {"categoria": "SUSTENTABILIDADE", "descricao": "Usina plantou mais de 500.000 mudas de árvores nativas para proteção de nascentes, rios e córregos.", "url": "https://www.uag.com.br/programas-ambientais/", "fonte": "Site oficial", "nivel_confianca": "ALTO"},
+      {"categoria": "SUSTENTABILIDADE", "descricao": "100% da colheita mecanizada crua desde 2009, em conformidade com o protocolo agroambiental paulista.", "url": "https://usinaguaira.com.br/htm/nossahistoria.htm", "fonte": "Site oficial", "nivel_confianca": "ALTO"},
+      {"categoria": "RESPONSABILIDADE_SOCIAL", "descricao": "Desenvolve ações de educação ambiental voltadas aos colaboradores e à comunidade da região, com foco em escolas municipais.", "url": "https://www.uag.com.br/programas-ambientais/", "fonte": "Site oficial", "nivel_confianca": "ALTO"},
+      {"categoria": "OUTRO", "descricao": "Certificações e prêmios: Selo Bronze do programa Valore (2014), 'Top of Quality Ambiental' (3 anos), título 'Empresa Amiga da Natureza' da Polícia Militar Ambiental de SP.", "url": "https://www.uag.com.br/programas-ambientais/", "fonte": "Site oficial", "nivel_confianca": "ALTO"}
+    ]
+  },
+  {
+    "empresa_id": 5775,
+    "razao_social": "Companhia Açucareira Vale do Rosário",
+    "status_pesquisa": "PARCIAL",
+    "observacoes": "Não foi localizado site oficial isolado. Relação com o grupo Raízen (via aquisição da Biosev em 2021) não confirmada por fonte primária para este CNPJ específico. Recomenda-se validação adicional antes de qualquer abordagem.",
+    "presenca_digital": [],
+    "contatos": [
+      {"nome": null, "cargo": null, "departamento": null, "tipo_contato": "TELEFONE_INSTITUCIONAL", "valor": "(16) 3820-2185", "fonte": "Diretório empresarial (Coligado)", "url_fonte": "https://www.coligado.com.br/empresa/unidade-vale-do-rosario-orlandia-sp-rural-3273021", "nivel_confianca": "BAIXO"}
+    ],
+    "evidencias": [
+      {"categoria": "OUTRO", "descricao": "Unidade industrial 'Vale do Rosário' é descrita como parte do parque industrial da Raízen na região de Ribeirão Preto, herdada da fusão com a Biosev em 2021 (relação com o CNPJ pesquisado não confirmada).", "url": "https://agfeed.com.br/negocios/o-fim-de-uma-era-raizen-desativa-historica-usina-santa-elisa-para-fazer-caixa-e-reduzir-dividas/", "fonte": "AgFeed", "nivel_confianca": "NAO_CONFIRMADO"}
+    ]
+  },
+  {
+    "empresa_id": 3200,
+    "razao_social": "COLORADO RENTAL LOCACAO DE MAQUINAS LTDA",
+    "status_pesquisa": "SUCESSO",
+    "observacoes": "Opera sob a marca 'Colorado Locação' (coloradolocacao.com.br), integrante do Grupo Colorado. O grupo tem vínculo direto e publicado com o IORM, fundado pela própria Diretora de Responsabilidade Social do grupo.",
+    "presenca_digital": [
+      {"tipo": "site", "url": "https://www.colorado.com.br/", "fonte": "Site oficial Grupo Colorado", "nivel_confianca": "ALTO"},
+      {"tipo": "site", "url": "https://coloradolocacao.com.br/", "fonte": "Site oficial Colorado Locação", "nivel_confianca": "ALTO"},
+      {"tipo": "linkedin", "url": "https://www.linkedin.com/company/grupocolorado", "fonte": "Citado como oficial pelo site do grupo", "nivel_confianca": "ALTO"},
+      {"tipo": "instagram", "url": "https://www.instagram.com/grupocolorado.oficial/", "fonte": "Site oficial Grupo Colorado", "nivel_confianca": "ALTO"},
+      {"tipo": "facebook", "url": "https://www.facebook.com/grupocolorado.oficial/", "fonte": "Site oficial Grupo Colorado", "nivel_confianca": "ALTO"},
+      {"tipo": "instagram", "url": "https://www.instagram.com/coloradolocacao/", "fonte": "Site Colorado Locação", "nivel_confianca": "ALTO"}
+    ],
+    "contatos": [
+      {"nome": null, "cargo": null, "departamento": null, "tipo_contato": "EMAIL_INSTITUCIONAL", "valor": "grupocolorado@colorado.com.br", "fonte": "Site oficial - página de contato", "url_fonte": "https://www.colorado.com.br/contato/", "nivel_confianca": "ALTO"},
+      {"nome": null, "cargo": null, "departamento": "Colorado Locação", "tipo_contato": "TELEFONE_COMERCIAL", "valor": "(16) 3516-5300", "fonte": "Site Colorado Locação", "url_fonte": "https://coloradolocacao.com.br/", "nivel_confianca": "ALTO"},
+      {"nome": null, "cargo": null, "departamento": "Colorado Locação", "tipo_contato": "WHATSAPP_INSTITUCIONAL", "valor": "(16) 99750-4699", "fonte": "Site Colorado Locação", "url_fonte": "https://coloradolocacao.com.br/", "nivel_confianca": "ALTO"},
+      {"nome": null, "cargo": null, "departamento": "Ouvidoria / Canal de Denúncias", "tipo_contato": "FORMULARIO_CONTATO", "valor": "https://www.contatoseguro.com.br/grupocolorado", "fonte": "Site oficial - página de contato", "url_fonte": "https://www.colorado.com.br/contato/", "nivel_confianca": "ALTO"},
+      {"nome": "Josimara Ribeiro de Mendonça", "cargo": "Diretora de Responsabilidade Social do Grupo Colorado", "departamento": "Responsabilidade Social", "tipo_contato": "PESSOA_CARGO", "valor": null, "fonte": "Site oficial Grupo Colorado - página Comunidades", "url_fonte": "https://www.colorado.com.br/comunidades/", "nivel_confianca": "ALTO"}
+    ],
+    "evidencias": [
+      {"categoria": "RESPONSABILIDADE_SOCIAL", "descricao": "Princípio orientador dos investimentos sociais do grupo: contribuir para um futuro digno para as comunidades próximas de suas empresas.", "url": "https://www.colorado.com.br/comunidades/", "fonte": "Site oficial Grupo Colorado", "nivel_confianca": "ALTO"},
+      {"categoria": "FUNDACAO", "descricao": "Instituto Oswaldo Ribeiro de Mendonça (IORM), fundado em 2005 por Josimara Ribeiro de Mendonça, oferece programas em cultura, educação, esportes e assistência social; já atendeu mais de 14 mil pessoas em quatro municípios paulistas.", "url": "https://www.colorado.com.br/comunidades/", "fonte": "Site oficial Grupo Colorado", "nivel_confianca": "ALTO"},
+      {"categoria": "PATROCINIO", "descricao": "Iniciativa 'Energia do Bem': doações de energia renovável ao Hospital de Amor; empresas do grupo receberam certificado de parceria.", "url": "https://www.colorado.com.br/nosdacolorado/empresas-do-grupo-colorado-recebem-certificado-de-parceria-por-destinarem-recursos-ao-hospital-de-amor/", "fonte": "Blog institucional 'Nós da Colorado'", "nivel_confianca": "MEDIO"},
+      {"categoria": "ESG", "descricao": "Selo 'Empresa Amiga da Criança' da Fundação Abrinq, conquistado pela Usina Colorado em 1998, com compromisso contra trabalho infantil.", "url": "https://www.colorado.com.br/comunidades/", "fonte": "Site oficial Grupo Colorado", "nivel_confianca": "ALTO"}
+    ]
+  },
+  {
+    "empresa_id": 7676,
+    "razao_social": "Aguetoni Transportes Ltda.",
+    "status_pesquisa": "SUCESSO",
+    "observacoes": "Site institucional é do Grupo Aguetoni, que engloba a Aguetoni Transportes e outras empresas do grupo.",
+    "presenca_digital": [
+      {"tipo": "site", "url": "https://aguetoni.com.br/", "fonte": "Site oficial Grupo Aguetoni", "nivel_confianca": "ALTO"},
+      {"tipo": "site", "url": "https://aguetoni.com.br/aguetoni-transportes/", "fonte": "Página institucional da unidade", "nivel_confianca": "ALTO"},
+      {"tipo": "facebook", "url": "https://www.facebook.com/grupoaguetoni/", "fonte": "Site oficial Grupo Aguetoni", "nivel_confianca": "ALTO"},
+      {"tipo": "instagram", "url": "https://www.instagram.com/grupoaguetoni/", "fonte": "Site oficial Grupo Aguetoni", "nivel_confianca": "ALTO"}
+    ],
+    "contatos": [
+      {"nome": null, "cargo": null, "departamento": null, "tipo_contato": "EMAIL_INSTITUCIONAL", "valor": "aguetoni@aguetoni.com.br", "fonte": "Site oficial - Fale Conosco", "url_fonte": "https://aguetoni.com.br/fale-conosco/", "nivel_confianca": "ALTO"},
+      {"nome": null, "cargo": null, "departamento": "Matriz (Guaíra/SP)", "tipo_contato": "TELEFONE_INSTITUCIONAL", "valor": "(17) 3330-2455", "fonte": "Site oficial - Fale Conosco", "url_fonte": "https://aguetoni.com.br/fale-conosco/", "nivel_confianca": "ALTO"},
+      {"nome": null, "cargo": null, "departamento": null, "tipo_contato": "FORMULARIO_CONTATO", "valor": "https://aguetoni.com.br/fale-conosco/", "fonte": "Site oficial", "url_fonte": "https://aguetoni.com.br/fale-conosco/", "nivel_confianca": "ALTO"}
+    ],
+    "evidencias": [
+      {"categoria": "RESPONSABILIDADE_SOCIAL", "descricao": "Grupo mantém documento formal 'Política Socioambiental' disponibilizado publicamente no site institucional.", "url": "https://aguetoni.com.br/", "fonte": "Site oficial Grupo Aguetoni", "nivel_confianca": "ALTO"},
+      {"categoria": "OUTRO", "descricao": "Publicação de 'Relatório de Transparência e Igualdade Salarial', emitido conforme exigência do Ministério do Trabalho e Emprego.", "url": "https://aguetoni.com.br/", "fonte": "Site oficial Grupo Aguetoni", "nivel_confianca": "ALTO"}
+    ]
+  },
+  {
+    "empresa_id": 160,
+    "razao_social": "Beira Rio Agroindustrial Ltda.",
+    "status_pesquisa": "PARCIAL",
+    "observacoes": "Domínio beirarioagroindustrial.com.br existe mas retornou erro 403 ao acessar. Não foram localizadas redes sociais oficiais próprias. Empresa associada à ABRA (Associação Brasileira de Reciclagem Animal).",
+    "presenca_digital": [
+      {"tipo": "site_nao_confirmado", "url": "https://www.beirarioagroindustrial.com.br", "fonte": "Domínio usado no e-mail institucional; acesso bloqueado (HTTP 403) no momento da pesquisa", "nivel_confianca": "BAIXO"},
+      {"tipo": "diretorio_associacao", "url": "https://abra.ind.br/associados/beirario/?lang=en", "fonte": "ABRA - Associação Brasileira de Reciclagem Animal", "nivel_confianca": "MEDIO"}
+    ],
+    "contatos": [
+      {"nome": null, "cargo": null, "departamento": "Contábil", "tipo_contato": "EMAIL_INSTITUCIONAL", "valor": "contabil@beirarioagroindustrial.com.br", "fonte": "Diretórios empresariais (Econodata/CNPJá)", "url_fonte": "https://cnpja.com/office/00510574000100", "nivel_confianca": "MEDIO"},
+      {"nome": null, "cargo": null, "departamento": null, "tipo_contato": "TELEFONE_INSTITUCIONAL", "valor": "(16) 3832-8901", "fonte": "Diretórios empresariais (Econodata/CNPJá)", "url_fonte": "https://cnpja.com/office/00510574000100", "nivel_confianca": "MEDIO"}
+    ],
+    "evidencias": [
+      {"categoria": "RESPONSABILIDADE_SOCIAL", "descricao": "A empresa reafirma sua responsabilidade social e ambiental como características destacadas de sua operação ao longo dos anos, com foco em tecnologia e melhorias nos processos de produção.", "url": "https://abra.ind.br/associados/beirario/?lang=en", "fonte": "ABRA - página de associado", "nivel_confianca": "MEDIO"}
+    ]
+  },
+  {
+    "empresa_id": 7960,
+    "razao_social": "Agrop - Agropecuária Orlando Prado Diniz Junqueira Ltda",
+    "status_pesquisa": "PARCIAL",
+    "observacoes": "Não foi localizado site institucional próprio confirmado. Página de empresa no LinkedIn identificada via busca pública. Nenhuma evidência textual direta de ESG/sustentabilidade encontrada.",
+    "presenca_digital": [
+      {"tipo": "linkedin", "url": "https://br.linkedin.com/company/agrop-agropecu%C3%A1ria-orlando-prado-diniz-junqueira", "fonte": "Resultado de busca pública", "nivel_confianca": "MEDIO"}
+    ],
+    "contatos": [
+      {"nome": null, "cargo": null, "departamento": null, "tipo_contato": "TELEFONE_INSTITUCIONAL", "valor": "(16) 3820-0100", "fonte": "Diretório empresarial", "url_fonte": "https://www.solutudo.com.br/empresas/sp/orlandia/cultivo/agrop-agropecuaria-orlando-prado-diniz-junqueira-ltda-9049080", "nivel_confianca": "BAIXO"},
+      {"nome": "André Luiz Lemes", "cargo": "Gerente Administrativo e Financeiro", "departamento": "Administrativo-Financeiro", "tipo_contato": "PESSOA_CARGO", "valor": "https://www.linkedin.com/in/andre-luiz-lemes-146997210/", "fonte": "Resultado de busca pública", "url_fonte": "https://www.linkedin.com/in/andre-luiz-lemes-146997210/", "nivel_confianca": "MEDIO"}
+    ],
+    "evidencias": []
+  },
+  {
+    "empresa_id": 1621,
+    "razao_social": "Rodotac Transportes Ltda",
+    "status_pesquisa": "SUCESSO",
+    "observacoes": "Confirmada como parte do Grupo Aguetoni, com página institucional dedicada. Não foram encontrados nomes de pessoas em cargos de ESG/RH/marketing publicados.",
+    "presenca_digital": [
+      {"tipo": "site", "url": "https://aguetoni.com.br/rodotac-transportes/", "fonte": "Site institucional Grupo Aguetoni", "nivel_confianca": "ALTO"},
+      {"tipo": "facebook", "url": "https://facebook.com/grupoaguetoni", "fonte": "Site institucional Grupo Aguetoni", "nivel_confianca": "ALTO"},
+      {"tipo": "instagram", "url": "https://instagram.com/grupoaguetoni", "fonte": "Site institucional Grupo Aguetoni", "nivel_confianca": "ALTO"}
+    ],
+    "contatos": [
+      {"nome": null, "cargo": null, "departamento": null, "tipo_contato": "TELEFONE_INSTITUCIONAL", "valor": "(17) 3330-2455", "fonte": "Site institucional Grupo Aguetoni", "url_fonte": "https://aguetoni.com.br/rodotac-transportes/", "nivel_confianca": "ALTO"},
+      {"nome": null, "cargo": null, "departamento": null, "tipo_contato": "EMAIL_INSTITUCIONAL", "valor": "aguetoni@aguetoni.com.br", "fonte": "Site institucional Grupo Aguetoni", "url_fonte": "https://aguetoni.com.br/rodotac-transportes/", "nivel_confianca": "ALTO"}
+    ],
+    "evidencias": [
+      {"categoria": "SUSTENTABILIDADE", "descricao": "Empresa disponibiliza para download Política de Segurança, Saúde, Meio Ambiente e Qualidade e Política Socioambiental.", "url": "https://aguetoni.com.br/rodotac-transportes/", "fonte": "Site institucional Grupo Aguetoni", "nivel_confianca": "ALTO"},
+      {"categoria": "RESPONSABILIDADE_SOCIAL", "descricao": "Publicação de Relatório de Transparência e Igualdade Salarial (MTE) e Programa de Prevenção e Combate ao Assédio no Trabalho.", "url": "https://aguetoni.com.br/rodotac-transportes/", "fonte": "Site institucional Grupo Aguetoni", "nivel_confianca": "ALTO"}
+    ]
+  },
+  {
+    "empresa_id": 5051,
+    "razao_social": "OLHOS D AGUA INDUSTRIA E COMERCIO DE CARNES LTDA",
+    "status_pesquisa": "SUCESSO",
+    "observacoes": "Site institucional oficial confirmado, com páginas Sobre e Contato. Não foram identificados programas formais de ESG ou nomes de responsáveis por áreas específicas.",
+    "presenca_digital": [
+      {"tipo": "site", "url": "https://www.olhosdagua.com.br", "fonte": "Site institucional oficial", "nivel_confianca": "ALTO"},
+      {"tipo": "instagram", "url": "https://instagram.com/olhosdaguafrig", "fonte": "Site institucional oficial", "nivel_confianca": "ALTO"},
+      {"tipo": "facebook", "url": "https://www.facebook.com/p/Olhos-Dagua-Ind%C3%BAstria-e-Com%C3%A9rcio-de-Carnes-100090406265421/", "fonte": "Site institucional oficial", "nivel_confianca": "ALTO"}
+    ],
+    "contatos": [
+      {"nome": null, "cargo": null, "departamento": null, "tipo_contato": "TELEFONE_INSTITUCIONAL", "valor": "0800 340 5888", "fonte": "Site institucional oficial - página Contato", "url_fonte": "https://www.olhosdagua.com.br/contato", "nivel_confianca": "ALTO"},
+      {"nome": null, "cargo": null, "departamento": null, "tipo_contato": "EMAIL_CONTATO", "valor": "olhosdagua@com4.com.br", "fonte": "Site institucional oficial - página Contato", "url_fonte": "https://www.olhosdagua.com.br/contato", "nivel_confianca": "ALTO"},
+      {"nome": null, "cargo": null, "departamento": null, "tipo_contato": "FORMULARIO_CONTATO", "valor": "https://www.olhosdagua.com.br/contato", "fonte": "Site institucional oficial", "url_fonte": "https://www.olhosdagua.com.br/contato", "nivel_confianca": "ALTO"}
+    ],
+    "evidencias": [
+      {"categoria": "RESPONSABILIDADE_SOCIAL", "descricao": "Empresa destaca sua contribuição para o desenvolvimento econômico e social do município de Ipuã há mais de 40 anos.", "url": "https://www.olhosdagua.com.br/sobre", "fonte": "Site institucional oficial - página Sobre", "nivel_confianca": "ALTO"}
+    ]
+  },
+  {
+    "empresa_id": 3450,
+    "razao_social": "SIQUEIRA, NOGUEIRA & SILVA - COMERCIO E REPRESENTACAO DE PRODUTOS AGRICOLAS LTDA",
+    "status_pesquisa": "PARCIAL",
+    "observacoes": "Empresa opera sob a marca 'Aplitec Agro'. Não foi possível confirmar site oficial nem telefone/email por fonte primária. Nomes dos sócios-fundadores identificados via matéria de jornal local.",
+    "presenca_digital": [
+      {"tipo": "instagram", "url": "https://www.instagram.com/aplitecagro/", "fonte": "Busca pública", "nivel_confianca": "MEDIO"}
+    ],
+    "contatos": [
+      {"nome": "Renato Silva Santos", "cargo": "Sócio-fundador", "departamento": "Diretoria", "tipo_contato": "PESSOA_CARGO", "valor": null, "fonte": "Jornal O Guaíra - matéria sobre 10 anos da Aplitec Agro", "url_fonte": "https://oguaira.com.br/75480-2/", "nivel_confianca": "MEDIO"},
+      {"nome": "André Siqueira", "cargo": "Sócio-fundador / produtor rural", "departamento": "Diretoria", "tipo_contato": "PESSOA_CARGO", "valor": null, "fonte": "Jornal O Guaíra - matéria sobre 10 anos da Aplitec Agro", "url_fonte": "https://oguaira.com.br/75480-2/", "nivel_confianca": "MEDIO"},
+      {"nome": "Matheus Leis Nogueira", "cargo": "Sócio-fundador / produtor rural", "departamento": "Diretoria", "tipo_contato": "PESSOA_CARGO", "valor": null, "fonte": "Jornal O Guaíra - matéria sobre 10 anos da Aplitec Agro", "url_fonte": "https://oguaira.com.br/75480-2/", "nivel_confianca": "MEDIO"}
+    ],
+    "evidencias": [
+      {"categoria": "RESPONSABILIDADE_SOCIAL", "descricao": "Sócio-fundador Renato Silva Santos declarou priorizar oferecer informações aos produtores com Dias de Campo e palestras, trazendo tecnologia e priorizando a sustentabilidade.", "url": "https://oguaira.com.br/75480-2/", "fonte": "Jornal O Guaíra", "nivel_confianca": "MEDIO"}
+    ]
+  },
+  {
+    "empresa_id": 2982,
+    "razao_social": "Tomilho Alimentos Ltda",
+    "status_pesquisa": "PARCIAL",
+    "observacoes": "Identificação ambígua: existe outra 'Tomilho Alimentos Ltda' em Petrópolis/RJ sem relação. A unidade em Guaíra corresponde a marca/grupo Só Fruta Alimentos Ltda (Grupo Predilecta). Site oficial não pôde ser acessado diretamente (erro técnico).",
+    "presenca_digital": [
+      {"tipo": "facebook", "url": "https://www.facebook.com/sofrutaalimentos/", "fonte": "Busca pública", "nivel_confianca": "MEDIO"},
+      {"tipo": "instagram", "url": "https://www.instagram.com/sofrutaalimentos/", "fonte": "Busca pública", "nivel_confianca": "MEDIO"},
+      {"tipo": "linkedin", "url": "https://br.linkedin.com/company/so-fruta-alimentos-grupo-predilecta", "fonte": "Resultado de busca pública", "nivel_confianca": "MEDIO"}
+    ],
+    "contatos": [
+      {"nome": null, "cargo": null, "departamento": null, "tipo_contato": "TELEFONE_COMERCIAL", "valor": "(16) 3383-2306", "fonte": "Diretórios empresariais públicos", "url_fonte": "https://sofrutaalimentos.com.br/fale-conosco/", "nivel_confianca": "MEDIO"}
+    ],
+    "evidencias": [
+      {"categoria": "OUTRO", "descricao": "Só Fruta Alimentos opera desde 2009 em Guaíra com parque industrial de aproximadamente 150.000 m², gerando mais de 800 empregos diretos.", "url": "https://www.econodata.com.br/consulta-empresa/11085742000183-SO-FRUTA-ALIMENTOS-LTDA", "fonte": "Diretório empresarial público", "nivel_confianca": "BAIXO"}
+    ]
+  },
+  {
+    "empresa_id": 4722,
+    "razao_social": "Destilaria Mandu",
+    "status_pesquisa": "PARCIAL",
+    "observacoes": "A planta física é hoje operada pela Tereos Açúcar e Energia Brasil S.A. como 'Usina Mandu' (confirmação por fonte terciária, não pelo site da Tereos especificamente sobre a unidade). Recomenda-se validar a razão social/CNPJ vigente antes de qualquer abordagem.",
+    "presenca_digital": [
+      {"tipo": "site", "url": "https://br.tereos.com", "fonte": "Site institucional oficial Tereos Brasil", "nivel_confianca": "ALTO"},
+      {"tipo": "outro", "url": "https://www.novacana.com/usinas/mandu", "fonte": "Portal setorial NovaCana - ficha da unidade Mandu", "nivel_confianca": "MEDIO"}
+    ],
+    "contatos": [
+      {"nome": null, "cargo": null, "departamento": null, "tipo_contato": "TELEFONE_INSTITUCIONAL", "valor": "(17) 3330-1200", "fonte": "Diretórios empresariais públicos", "url_fonte": "https://www.econodata.com.br/consulta-empresa/44366276000163-usina-mandu-sa", "nivel_confianca": "MEDIO"},
+      {"nome": null, "cargo": null, "departamento": "Relações Institucionais / Atendimento", "tipo_contato": "FORMULARIO_CONTATO", "valor": "https://br.tereos.com/pt-pt/contato/", "fonte": "Site institucional oficial Tereos Brasil", "url_fonte": "https://br.tereos.com/pt-pt/contato/", "nivel_confianca": "ALTO"}
+    ],
+    "evidencias": [
+      {"categoria": "SUSTENTABILIDADE", "descricao": "Unidade Mandu (Guaíra/SP) certificada Bonsucro, ISCC Corsia, ISCC EU, além do Selo Energia Verde da UNICA.", "url": "https://www.novacana.com/noticias/usina-mandu-tereos-conquista-certificado-iscc-corsia-low-luc-risk-240226", "fonte": "NovaCana / UNICA", "nivel_confianca": "MEDIO"},
+      {"categoria": "SUSTENTABILIDADE", "descricao": "Tereos publica anualmente Relatório de Sustentabilidade corporativo e mantém seção de Pilares de Sustentabilidade.", "url": "https://br.tereos.com/pt-pt/sustentabilidade/relatorio-sustentabilidade/", "fonte": "Site institucional oficial Tereos Brasil", "nivel_confianca": "ALTO"}
+    ]
+  },
+  {
+    "empresa_id": 3531,
+    "razao_social": "POSTO CALIFORNIA DE GUAIRA LTDA",
+    "status_pesquisa": "SUCESSO",
+    "observacoes": "Confirmado como unidade do Grupo Aguetoni. Canal de e-mail e telefone matriz compartilhados por todas as unidades do grupo.",
+    "presenca_digital": [
+      {"tipo": "site", "url": "https://aguetoni.com.br/posto-california/", "fonte": "Site oficial Grupo Aguetoni", "nivel_confianca": "ALTO"}
+    ],
+    "contatos": [
+      {"nome": null, "cargo": null, "departamento": null, "tipo_contato": "TELEFONE_COMERCIAL", "valor": "(17) 3331-3889", "fonte": "Site oficial Grupo Aguetoni - página Posto Califórnia", "url_fonte": "https://aguetoni.com.br/posto-california/", "nivel_confianca": "ALTO"},
+      {"nome": null, "cargo": null, "departamento": null, "tipo_contato": "EMAIL_INSTITUCIONAL", "valor": "aguetoni@aguetoni.com.br", "fonte": "Site oficial Grupo Aguetoni", "url_fonte": "https://aguetoni.com.br/posto-california/", "nivel_confianca": "ALTO"}
+    ],
+    "evidencias": [
+      {"categoria": "RESPONSABILIDADE_SOCIAL", "descricao": "Site institucional lista Política Socioambiental e Relatório de Transparência e Igualdade Salarial emitido pelo MTE.", "url": "https://aguetoni.com.br/posto-california/", "fonte": "Site oficial Grupo Aguetoni", "nivel_confianca": "ALTO"}
+    ]
+  },
+  {
+    "empresa_id": 4749,
+    "razao_social": "COLORADO VEICULOS LIMITADA",
+    "status_pesquisa": "SUCESSO",
+    "observacoes": "Concessionária Fiat Colorado, fundada em 1980. Não foram encontradas evidências públicas de programas de ESG/responsabilidade social/patrocínio no site oficial.",
+    "presenca_digital": [
+      {"tipo": "site", "url": "https://www.fiatcolorado.com.br/", "fonte": "Site oficial Colorado Fiat", "nivel_confianca": "ALTO"},
+      {"tipo": "instagram", "url": "https://www.instagram.com/coloradofiat/", "fonte": "Referenciado no site oficial", "nivel_confianca": "MEDIO"},
+      {"tipo": "facebook", "url": "https://www.facebook.com/coloradofiat/", "fonte": "Busca pública", "nivel_confianca": "MEDIO"}
+    ],
+    "contatos": [
+      {"nome": null, "cargo": null, "departamento": null, "tipo_contato": "TELEFONE_COMERCIAL", "valor": "(16) 3820-0300", "fonte": "Site oficial Colorado Fiat", "url_fonte": "https://www.fiatcolorado.com.br/", "nivel_confianca": "ALTO"},
+      {"nome": null, "cargo": null, "departamento": null, "tipo_contato": "WHATSAPP_INSTITUCIONAL", "valor": "(16) 99950-0300", "fonte": "Site oficial Colorado Fiat (WhatsApp divulgado pela própria empresa)", "url_fonte": "https://www.fiatcolorado.com.br/", "nivel_confianca": "ALTO"}
+    ],
+    "evidencias": []
+  },
+  {
+    "empresa_id": 7558,
+    "razao_social": "POSTO JATAI LTDA.",
+    "status_pesquisa": "SUCESSO",
+    "observacoes": "Primeira unidade do Grupo Aguetoni, inaugurada em 1990. Contatos institucionais compartilhados com as demais unidades.",
+    "presenca_digital": [
+      {"tipo": "site", "url": "https://aguetoni.com.br/posto-jatai/", "fonte": "Site oficial Grupo Aguetoni", "nivel_confianca": "ALTO"}
+    ],
+    "contatos": [
+      {"nome": null, "cargo": null, "departamento": null, "tipo_contato": "TELEFONE_COMERCIAL", "valor": "(17) 3331-2502", "fonte": "Site oficial Grupo Aguetoni - página Posto Jataí", "url_fonte": "https://aguetoni.com.br/posto-jatai/", "nivel_confianca": "ALTO"},
+      {"nome": null, "cargo": null, "departamento": null, "tipo_contato": "EMAIL_INSTITUCIONAL", "valor": "aguetoni@aguetoni.com.br", "fonte": "Site oficial Grupo Aguetoni", "url_fonte": "https://aguetoni.com.br/posto-jatai/", "nivel_confianca": "ALTO"}
+    ],
+    "evidencias": [
+      {"categoria": "RESPONSABILIDADE_SOCIAL", "descricao": "Site institucional lista Política Socioambiental e programa de Prevenção e Combate ao assédio no trabalho.", "url": "https://aguetoni.com.br/posto-jatai/", "fonte": "Site oficial Grupo Aguetoni", "nivel_confianca": "ALTO"}
+    ]
+  },
+  {
+    "empresa_id": 1019,
+    "razao_social": "AUTO POSTO AVENIDA DE GUAIRA LTDA.",
+    "status_pesquisa": "SUCESSO",
+    "observacoes": "Página oficial confirma que a unidade Posto Avenida fica em Guaíra/SP e integra o Grupo Aguetoni.",
+    "presenca_digital": [
+      {"tipo": "site", "url": "https://aguetoni.com.br/posto-avenida/", "fonte": "Site oficial Grupo Aguetoni", "nivel_confianca": "ALTO"}
+    ],
+    "contatos": [
+      {"nome": null, "cargo": null, "departamento": null, "tipo_contato": "TELEFONE_COMERCIAL", "valor": "(17) 3331-2888", "fonte": "Site oficial Grupo Aguetoni - página Posto Avenida", "url_fonte": "https://aguetoni.com.br/posto-avenida/", "nivel_confianca": "ALTO"},
+      {"nome": null, "cargo": null, "departamento": null, "tipo_contato": "EMAIL_INSTITUCIONAL", "valor": "aguetoni@aguetoni.com.br", "fonte": "Site oficial Grupo Aguetoni", "url_fonte": "https://aguetoni.com.br/posto-avenida/", "nivel_confianca": "ALTO"}
+    ],
+    "evidencias": [
+      {"categoria": "RESPONSABILIDADE_SOCIAL", "descricao": "Site institucional lista Política Socioambiental e relatório de transparência e igualdade salarial emitido pelo MTE.", "url": "https://aguetoni.com.br/posto-avenida/", "fonte": "Site oficial Grupo Aguetoni", "nivel_confianca": "ALTO"}
+    ]
+  },
+  {
+    "empresa_id": 7701,
+    "razao_social": "ORLASOLDA COMERCIO DE FERRAMENTAS E SOLDAS LTDA",
+    "status_pesquisa": "PARCIAL",
+    "observacoes": "Site oficial não pôde ser validado (erro de certificado SSL). Telefone/e-mail vêm apenas de bases cadastrais secundárias; o domínio do e-mail encontrado não bate com o nome da empresa, por isso confiança baixa. Nenhuma evidência de ESG/responsabilidade social encontrada.",
+    "presenca_digital": [
+      {"tipo": "site_nao_confirmado", "url": "https://www.orlasolda.com.br/", "fonte": "Resultado de busca pública; site não pôde ser validado por erro de certificado SSL", "nivel_confianca": "BAIXO"},
+      {"tipo": "facebook", "url": "https://www.facebook.com/orlasolda/", "fonte": "Resultado de busca pública; conteúdo não pôde ser extraído", "nivel_confianca": "BAIXO"}
+    ],
+    "contatos": [
+      {"nome": null, "cargo": null, "departamento": null, "tipo_contato": "TELEFONE_COMERCIAL", "valor": "(16) 3820-9900", "fonte": "Base cadastral pública (InformeCadastral/Econodata), não confirmado em canal oficial", "url_fonte": "https://www.informecadastral.com.br/cnpj/orlasolda-comercio-de-ferramentas-e-soldas-ltda-66185133000198", "nivel_confianca": "MEDIO"},
+      {"nome": null, "cargo": null, "departamento": null, "tipo_contato": "EMAIL_CONTATO", "valor": "comsolda@comsolda.net.br", "fonte": "Base cadastral pública; domínio não corresponde ao nome da empresa, possível informação desatualizada", "url_fonte": "https://www.informecadastral.com.br/cnpj/orlasolda-comercio-de-ferramentas-e-soldas-ltda-66185133000198", "nivel_confianca": "BAIXO"}
+    ],
+    "evidencias": []
+  }
+]

@@ -1,0 +1,5 @@
+requests>=2.31
+pytest>=7.4
+pandas>=2.1
+streamlit>=1.38
+python-dotenv>=1.0

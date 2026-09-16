@@ -1,0 +1,49 @@
+{
+  "_embedded": {
+    "doacoes": [
+      {
+        "PRONAC": "234137",
+        "valor": 340.14,
+        "data_recibo": "2024-07-31",
+        "nome_projeto": "Plano Plurianual Música Sinfônica para Todos - Temporada 2024 a 2026",
+        "cgccpf": "41157008000143",
+        "nome_doador": "JJ CONCRETO LTDA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/234137",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/1152ec0e2fba4ecf8a3c9b14dc4aa2700d033073ef9ee0b2f7d79a32cbeb"
+        }
+      },
+      {
+        "PRONAC": "234137",
+        "valor": 2067.58,
+        "data_recibo": "2024-10-31",
+        "nome_projeto": "Plano Plurianual Música Sinfônica para Todos - Temporada 2024 a 2026",
+        "cgccpf": "41157008000143",
+        "nome_doador": "JJ CONCRETO LTDA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/234137",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/6bbb46f8584dd1dceb1513aaca3ca22e0a1a876da5709d185085d34cc644"
+        }
+      },
+      {
+        "PRONAC": "234137",
+        "valor": 725.31,
+        "data_recibo": "2025-01-31",
+        "nome_projeto": "Plano Plurianual Música Sinfônica para Todos - Temporada 2024 a 2026",
+        "cgccpf": "41157008000143",
+        "nome_doador": "JJ CONCRETO LTDA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/234137",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/32197c0ee6188669db7c0a71edbe5ea3538dfa02b079429c8a80a33a1492"
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": "http://api.salic.cultura.gov.br/api/v1/incentivadores/41157008000143/doacoes",
+    "first": "https://api.salic.cultura.gov.br/api/v1/incentivadores/dd7b2150b43e203ad58619a475ce1c2e7c2294bc9cca8f/doacoes?limit=100&offset=0",
+    "last": "https://api.salic.cultura.gov.br/api/v1/incentivadores/dd7b2150b43e203ad58619a475ce1c2e7c2294bc9cca8f/doacoes?limit=100&offset=0"
+  },
+  "count": 3,
+  "total": 1
+}

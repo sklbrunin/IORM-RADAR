@@ -1,0 +1,37 @@
+{
+  "_embedded": {
+    "doacoes": [
+      {
+        "PRONAC": "961788",
+        "valor": 3105.9008,
+        "data_recibo": "1997-03-10",
+        "nome_projeto": "História Paulista: Estudo de Ribeirão Preto",
+        "cgccpf": "44366276000163",
+        "nome_doador": "Destilaria Mandu",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/961788",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/4ed7349da8464040fbbdd32e09f57ef47a3f24fe9dbb45297aa57f349e10"
+        }
+      },
+      {
+        "PRONAC": "034342",
+        "valor": 35000,
+        "data_recibo": "2004-03-05",
+        "nome_projeto": "Família Junqueira e sua História e Genealogia",
+        "cgccpf": "44366276000163",
+        "nome_doador": "Destilaria Mandu",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/034342",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/f3c15ce00a448b2cef47bfdc7efed4dcbaebb0ff41c7f0dc74cfc7c7e292"
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": "http://api.salic.cultura.gov.br/api/v1/incentivadores/44366276000163/doacoes",
+    "first": "https://api.salic.cultura.gov.br/api/v1/incentivadores/8957876cc1c6964f693fe1b6ae42a53d2f4668944a56db/doacoes?limit=100&offset=0",
+    "last": "https://api.salic.cultura.gov.br/api/v1/incentivadores/8957876cc1c6964f693fe1b6ae42a53d2f4668944a56db/doacoes?limit=100&offset=0"
+  },
+  "count": 2,
+  "total": 1
+}

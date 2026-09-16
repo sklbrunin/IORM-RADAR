@@ -1,0 +1,97 @@
+{
+  "_embedded": {
+    "doacoes": [
+      {
+        "PRONAC": "176531",
+        "valor": 1600,
+        "data_recibo": "2017-12-28",
+        "nome_projeto": "Agenda Cultural Guaira",
+        "cgccpf": "02875507000114",
+        "nome_doador": "AUTO POSTO AVENIDA DE GUAIRA LTDA.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/176531",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/49af97f72dea623df2eb7f1c92ffae9c06a8007289253d651ad8c8d797fa"
+        }
+      },
+      {
+        "PRONAC": "192601",
+        "valor": 1000,
+        "data_recibo": "2019-12-19",
+        "nome_projeto": "AGENDA CULTURAL 2020",
+        "cgccpf": "02875507000114",
+        "nome_doador": "AUTO POSTO AVENIDA DE GUAIRA LTDA.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/192601",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/6a173cad2a5eaed6810c7c8067c3508537f95df173a99440e97b79378993"
+        }
+      },
+      {
+        "PRONAC": "205171",
+        "valor": 600,
+        "data_recibo": "2020-12-29",
+        "nome_projeto": "AGENDA CULTURAL 2021",
+        "cgccpf": "02875507000114",
+        "nome_doador": "AUTO POSTO AVENIDA DE GUAIRA LTDA.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/205171",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/0e603a76a7bc5da0db2fbd9eb4b959a66ce50bb4ba0bf571210527b2c3d4"
+        }
+      },
+      {
+        "PRONAC": "212460",
+        "valor": 400,
+        "data_recibo": "2021-12-21",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2022",
+        "cgccpf": "02875507000114",
+        "nome_doador": "AUTO POSTO AVENIDA DE GUAIRA LTDA.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/212460",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/14859e1b9806da925fcb93941bb34561c6a81fa48269931a86606b50b6c4"
+        }
+      },
+      {
+        "PRONAC": "220726",
+        "valor": 880,
+        "data_recibo": "2022-12-26",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2023",
+        "cgccpf": "02875507000114",
+        "nome_doador": "AUTO POSTO AVENIDA DE GUAIRA LTDA.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/220726",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/e19ec5b709af657d40d8f30b77ae7ae84911dc542120338cefddbbe9c550"
+        }
+      },
+      {
+        "PRONAC": "235686",
+        "valor": 400,
+        "data_recibo": "2023-12-27",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2024",
+        "cgccpf": "02875507000114",
+        "nome_doador": "AUTO POSTO AVENIDA DE GUAIRA LTDA.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/235686",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/0a97776e6a3e1303b2806f9fd51dde0e99f487fb824bc2292e5d189650f4"
+        }
+      },
+      {
+        "PRONAC": "248359",
+        "valor": 800,
+        "data_recibo": "2024-12-27",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2025",
+        "cgccpf": "02875507000114",
+        "nome_doador": "AUTO POSTO AVENIDA DE GUAIRA LTDA.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/248359",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/4d4c193bebd536fac884b8bd67b468492eb272695dc209d72614d2eef00a"
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": "http://api.salic.cultura.gov.br/api/v1/incentivadores/02875507000114/doacoes",
+    "first": "https://api.salic.cultura.gov.br/api/v1/incentivadores/ef3018a898f8e5985ac6c20d09d78db957fc3cf453e1c8/doacoes?limit=100&offset=0",
+    "last": "https://api.salic.cultura.gov.br/api/v1/incentivadores/ef3018a898f8e5985ac6c20d09d78db957fc3cf453e1c8/doacoes?limit=100&offset=0"
+  },
+  "count": 7,
+  "total": 1
+}

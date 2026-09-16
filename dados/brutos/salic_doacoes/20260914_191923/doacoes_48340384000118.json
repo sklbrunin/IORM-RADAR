@@ -1,0 +1,169 @@
+{
+  "_embedded": {
+    "doacoes": [
+      {
+        "PRONAC": "121680",
+        "valor": 20000,
+        "data_recibo": "2014-12-30",
+        "nome_projeto": "Usina da Dança",
+        "cgccpf": "48340384000118",
+        "nome_doador": "Mina Mercantil Industrial e Agrícola Ltda.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/121680",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/609f4fd160bef5127062d0501894539660410ff8a8ea6c934d1a6f79aef7"
+        }
+      },
+      {
+        "PRONAC": "158632",
+        "valor": 9000,
+        "data_recibo": "2016-12-23",
+        "nome_projeto": "Projeto Agenda Cultural",
+        "cgccpf": "48340384000118",
+        "nome_doador": "Mina Mercantil Industrial e Agrícola Ltda.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/158632",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/21c8f5c7f889ed77e1f8fe89c64e74b9769c79f470596de134a3ecfa23c7"
+        }
+      },
+      {
+        "PRONAC": "163411",
+        "valor": 27000,
+        "data_recibo": "2016-12-23",
+        "nome_projeto": "Plano Anual Instituto Sociocultural Hospital de Câncer de Barretos 2017",
+        "cgccpf": "48340384000118",
+        "nome_doador": "Mina Mercantil Industrial e Agrícola Ltda.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/163411",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/14e6b2efcaf079e5a3b1b69d30e23f70f0c0ba8a75c1821ad4314989ba66"
+        }
+      },
+      {
+        "PRONAC": "176531",
+        "valor": 32000,
+        "data_recibo": "2017-12-27",
+        "nome_projeto": "Agenda Cultural Guaira",
+        "cgccpf": "48340384000118",
+        "nome_doador": "Mina Mercantil Industrial e Agrícola Ltda.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/176531",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/2c4e6b34af003f1d2e4073c7ba11267108a778f1cc561974cebe293a94ed"
+        }
+      },
+      {
+        "PRONAC": "185522",
+        "valor": 38000,
+        "data_recibo": "2018-12-26",
+        "nome_projeto": "Agenda Cultural Guaira",
+        "cgccpf": "48340384000118",
+        "nome_doador": "Mina Mercantil Industrial e Agrícola Ltda.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/185522",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/9b36e8939201baa4a61a3a7c90d5f0b6bedaa3e47d3ec44d950d03b73a32"
+        }
+      },
+      {
+        "PRONAC": "192601",
+        "valor": 6000,
+        "data_recibo": "2019-12-19",
+        "nome_projeto": "AGENDA CULTURAL 2020",
+        "cgccpf": "48340384000118",
+        "nome_doador": "Mina Mercantil Industrial e Agrícola Ltda.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/192601",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/80e1654a941243f343d8431bfd9de51a0031470c6e0dbce3779e74f3b0e7"
+        }
+      },
+      {
+        "PRONAC": "192432",
+        "valor": 24000,
+        "data_recibo": "2019-12-20",
+        "nome_projeto": "Plano Anual Instituto Sociocultural Hospital de Câncer de Barretos 2020",
+        "cgccpf": "48340384000118",
+        "nome_doador": "Mina Mercantil Industrial e Agrícola Ltda.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/192432",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/be1b2eefe7a83755dbb85175b2194b6f911b1a84b107a9a2a21c50b2bb45"
+        }
+      },
+      {
+        "PRONAC": "203373",
+        "valor": 50000,
+        "data_recibo": "2020-12-29",
+        "nome_projeto": "Plano Anual Instituto Sociocultural Hospital de Câncer de Barretos 2021",
+        "cgccpf": "48340384000118",
+        "nome_doador": "Mina Mercantil Industrial e Agrícola Ltda.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/203373",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/446eb8262af97db6257c228dcb64adcfa842d7351d81139866c6445f6abd"
+        }
+      },
+      {
+        "PRONAC": "212460",
+        "valor": 100000,
+        "data_recibo": "2021-12-28",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2022",
+        "cgccpf": "48340384000118",
+        "nome_doador": "Mina Mercantil Industrial e Agrícola Ltda.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/212460",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/854c6b4a5d2876a2de1a6af2bd239c7cde4290cdf3aceeb7a628470196ca"
+        }
+      },
+      {
+        "PRONAC": "221858",
+        "valor": 85000,
+        "data_recibo": "2022-12-19",
+        "nome_projeto": "Plano Anual do Instituto Sociocultural do Hospital de Amor",
+        "cgccpf": "48340384000118",
+        "nome_doador": "Mina Mercantil Industrial e Agrícola Ltda.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/221858",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/399a90a8a6b6ec9d340116230c55d85cb0df5f03631791ebfcc0712b0955"
+        }
+      },
+      {
+        "PRONAC": "238989",
+        "valor": 80000,
+        "data_recibo": "2023-12-27",
+        "nome_projeto": "PLANO ANUAL DE ATIVIDADES INSTITUTO SOCIOCULTURAL HOSPITAL DE AMOR",
+        "cgccpf": "48340384000118",
+        "nome_doador": "Mina Mercantil Industrial e Agrícola Ltda.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/238989",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/44e213fb095b087cdfda81b3385b5d66308542b4734415d42e243aeb7d5c"
+        }
+      },
+      {
+        "PRONAC": "245948",
+        "valor": 90000,
+        "data_recibo": "2024-12-18",
+        "nome_projeto": "PLANO ANUAL DE ATIVIDADES DO INSTITUTO SOCIOCULTURAL HOSPITAL DE AMOR",
+        "cgccpf": "48340384000118",
+        "nome_doador": "Mina Mercantil Industrial e Agrícola Ltda.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/245948",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/5c3b563f525d3274e81d23d355b073151da239c3adda1f245f96f4948bc3"
+        }
+      },
+      {
+        "PRONAC": "255454",
+        "valor": 84000,
+        "data_recibo": "2025-12-12",
+        "nome_projeto": "PLANO BIANUAL DE ATIVIDADES DO INSTITUTO SOCIOCULTURAL HOSPITAL DE AMOR",
+        "cgccpf": "48340384000118",
+        "nome_doador": "Mina Mercantil Industrial e Agrícola Ltda.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/255454",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/2d1832e1704d09292492846f62324c16dd3fa401dde03857593e719e49e8"
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": "http://api.salic.cultura.gov.br/api/v1/incentivadores/48340384000118/doacoes",
+    "first": "https://api.salic.cultura.gov.br/api/v1/incentivadores/6ebec06dd537dc8f3a649910a5d6a7f0c77a7264f664e9/doacoes?limit=100&offset=0",
+    "last": "https://api.salic.cultura.gov.br/api/v1/incentivadores/6ebec06dd537dc8f3a649910a5d6a7f0c77a7264f664e9/doacoes?limit=100&offset=0"
+  },
+  "count": 13,
+  "total": 1
+}

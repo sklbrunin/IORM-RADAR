@@ -1,0 +1,85 @@
+{
+  "_embedded": {
+    "doacoes": [
+      {
+        "PRONAC": "121680",
+        "valor": 4000,
+        "data_recibo": "2013-12-30",
+        "nome_projeto": "Usina da Dança",
+        "cgccpf": "04400329000109",
+        "nome_doador": "Rodotac Transportes Ltda,",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/121680",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/bb31bee122650074fac3abaedc81abdae9a0d35a4e893f1fb9a6bed3fe01"
+        }
+      },
+      {
+        "PRONAC": "121680",
+        "valor": 4000,
+        "data_recibo": "2014-12-30",
+        "nome_projeto": "Usina da Dança",
+        "cgccpf": "04400329000109",
+        "nome_doador": "Rodotac Transportes Ltda,",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/121680",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/7065084278d979626409a90c3492e1da27c24d72c56cf4d79623f7a889f8"
+        }
+      },
+      {
+        "PRONAC": "121680",
+        "valor": 4000,
+        "data_recibo": "2015-12-30",
+        "nome_projeto": "Usina da Dança",
+        "cgccpf": "04400329000109",
+        "nome_doador": "Rodotac Transportes Ltda,",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/121680",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/69b0459123b6fe2fcbfc87e06c16f55fc1d54dd625e346ea6739668547d7"
+        }
+      },
+      {
+        "PRONAC": "177611",
+        "valor": 20000,
+        "data_recibo": "2018-12-28",
+        "nome_projeto": "Agenda Cultural Miguelópolis",
+        "cgccpf": "04400329000109",
+        "nome_doador": "Rodotac Transportes Ltda,",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/177611",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/82215778ce82818108af7f519dbd3bd31c54b74e9d862c0ef0ef397f340a"
+        }
+      },
+      {
+        "PRONAC": "235686",
+        "valor": 32000,
+        "data_recibo": "2023-12-27",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2024",
+        "cgccpf": "04400329000109",
+        "nome_doador": "Rodotac Transportes Ltda,",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/235686",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/fa0dea050ba72d625e7bb31fad879d408af44652bf627d65297d640b300f"
+        }
+      },
+      {
+        "PRONAC": "235686",
+        "valor": 3600,
+        "data_recibo": "2024-12-27",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2024",
+        "cgccpf": "04400329000109",
+        "nome_doador": "Rodotac Transportes Ltda,",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/235686",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/5add0c5eb29da7f901f21002332db47be43d7125cb499aed6f4bca8125e0"
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": "http://api.salic.cultura.gov.br/api/v1/incentivadores/04400329000109/doacoes",
+    "first": "https://api.salic.cultura.gov.br/api/v1/incentivadores/6a80de7c9f94ea64a4f4d3623b0b1f966166f8abd7f4dd/doacoes?limit=100&offset=0",
+    "last": "https://api.salic.cultura.gov.br/api/v1/incentivadores/6a80de7c9f94ea64a4f4d3623b0b1f966166f8abd7f4dd/doacoes?limit=100&offset=0"
+  },
+  "count": 6,
+  "total": 1
+}

@@ -1,0 +1,25 @@
+{
+  "_embedded": {
+    "doacoes": [
+      {
+        "PRONAC": "248359",
+        "valor": 3236.87,
+        "data_recibo": "2024-12-27",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2025",
+        "cgccpf": "04069012000123",
+        "nome_doador": "VIEIRA FERRAGENS LTDA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/248359",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/c3d110ca18e66fbbf9112e51ebe3d5ebefef7f2f33336c7c50f2b3ee9a2a"
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": "http://api.salic.cultura.gov.br/api/v1/incentivadores/04069012000123/doacoes",
+    "first": "https://api.salic.cultura.gov.br/api/v1/incentivadores/70f6891e12e2c3373b340504d1753032f872dce14ab02c/doacoes?limit=100&offset=0",
+    "last": "https://api.salic.cultura.gov.br/api/v1/incentivadores/70f6891e12e2c3373b340504d1753032f872dce14ab02c/doacoes?limit=100&offset=0"
+  },
+  "count": 1,
+  "total": 1
+}

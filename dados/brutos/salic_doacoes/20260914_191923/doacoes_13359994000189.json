@@ -1,0 +1,73 @@
+{
+  "_embedded": {
+    "doacoes": [
+      {
+        "PRONAC": "177662",
+        "valor": 6000,
+        "data_recibo": "2018-12-26",
+        "nome_projeto": "AGENDA CULTURAL IPUÃ",
+        "cgccpf": "13359994000189",
+        "nome_doador": "COLORADO RENTAL LOCACAO DE MAQUINAS LTDA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/177662",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/d8185be30c10c6eecd9c382f655d267206fefb4dee32afb3178acb42b004"
+        }
+      },
+      {
+        "PRONAC": "192601",
+        "valor": 34748,
+        "data_recibo": "2019-12-27",
+        "nome_projeto": "AGENDA CULTURAL 2020",
+        "cgccpf": "13359994000189",
+        "nome_doador": "COLORADO RENTAL LOCACAO DE MAQUINAS LTDA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/192601",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/64569534837e486952706b5dea4f608fa42b6bc4ccaac84f5b8405db7585"
+        }
+      },
+      {
+        "PRONAC": "205171",
+        "valor": 40089,
+        "data_recibo": "2020-12-29",
+        "nome_projeto": "AGENDA CULTURAL 2021",
+        "cgccpf": "13359994000189",
+        "nome_doador": "COLORADO RENTAL LOCACAO DE MAQUINAS LTDA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/205171",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/467b5b2ba2cbb662082d5817a2b4d536ee4581ff8b69e1566ace2670535c"
+        }
+      },
+      {
+        "PRONAC": "212460",
+        "valor": 43785,
+        "data_recibo": "2021-12-23",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2022",
+        "cgccpf": "13359994000189",
+        "nome_doador": "COLORADO RENTAL LOCACAO DE MAQUINAS LTDA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/212460",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/d2e83b76732d1b7e00dcd756f30c9f61a958daf197d91e9699e5c1a87268"
+        }
+      },
+      {
+        "PRONAC": "220726",
+        "valor": 70814,
+        "data_recibo": "2022-12-28",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2023",
+        "cgccpf": "13359994000189",
+        "nome_doador": "COLORADO RENTAL LOCACAO DE MAQUINAS LTDA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/220726",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/e9326def3363426640a40b4ec7e121cc90b837fca66256abfc70506f187a"
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": "http://api.salic.cultura.gov.br/api/v1/incentivadores/13359994000189/doacoes",
+    "first": "https://api.salic.cultura.gov.br/api/v1/incentivadores/42a5bc7d7c2f922b93757a52015e92d530503a572ebf6b/doacoes?limit=100&offset=0",
+    "last": "https://api.salic.cultura.gov.br/api/v1/incentivadores/42a5bc7d7c2f922b93757a52015e92d530503a572ebf6b/doacoes?limit=100&offset=0"
+  },
+  "count": 5,
+  "total": 1
+}

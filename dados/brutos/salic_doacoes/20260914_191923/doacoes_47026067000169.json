@@ -1,0 +1,85 @@
+{
+  "_embedded": {
+    "doacoes": [
+      {
+        "PRONAC": "121680",
+        "valor": 20000,
+        "data_recibo": "2012-12-27",
+        "nome_projeto": "Usina da Dança",
+        "cgccpf": "47026067000169",
+        "nome_doador": "OLHOS D AGUA INDUSTRIA E COMERCIO DE CARNES LTDA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/121680",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/a0c860789bc5dbb881019860b6514ba846ee4ce8978943e850e322f861ea"
+        }
+      },
+      {
+        "PRONAC": "121680",
+        "valor": 18000,
+        "data_recibo": "2013-12-27",
+        "nome_projeto": "Usina da Dança",
+        "cgccpf": "47026067000169",
+        "nome_doador": "OLHOS D AGUA INDUSTRIA E COMERCIO DE CARNES LTDA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/121680",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/d2b310bb93d83bdf0d6207647ef486ff8489cefb56262e50030351b52bde"
+        }
+      },
+      {
+        "PRONAC": "121680",
+        "valor": 5400,
+        "data_recibo": "2014-12-30",
+        "nome_projeto": "Usina da Dança",
+        "cgccpf": "47026067000169",
+        "nome_doador": "OLHOS D AGUA INDUSTRIA E COMERCIO DE CARNES LTDA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/121680",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/c6929a7110e3fa48e7a51a6b7b43bcced51a029fa27655d6d4ca8efbe913"
+        }
+      },
+      {
+        "PRONAC": "158632",
+        "valor": 8100,
+        "data_recibo": "2015-12-30",
+        "nome_projeto": "Projeto Agenda Cultural",
+        "cgccpf": "47026067000169",
+        "nome_doador": "OLHOS D AGUA INDUSTRIA E COMERCIO DE CARNES LTDA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/158632",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/9f0661a70e63b78a28bf93747f40d83023ac793e312540063cee106b67ac"
+        }
+      },
+      {
+        "PRONAC": "158632",
+        "valor": 3000,
+        "data_recibo": "2016-12-29",
+        "nome_projeto": "Projeto Agenda Cultural",
+        "cgccpf": "47026067000169",
+        "nome_doador": "OLHOS D AGUA INDUSTRIA E COMERCIO DE CARNES LTDA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/158632",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/4f0d94c4d3efc4284f609c874ab2d742938823f6e4d8ddd5f207ad8895d8"
+        }
+      },
+      {
+        "PRONAC": "2411022",
+        "valor": 10500,
+        "data_recibo": "2024-12-27",
+        "nome_projeto": "USP Música Criança - São Joaquim da Barra - 2025",
+        "cgccpf": "47026067000169",
+        "nome_doador": "OLHOS D AGUA INDUSTRIA E COMERCIO DE CARNES LTDA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/2411022",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/0f0dca20dbc412e5f369985dec0d49bb33493d85490c46da829e5ac281d1"
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": "http://api.salic.cultura.gov.br/api/v1/incentivadores/47026067000169/doacoes",
+    "first": "https://api.salic.cultura.gov.br/api/v1/incentivadores/7f9affeebb5b4e878b41cf85a5fdce11d7a67bdc3fae0c/doacoes?limit=100&offset=0",
+    "last": "https://api.salic.cultura.gov.br/api/v1/incentivadores/7f9affeebb5b4e878b41cf85a5fdce11d7a67bdc3fae0c/doacoes?limit=100&offset=0"
+  },
+  "count": 6,
+  "total": 1
+}

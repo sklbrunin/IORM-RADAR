@@ -1,0 +1,205 @@
+{
+  "_embedded": {
+    "doacoes": [
+      {
+        "PRONAC": "961788",
+        "valor": 2345.7016,
+        "data_recibo": "1997-03-10",
+        "nome_projeto": "História Paulista: Estudo de Ribeirão Preto",
+        "cgccpf": "52990991000109",
+        "nome_doador": "Companhia Açucareira Vale do Rosário",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/961788",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/46d4073a2360f8137eaa912e28e89bb81b97640f0456f08a08ac605252ea"
+        }
+      },
+      {
+        "PRONAC": "961788",
+        "valor": 2345.7016,
+        "data_recibo": "1997-04-10",
+        "nome_projeto": "História Paulista: Estudo de Ribeirão Preto",
+        "cgccpf": "52990991000109",
+        "nome_doador": "Companhia Açucareira Vale do Rosário",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/961788",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/970bd2ea86adb6d8c8c47bc9880671618cbba87474cef3a468c614498bd8"
+        }
+      },
+      {
+        "PRONAC": "961788",
+        "valor": 2345.7016,
+        "data_recibo": "1997-05-11",
+        "nome_projeto": "História Paulista: Estudo de Ribeirão Preto",
+        "cgccpf": "52990991000109",
+        "nome_doador": "Companhia Açucareira Vale do Rosário",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/961788",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/7588fcc2306dbcd3d25eeafb1e3bb3c4b9b431425cc42c8c86504fbfccfe"
+        }
+      },
+      {
+        "PRONAC": "961788",
+        "valor": 2345.7016,
+        "data_recibo": "1997-06-10",
+        "nome_projeto": "História Paulista: Estudo de Ribeirão Preto",
+        "cgccpf": "52990991000109",
+        "nome_doador": "Companhia Açucareira Vale do Rosário",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/961788",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/2c3f272f7f7ac070a2f8bd26e00624c51d41f25f0b79c302bf495d32d619"
+        }
+      },
+      {
+        "PRONAC": "961788",
+        "valor": 2345.7016,
+        "data_recibo": "1997-07-10",
+        "nome_projeto": "História Paulista: Estudo de Ribeirão Preto",
+        "cgccpf": "52990991000109",
+        "nome_doador": "Companhia Açucareira Vale do Rosário",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/961788",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/425d30ac0b790b8b72677c478f064b85db52aed8be516debd4f57d65c9c5"
+        }
+      },
+      {
+        "PRONAC": "961788",
+        "valor": 2345.7016,
+        "data_recibo": "1997-08-11",
+        "nome_projeto": "História Paulista: Estudo de Ribeirão Preto",
+        "cgccpf": "52990991000109",
+        "nome_doador": "Companhia Açucareira Vale do Rosário",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/961788",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/a179156a2408e3620146cdc765562ffe67acb905c7d141d0d57e9d8ce3ca"
+        }
+      },
+      {
+        "PRONAC": "994686",
+        "valor": 16848,
+        "data_recibo": "2000-05-08",
+        "nome_projeto": "VERBA",
+        "cgccpf": "52990991000109",
+        "nome_doador": "Companhia Açucareira Vale do Rosário",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/994686",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/4da844280b28516c1a9d2a3f0df2a0a366fd86105bcca4aca3c89e8b457a"
+        }
+      },
+      {
+        "PRONAC": "994686",
+        "valor": 10000,
+        "data_recibo": "2000-09-29",
+        "nome_projeto": "VERBA",
+        "cgccpf": "52990991000109",
+        "nome_doador": "Companhia Açucareira Vale do Rosário",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/994686",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/0cfa3d0a5d4a6e1e79da8e5a2f968062d9337f59c007e7e4583df73fb7c7"
+        }
+      },
+      {
+        "PRONAC": "023057",
+        "valor": 40487.33,
+        "data_recibo": "2002-09-11",
+        "nome_projeto": "Doces Sabores",
+        "cgccpf": "52990991000109",
+        "nome_doador": "Companhia Açucareira Vale do Rosário",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/023057",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/262e54cf20c74d26fffda18e3894c8fd2dcda5922b1e12ef8a5a84d06e9c"
+        }
+      },
+      {
+        "PRONAC": "023057",
+        "valor": 40487.33,
+        "data_recibo": "2002-10-11",
+        "nome_projeto": "Doces Sabores",
+        "cgccpf": "52990991000109",
+        "nome_doador": "Companhia Açucareira Vale do Rosário",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/023057",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/30c434a00adee896a4b8479a11df17f98db9d2af69af45385313b7ffe2f2"
+        }
+      },
+      {
+        "PRONAC": "023057",
+        "valor": 40487.34,
+        "data_recibo": "2002-11-11",
+        "nome_projeto": "Doces Sabores",
+        "cgccpf": "52990991000109",
+        "nome_doador": "Companhia Açucareira Vale do Rosário",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/023057",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/af6582d32769cfdc87fed8ecf1834fd244275d0f72fbd066ad49d567ee95"
+        }
+      },
+      {
+        "PRONAC": "011185",
+        "valor": 25000,
+        "data_recibo": "2003-08-11",
+        "nome_projeto": "História do Carro a Álcool",
+        "cgccpf": "52990991000109",
+        "nome_doador": "Companhia Açucareira Vale do Rosário",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/011185",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/ea72f0f7787d0df0a28cc0931f087b1039d42f8e85d697e7cf174c362e68"
+        }
+      },
+      {
+        "PRONAC": "028735",
+        "valor": 20000,
+        "data_recibo": "2003-09-03",
+        "nome_projeto": "Plano Anual de Trabalho -2003",
+        "cgccpf": "52990991000109",
+        "nome_doador": "Companhia Açucareira Vale do Rosário",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/028735",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/22ce855e9b23c45e10e2f5120a9d6ae188d285389a3a7036367e36c0a2ff"
+        }
+      },
+      {
+        "PRONAC": "032849",
+        "valor": 20000,
+        "data_recibo": "2003-12-30",
+        "nome_projeto": "14 Bis",
+        "cgccpf": "52990991000109",
+        "nome_doador": "Companhia Açucareira Vale do Rosário",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/032849",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/32731654ddb43247606d9e70d7b666858a6e1db1b4526acd181ee77e1203"
+        }
+      },
+      {
+        "PRONAC": "034342",
+        "valor": 50000,
+        "data_recibo": "2003-12-30",
+        "nome_projeto": "Família Junqueira e sua História e Genealogia",
+        "cgccpf": "52990991000109",
+        "nome_doador": "Companhia Açucareira Vale do Rosário",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/034342",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/835ee1b14452357c66dd177f59e44629e39a32b788e3cb236b35d8553013"
+        }
+      },
+      {
+        "PRONAC": "032849",
+        "valor": 20000,
+        "data_recibo": "2004-12-29",
+        "nome_projeto": "14 Bis",
+        "cgccpf": "52990991000109",
+        "nome_doador": "Companhia Açucareira Vale do Rosário",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/032849",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/36a81f6b7b711acea61ea22fb8cb26a7d75126c86222b5f53a618eb21eb9"
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": "http://api.salic.cultura.gov.br/api/v1/incentivadores/52990991000109/doacoes",
+    "first": "https://api.salic.cultura.gov.br/api/v1/incentivadores/6633db0d430a13058776a2ee6e9ce9c59a88a694690a66/doacoes?limit=100&offset=0",
+    "last": "https://api.salic.cultura.gov.br/api/v1/incentivadores/6633db0d430a13058776a2ee6e9ce9c59a88a694690a66/doacoes?limit=100&offset=0"
+  },
+  "count": 16,
+  "total": 1
+}

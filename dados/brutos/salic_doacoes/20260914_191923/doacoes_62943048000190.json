@@ -1,0 +1,97 @@
+{
+  "_embedded": {
+    "doacoes": [
+      {
+        "PRONAC": "176531",
+        "valor": 1600,
+        "data_recibo": "2017-12-28",
+        "nome_projeto": "Agenda Cultural Guaira",
+        "cgccpf": "62943048000190",
+        "nome_doador": "POSTO JATAI LTDA.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/176531",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/033f0cbda5190e2941010170afc8a1f854783087685aa2584e6abdd85662"
+        }
+      },
+      {
+        "PRONAC": "172194",
+        "valor": 600,
+        "data_recibo": "2018-12-27",
+        "nome_projeto": "ALMA - manutenção",
+        "cgccpf": "62943048000190",
+        "nome_doador": "POSTO JATAI LTDA.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/172194",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/4ca4085e852ccb9692c764f291b51fce56ca85149c39ac9aefafa4cbff8c"
+        }
+      },
+      {
+        "PRONAC": "172194",
+        "valor": 600,
+        "data_recibo": "2018-12-27",
+        "nome_projeto": "ALMA - manutenção",
+        "cgccpf": "62943048000190",
+        "nome_doador": "POSTO JATAI LTDA.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/172194",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/ffe2d80b3ee84fb484aa6284a7aa73bceaa8ea881d61ddbeb0415c03e6e4"
+        }
+      },
+      {
+        "PRONAC": "192601",
+        "valor": 800,
+        "data_recibo": "2019-12-19",
+        "nome_projeto": "AGENDA CULTURAL 2020",
+        "cgccpf": "62943048000190",
+        "nome_doador": "POSTO JATAI LTDA.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/192601",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/f7ef309ed3b3f910106e8c8322f4087e2522975e8059888a00aa3ebcb4d2"
+        }
+      },
+      {
+        "PRONAC": "205171",
+        "valor": 600,
+        "data_recibo": "2020-12-29",
+        "nome_projeto": "AGENDA CULTURAL 2021",
+        "cgccpf": "62943048000190",
+        "nome_doador": "POSTO JATAI LTDA.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/205171",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/6353706e21af3440a8a1506193e129d390d384b51b62deea05daf2152d49"
+        }
+      },
+      {
+        "PRONAC": "212460",
+        "valor": 800,
+        "data_recibo": "2021-12-21",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2022",
+        "cgccpf": "62943048000190",
+        "nome_doador": "POSTO JATAI LTDA.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/212460",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/552c90d3b014f0c8c8b1fc50ddd20c0f04da41081f16daefc464e8e13e69"
+        }
+      },
+      {
+        "PRONAC": "220726",
+        "valor": 1600,
+        "data_recibo": "2022-12-26",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2023",
+        "cgccpf": "62943048000190",
+        "nome_doador": "POSTO JATAI LTDA.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/220726",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/e16046f19f3db46866752179b1d069cce9324290453a9aa4c45df4d0e437"
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": "http://api.salic.cultura.gov.br/api/v1/incentivadores/62943048000190/doacoes",
+    "first": "https://api.salic.cultura.gov.br/api/v1/incentivadores/dc12fc3fde330b221efa0c42dd0f0d8ce0b44103538521/doacoes?limit=100&offset=0",
+    "last": "https://api.salic.cultura.gov.br/api/v1/incentivadores/dc12fc3fde330b221efa0c42dd0f0d8ce0b44103538521/doacoes?limit=100&offset=0"
+  },
+  "count": 7,
+  "total": 1
+}

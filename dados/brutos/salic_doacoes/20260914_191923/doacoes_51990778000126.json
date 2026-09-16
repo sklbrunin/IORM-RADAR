@@ -1,0 +1,781 @@
+{
+  "_embedded": {
+    "doacoes": [
+      {
+        "PRONAC": "032786",
+        "valor": 180000,
+        "data_recibo": "2004-11-25",
+        "nome_projeto": "Brazilianart Book V",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/032786",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/c400b11ef28d81cd7cb2f9244c3150b0975180499fc59dce312cf095bbf8"
+        }
+      },
+      {
+        "PRONAC": "045745",
+        "valor": 100000,
+        "data_recibo": "2005-09-30",
+        "nome_projeto": "Bibliotecas Infanto Juvenil Brasil Leitor",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/045745",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/2fedde722ac5db414fa98b523c21181c83d2c030f8f35179fa41daa62f91"
+        }
+      },
+      {
+        "PRONAC": "045904",
+        "valor": 41600,
+        "data_recibo": "2005-09-30",
+        "nome_projeto": "Bibliotecas Creche Brasil Leitor",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/045904",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/467dbfc23528aed9eba64967019d7d52adc6cfc944f47d5ae4c975c63c98"
+        }
+      },
+      {
+        "PRONAC": "036677",
+        "valor": 91156,
+        "data_recibo": "2005-12-19",
+        "nome_projeto": "Cana de Açúcar Retratada em São Paulo",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/036677",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/4de63d08b03284c33da513913a8e6f051914a284758e16907ef860ab0b39"
+        }
+      },
+      {
+        "PRONAC": "045745",
+        "valor": 26520,
+        "data_recibo": "2006-05-05",
+        "nome_projeto": "Bibliotecas Infanto Juvenil Brasil Leitor",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/045745",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/17bdb2c6ebfce824f4c4f5ff655cabd650dcc25e13e10c2e3a2010a4a168"
+        }
+      },
+      {
+        "PRONAC": "045904",
+        "valor": 47827,
+        "data_recibo": "2006-07-20",
+        "nome_projeto": "Bibliotecas Creche Brasil Leitor",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/045904",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/39b5c07f6c81bf84e2bc8c1017ac2efe9b4a69541ebff3697aec50d8c0a7"
+        }
+      },
+      {
+        "PRONAC": "053713",
+        "valor": 60000,
+        "data_recibo": "2006-08-28",
+        "nome_projeto": "Reflexões Visuais de Gilberto Salvador",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/053713",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/e29086cc99a3a8d447e7a9ab01e1b6812766b08428e14201b93df40ce25c"
+        }
+      },
+      {
+        "PRONAC": "062325",
+        "valor": 29130,
+        "data_recibo": "2006-08-30",
+        "nome_projeto": "Novas bibliotecas infanto juvenil Brasil Leitor",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/062325",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/dff64c46649885458082d049553e9c49fac2749d65c06c15cf33398f8f9b"
+        }
+      },
+      {
+        "PRONAC": "062326",
+        "valor": 122370,
+        "data_recibo": "2006-09-01",
+        "nome_projeto": "Bibliotecas Insituto Brasil Leitor - revitalização e manutenção",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/062326",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/d207dc4a55f11ec1043b9033eaa171b97917f5f2d44634dcf78c12c7a6ab"
+        }
+      },
+      {
+        "PRONAC": "053935",
+        "valor": 100000,
+        "data_recibo": "2006-09-11",
+        "nome_projeto": "Brazilianart Book VII",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/053935",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/93771dcbde45ffbfc131975ef0170a54621405c3fa09a4a87bb84768df91"
+        }
+      },
+      {
+        "PRONAC": "065655",
+        "valor": 100000,
+        "data_recibo": "2006-12-08",
+        "nome_projeto": "Usina da Dança",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/065655",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/083a3e6dc402a874b11e7cb0f90e8bdb84f98d81057536544e9f717c1796"
+        }
+      },
+      {
+        "PRONAC": "050085",
+        "valor": 100000,
+        "data_recibo": "2007-04-27",
+        "nome_projeto": "Biblia de Carlos Araújo",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/050085",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/3f715a0ff5950e5256f224aff5b03a18c13f30b8635aae92d9cd2309a8d5"
+        }
+      },
+      {
+        "PRONAC": "066348",
+        "valor": 106000,
+        "data_recibo": "2007-05-24",
+        "nome_projeto": "Sociedade Masculina 2006",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/066348",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/c4dca6267f640d40369e9a601b81b2fe2b54203614e00ff5cb207a02bd67"
+        }
+      },
+      {
+        "PRONAC": "066348",
+        "valor": 19800,
+        "data_recibo": "2007-06-05",
+        "nome_projeto": "Sociedade Masculina 2006",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/066348",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/b2f854af4c920c7e38a8147aba6abffe3257ffc53da8f55505a5f1ab8fd4"
+        }
+      },
+      {
+        "PRONAC": "062329",
+        "valor": 12000,
+        "data_recibo": "2008-04-09",
+        "nome_projeto": "Novas instalações de bibliotecas em Creche",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/062329",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/80a9478fc23c1c0a74381c9a200cf250d9e671d33d310908e572838ef4b2"
+        }
+      },
+      {
+        "PRONAC": "081076",
+        "valor": 13033.34,
+        "data_recibo": "2009-12-28",
+        "nome_projeto": "Usina da Dança 2009/2010",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/081076",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/19bad6f8584e940827e4515b5ea0e6e415892841b871b936bb70961cb591"
+        }
+      },
+      {
+        "PRONAC": "081076",
+        "valor": 138000,
+        "data_recibo": "2010-08-23",
+        "nome_projeto": "Usina da Dança 2009/2010",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/081076",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/7715d1c9196eeaf76c3a0012bb7419b4510b488e50e641aca53428332651"
+        }
+      },
+      {
+        "PRONAC": "081076",
+        "valor": 130000,
+        "data_recibo": "2010-11-18",
+        "nome_projeto": "Usina da Dança 2009/2010",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/081076",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/aa8e03b393677f05f1dabee500105f4ace686a145573d06c823674cf1178"
+        }
+      },
+      {
+        "PRONAC": "098147",
+        "valor": 100000,
+        "data_recibo": "2011-06-09",
+        "nome_projeto": "Museu do Açucar - Piracicaba",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/098147",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/32ef30f7475dd7b5fe84c56f9b6a1538d4d2a48e636df71030e25a3e0488"
+        }
+      },
+      {
+        "PRONAC": "092854",
+        "valor": 50000,
+        "data_recibo": "2011-06-09",
+        "nome_projeto": "Manutenção dos Centros de Leitura em Logradouros existentes no Brasil",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/092854",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/46393234d46068e7d88c5ddcc195b4f490720d5d72b4da50d282d7494602"
+        }
+      },
+      {
+        "PRONAC": "092854",
+        "valor": 50800,
+        "data_recibo": "2011-07-15",
+        "nome_projeto": "Manutenção dos Centros de Leitura em Logradouros existentes no Brasil",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/092854",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/e69c3ed231153ef82ece431aafcba8334872fd59e14482fdedeeb8e5863a"
+        }
+      },
+      {
+        "PRONAC": "098147",
+        "valor": 34500,
+        "data_recibo": "2011-12-27",
+        "nome_projeto": "Museu do Açucar - Piracicaba",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/098147",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/26c086f13303ec17ab01d1cc779dd045924973e64822c66d7170908eebae"
+        }
+      },
+      {
+        "PRONAC": "098147",
+        "valor": 3000,
+        "data_recibo": "2011-12-29",
+        "nome_projeto": "Museu do Açucar - Piracicaba",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/098147",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/a9d414a26c8fb0a31b1ce7f29047e2b6b99e91e69e61373dbcd08b9e8d18"
+        }
+      },
+      {
+        "PRONAC": "126818",
+        "valor": 184832,
+        "data_recibo": "2012-11-30",
+        "nome_projeto": "Centro Cultural Colorado",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/126818",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/81543359cfcd64e445f62a319bb3d17f6ed3ef05b12ebc4cf00999f58b5f"
+        }
+      },
+      {
+        "PRONAC": "126818",
+        "valor": 152578.4,
+        "data_recibo": "2012-12-28",
+        "nome_projeto": "Centro Cultural Colorado",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/126818",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/e091ed2c7d30815187903583206998b1522300cf9496031957ae241f8fce"
+        }
+      },
+      {
+        "PRONAC": "127873",
+        "valor": 45000,
+        "data_recibo": "2012-12-28",
+        "nome_projeto": "Museu da Cana de Açúcar",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/127873",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/89978ac031d0fe3667568072ed10c65af449995e7548e4d9428f1ba8a077"
+        }
+      },
+      {
+        "PRONAC": "133659",
+        "valor": 280000,
+        "data_recibo": "2013-10-09",
+        "nome_projeto": "Centros Comunitários de Leitura - Brasil",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/133659",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/bda2175d0d143ba576353878ae6f9614c533a26b0758b2b4d2114927ff73"
+        }
+      },
+      {
+        "PRONAC": "121680",
+        "valor": 561950,
+        "data_recibo": "2013-12-24",
+        "nome_projeto": "Usina da Dança",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/121680",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/91b58ad4e36fb79056ad3efd737347635f847f40fda4311dd5046bd0ec96"
+        }
+      },
+      {
+        "PRONAC": "108132",
+        "valor": 577050,
+        "data_recibo": "2013-12-30",
+        "nome_projeto": "SÉRIE PHILARMÔNICA & CONVIDADOS",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/108132",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/38162f2ab205086c8bd0d638ddf3f114f21fbdf2fb4257fd25f24ad09bb3"
+        }
+      },
+      {
+        "PRONAC": "108132",
+        "valor": 134220,
+        "data_recibo": "2014-07-31",
+        "nome_projeto": "SÉRIE PHILARMÔNICA & CONVIDADOS",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/108132",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/65f1f87dc563c6ea662b7ca9d75f96d41af02116d66e45e3c780e17c71d1"
+        }
+      },
+      {
+        "PRONAC": "126818",
+        "valor": 168705.2,
+        "data_recibo": "2014-09-05",
+        "nome_projeto": "Centro Cultural Colorado",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/126818",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/08c0f57bad3cd1571c6170c7c7df97de06e3590d290f54575cd01a3faeeb"
+        }
+      },
+      {
+        "PRONAC": "148703",
+        "valor": 400000,
+        "data_recibo": "2014-10-28",
+        "nome_projeto": "Brasil: Nossa História, Nossa Gente",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/148703",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/87882ba3aa7dfc407d0495fe1464f3638dd174db252f978d41e89f117110"
+        }
+      },
+      {
+        "PRONAC": "1411562",
+        "valor": 69470,
+        "data_recibo": "2014-12-24",
+        "nome_projeto": "Centro Cultural Colorado - 2º Ano",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/1411562",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/455c721b485a43b859685599435be78506b30a3092612d8a0d7a224449dd"
+        }
+      },
+      {
+        "PRONAC": "148703",
+        "valor": 223000,
+        "data_recibo": "2014-12-24",
+        "nome_projeto": "Brasil: Nossa História, Nossa Gente",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/148703",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/9e2014f0d3e2c912cdb1d8848d55dfaa8d93ea904dd793bb7d0db3bb2c4c"
+        }
+      },
+      {
+        "PRONAC": "147068",
+        "valor": 750000,
+        "data_recibo": "2015-03-16",
+        "nome_projeto": "CONCERTO COM O MEIO AMBIENTE",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/147068",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/c6892e086c42e415eeaa8b684e78852bfe2d883e5cf9f3c823d45146ae25"
+        }
+      },
+      {
+        "PRONAC": "147068",
+        "valor": 450000,
+        "data_recibo": "2015-05-12",
+        "nome_projeto": "CONCERTO COM O MEIO AMBIENTE",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/147068",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/36e643adec6bd3fff462b568c1685094d781304b4d8554ff037455733862"
+        }
+      },
+      {
+        "PRONAC": "158632",
+        "valor": 130000,
+        "data_recibo": "2016-09-21",
+        "nome_projeto": "Projeto Agenda Cultural",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/158632",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/9b98b6f844e6dce51feeccca521c0c5d373b905d91dbefce08a33e7f1495"
+        }
+      },
+      {
+        "PRONAC": "159310",
+        "valor": 50000,
+        "data_recibo": "2016-12-20",
+        "nome_projeto": "MANUTENÇÃO 2016 DA CISNE NEGRO CIA. DE DANÇA",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/159310",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/eac3fa9d31dafe64679184f3eae109ea003c599183f92635701df6dabef7"
+        }
+      },
+      {
+        "PRONAC": "159310",
+        "valor": 50000,
+        "data_recibo": "2016-12-28",
+        "nome_projeto": "MANUTENÇÃO 2016 DA CISNE NEGRO CIA. DE DANÇA",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/159310",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/30b105404b18b40056d6ab5dffda13c54b81ec91cf98921cb2f2f115c79b"
+        }
+      },
+      {
+        "PRONAC": "160018",
+        "valor": 406944,
+        "data_recibo": "2016-12-28",
+        "nome_projeto": "Espetáculo Usina da Dança",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/160018",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/1a2b04c95f071c9f31ca607d89fe4a45162645c3afbdc3d13579940ab8cd"
+        }
+      },
+      {
+        "PRONAC": "163376",
+        "valor": 227000,
+        "data_recibo": "2016-12-28",
+        "nome_projeto": "Plano Anual Amigo do Guri 2017",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/163376",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/ce8f21ef768d79633eb2c67f386e1dab4a2351c3177cdbbb7a20cae8f87b"
+        }
+      },
+      {
+        "PRONAC": "163411",
+        "valor": 126025,
+        "data_recibo": "2016-12-28",
+        "nome_projeto": "Plano Anual Instituto Sociocultural Hospital de Câncer de Barretos 2017",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/163411",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/924495f472d7dc3616a6b213d1089550e777b2d7901a1c8923ac630ad027"
+        }
+      },
+      {
+        "PRONAC": "163740",
+        "valor": 205648,
+        "data_recibo": "2016-12-28",
+        "nome_projeto": "Plano Anual de Manutenção do Teatro Minaz 2017",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/163740",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/6c98db2eb82e112d1e8868dabb7765fc136b33fb29196052608c948a1557"
+        }
+      },
+      {
+        "PRONAC": "160568",
+        "valor": 120000,
+        "data_recibo": "2016-12-28",
+        "nome_projeto": "Cineclube Liberdade",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/160568",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/57effeadfb3a520776308476a5ba48a09498423681a8e6f09ad619b2e6f2"
+        }
+      },
+      {
+        "PRONAC": "158632",
+        "valor": 45000,
+        "data_recibo": "2016-12-30",
+        "nome_projeto": "Projeto Agenda Cultural",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/158632",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/b35ca1296452fb65769ef30bf4f7929ecc96453d7597bf17244a7be3ceae"
+        }
+      },
+      {
+        "PRONAC": "193605",
+        "valor": 100000,
+        "data_recibo": "2020-12-29",
+        "nome_projeto": "MANUTENÇÃO 2020/2021/2022 DA CISNE NEGRO CIA. DE DANÇA - PLANO PLURIANUAL",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/193605",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/775590914c0fce0eaf41b041a890eec52e3e3e6972a9617d2ee0a4afc864"
+        }
+      },
+      {
+        "PRONAC": "205171",
+        "valor": 1518994,
+        "data_recibo": "2020-12-29",
+        "nome_projeto": "AGENDA CULTURAL 2021",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/205171",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/5a0dab3a769c01e7c447f73e7f66c8a39831d5e600df003c2ba499e0e61e"
+        }
+      },
+      {
+        "PRONAC": "212460",
+        "valor": 430514,
+        "data_recibo": "2021-12-23",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2022",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/212460",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/7f837b545cedbf22fc0579ca72268d6477abf81f031da87dae524a2789e3"
+        }
+      },
+      {
+        "PRONAC": "212918",
+        "valor": 200000,
+        "data_recibo": "2021-12-23",
+        "nome_projeto": "Plano Bianual de Atividades Educacionais da Cia. Minaz",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/212918",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/55ea63d7fd9613e66b0a4b13de9461514e22aabdc6f0f16d483eed350061"
+        }
+      },
+      {
+        "PRONAC": "212460",
+        "valor": 1600000,
+        "data_recibo": "2021-12-29",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2022",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/212460",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/2a9394c14878c3938cb48b04cd24f7b47563f1e3cbb2c0110e02e3f29136"
+        }
+      },
+      {
+        "PRONAC": "204095",
+        "valor": 200000,
+        "data_recibo": "2021-12-30",
+        "nome_projeto": "PLANO ANUAL CASA FIAT DE CULTURA 2021",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/204095",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/e115503752f13dc1aa9493e8a8e4efee2ea15628b9d2850150504a7bbaf4"
+        }
+      },
+      {
+        "PRONAC": "220726",
+        "valor": 474000,
+        "data_recibo": "2022-11-08",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2023",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/220726",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/1165566195e8f802e4ffb261ead0c924f0d5da85c5dc64227cbd45012c83"
+        }
+      },
+      {
+        "PRONAC": "223286",
+        "valor": 300000,
+        "data_recibo": "2022-12-28",
+        "nome_projeto": "Caravana de Ópera Minaz",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/223286",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/f9b79c8049fd012d2b2f426c5fcb8f6f1d2395d64ace15dd00c0a489f447"
+        }
+      },
+      {
+        "PRONAC": "220726",
+        "valor": 238474,
+        "data_recibo": "2022-12-28",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2023",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/220726",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/6d29b7c81db30222bbee594c406fb0d4b1f39fada99a14a52e111280f03f"
+        }
+      },
+      {
+        "PRONAC": "221917",
+        "valor": 250000,
+        "data_recibo": "2022-12-28",
+        "nome_projeto": "Plano Anual de Atividades da Santa Marcelina Cultura 2023",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/221917",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/08000d4117ce4935202680316490a1af27c0015eedfd146d2cc38d02d7aa"
+        }
+      },
+      {
+        "PRONAC": "220726",
+        "valor": 250000,
+        "data_recibo": "2022-12-29",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2023",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/220726",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/715a1575d0fcc94353e99dd61ff047865590b8b9c20a6938f9bbb13ff988"
+        }
+      },
+      {
+        "PRONAC": "238989",
+        "valor": 400000,
+        "data_recibo": "2023-12-26",
+        "nome_projeto": "PLANO ANUAL DE ATIVIDADES INSTITUTO SOCIOCULTURAL HOSPITAL DE AMOR",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/238989",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/25d3dda8603ac7179032d3f7b6886029c01e9e62e498ada7ff13fe43df55"
+        }
+      },
+      {
+        "PRONAC": "231490",
+        "valor": 300000,
+        "data_recibo": "2023-12-26",
+        "nome_projeto": "MANUTENÇÃO PLURIANUAL DA CISNE NEGRO CIA. DE DANÇA - 2023 - 2026",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/231490",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/67e71598c735ad7a90f9bc2796e3306a3e16f8dae529f46864d2c61370cf"
+        }
+      },
+      {
+        "PRONAC": "235550",
+        "valor": 250000,
+        "data_recibo": "2023-12-26",
+        "nome_projeto": "Plano Anual de Atividades da Santa Marcelina Cultura 2024",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/235550",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/4f9039891a03e929aef1696ffb3da17c758961f6842b1921a1956159e23c"
+        }
+      },
+      {
+        "PRONAC": "2310814",
+        "valor": 300000,
+        "data_recibo": "2023-12-26",
+        "nome_projeto": "Caravana de Opera Minaz 2024",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/2310814",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/fdacb4bf1492f251d57b73bf1cd09893ac09570c107fc73e33c2edf17785"
+        }
+      },
+      {
+        "PRONAC": "235686",
+        "valor": 131660,
+        "data_recibo": "2023-12-26",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2024",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/235686",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/cf2636a02fb2c233c36f80bdb9b05f788d9b1d5244b1e082ef9d5db8f5da"
+        }
+      },
+      {
+        "PRONAC": "235686",
+        "valor": 150000,
+        "data_recibo": "2024-12-20",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2024",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/235686",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/2175ff0bc701db4abc0182695ea2451a5af112965d90af7e7e6bf5dea559"
+        }
+      },
+      {
+        "PRONAC": "248359",
+        "valor": 2378234,
+        "data_recibo": "2024-12-26",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2025",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/248359",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/ad300a217713528a55849a293ee09e4a4b3db584887a9a1dbc766a1e6df7"
+        }
+      },
+      {
+        "PRONAC": "259751",
+        "valor": 420355,
+        "data_recibo": "2025-12-29",
+        "nome_projeto": "IORM CULTURAL 2026",
+        "cgccpf": "51990778000126",
+        "nome_doador": "Açúcar e Álcool Oswaldo Ribeiro de Mendonça Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/259751",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/d04031c17a9399af04512b99b3ea26391386750dafab4fbb5a15d69aa273"
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": "http://api.salic.cultura.gov.br/api/v1/incentivadores/51990778000126/doacoes",
+    "first": "https://api.salic.cultura.gov.br/api/v1/incentivadores/e289bd1b20b9f5b5bc1506d218a87467c0365f04342a50/doacoes?limit=100&offset=0",
+    "last": "https://api.salic.cultura.gov.br/api/v1/incentivadores/e289bd1b20b9f5b5bc1506d218a87467c0365f04342a50/doacoes?limit=100&offset=0"
+  },
+  "count": 64,
+  "total": 1
+}

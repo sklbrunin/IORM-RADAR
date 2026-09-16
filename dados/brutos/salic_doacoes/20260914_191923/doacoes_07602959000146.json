@@ -1,0 +1,73 @@
+{
+  "_embedded": {
+    "doacoes": [
+      {
+        "PRONAC": "212460",
+        "valor": 139.45,
+        "data_recibo": "2022-09-15",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2022",
+        "cgccpf": "07602959000146",
+        "nome_doador": "INSTITUTO OSWALDO RIBEIRO DE MENDONCA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/212460",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/424c88457ed74b25e843fc52b6266d497424c09ff3057deeab953e38ab89"
+        }
+      },
+      {
+        "PRONAC": "212460",
+        "valor": 3,
+        "data_recibo": "2022-09-29",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2022",
+        "cgccpf": "07602959000146",
+        "nome_doador": "INSTITUTO OSWALDO RIBEIRO DE MENDONCA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/212460",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/582bbf61dd0d0da396d38b8878397123e2c5d698a90e320b4c7f5bfbd2af"
+        }
+      },
+      {
+        "PRONAC": "235686",
+        "valor": 25520,
+        "data_recibo": "2023-12-28",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2024",
+        "cgccpf": "07602959000146",
+        "nome_doador": "INSTITUTO OSWALDO RIBEIRO DE MENDONCA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/235686",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/a07ba4241de03311f667e8cff358bf4cbee823fd59a9eb577999d79114ee"
+        }
+      },
+      {
+        "PRONAC": "235686",
+        "valor": 1454.28,
+        "data_recibo": "2023-12-28",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2024",
+        "cgccpf": "07602959000146",
+        "nome_doador": "INSTITUTO OSWALDO RIBEIRO DE MENDONCA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/235686",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/bf8c28af487fff3e0c9c872bee2cae2cfdcc18b045de2b6578eef60d3574"
+        }
+      },
+      {
+        "PRONAC": "235686",
+        "valor": 3692.04,
+        "data_recibo": "2023-12-29",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2024",
+        "cgccpf": "07602959000146",
+        "nome_doador": "INSTITUTO OSWALDO RIBEIRO DE MENDONCA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/235686",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/af4e829ca7c6484730411dfc02bcf7ddefdf1f3585be8b9ed4d222135486"
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": "http://api.salic.cultura.gov.br/api/v1/incentivadores/07602959000146/doacoes",
+    "first": "https://api.salic.cultura.gov.br/api/v1/incentivadores/15b06bd57f0e8519dc5e584efbcc99573f0ac1c3a35b9a/doacoes?limit=100&offset=0",
+    "last": "https://api.salic.cultura.gov.br/api/v1/incentivadores/15b06bd57f0e8519dc5e584efbcc99573f0ac1c3a35b9a/doacoes?limit=100&offset=0"
+  },
+  "count": 5,
+  "total": 1
+}

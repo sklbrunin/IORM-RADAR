@@ -1,0 +1,85 @@
+{
+  "_embedded": {
+    "doacoes": [
+      {
+        "PRONAC": "172194",
+        "valor": 1000,
+        "data_recibo": "2018-12-27",
+        "nome_projeto": "ALMA - manutenção",
+        "cgccpf": "18104061000164",
+        "nome_doador": "POSTO CALIFORNIA DE GUAIRA LTDA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/172194",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/7758bbadc84599b14f92d7283f9883994d760d7467e4163b61becd555610"
+        }
+      },
+      {
+        "PRONAC": "192601",
+        "valor": 1200,
+        "data_recibo": "2019-12-20",
+        "nome_projeto": "AGENDA CULTURAL 2020",
+        "cgccpf": "18104061000164",
+        "nome_doador": "POSTO CALIFORNIA DE GUAIRA LTDA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/192601",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/03db3b8f16b1134c600091dd58cdcf73e244ba9cf7a36eaa86698a96ea5e"
+        }
+      },
+      {
+        "PRONAC": "205171",
+        "valor": 1400,
+        "data_recibo": "2020-12-30",
+        "nome_projeto": "AGENDA CULTURAL 2021",
+        "cgccpf": "18104061000164",
+        "nome_doador": "POSTO CALIFORNIA DE GUAIRA LTDA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/205171",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/3e07624df562dae35c399b73b3b798d14ce9b1d502551fe38256431f9963"
+        }
+      },
+      {
+        "PRONAC": "220726",
+        "valor": 3000,
+        "data_recibo": "2022-12-27",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2023",
+        "cgccpf": "18104061000164",
+        "nome_doador": "POSTO CALIFORNIA DE GUAIRA LTDA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/220726",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/1339fa8850750b1e2b3a2b60481cfe61eb463f82839c1fda88a65cbbc7c1"
+        }
+      },
+      {
+        "PRONAC": "235686",
+        "valor": 3200,
+        "data_recibo": "2023-12-28",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2024",
+        "cgccpf": "18104061000164",
+        "nome_doador": "POSTO CALIFORNIA DE GUAIRA LTDA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/235686",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/f6e803a154c0bf6586b784a9231884104ad1ed42460508186e0723a4ad6e"
+        }
+      },
+      {
+        "PRONAC": "248359",
+        "valor": 4000,
+        "data_recibo": "2024-12-27",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2025",
+        "cgccpf": "18104061000164",
+        "nome_doador": "POSTO CALIFORNIA DE GUAIRA LTDA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/248359",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/d7f9657f31b9f81d6c5a1441af3286792191e5f92e1618ad15a7be546d91"
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": "http://api.salic.cultura.gov.br/api/v1/incentivadores/18104061000164/doacoes",
+    "first": "https://api.salic.cultura.gov.br/api/v1/incentivadores/5fc856e0126530ef0396dddee224d56c85e231e6c61076/doacoes?limit=100&offset=0",
+    "last": "https://api.salic.cultura.gov.br/api/v1/incentivadores/5fc856e0126530ef0396dddee224d56c85e231e6c61076/doacoes?limit=100&offset=0"
+  },
+  "count": 6,
+  "total": 1
+}

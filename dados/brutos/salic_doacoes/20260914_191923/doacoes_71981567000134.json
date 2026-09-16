@@ -1,0 +1,97 @@
+{
+  "_embedded": {
+    "doacoes": [
+      {
+        "PRONAC": "121680",
+        "valor": 2500,
+        "data_recibo": "2015-12-28",
+        "nome_projeto": "Usina da Dança",
+        "cgccpf": "71981567000134",
+        "nome_doador": "Agrop - Agropecuária Orlando Prado Diniz Junqueira Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/121680",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/566a03fa73f38f907d4782684b7c84746aa2f7b38f37930738936a0904e1"
+        }
+      },
+      {
+        "PRONAC": "176531",
+        "valor": 5600,
+        "data_recibo": "2017-12-08",
+        "nome_projeto": "Agenda Cultural Guaira",
+        "cgccpf": "71981567000134",
+        "nome_doador": "Agrop - Agropecuária Orlando Prado Diniz Junqueira Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/176531",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/1ef98cb126af5e67bafce33a417d19d06191a8d44a617fbbd018de3fe9bb"
+        }
+      },
+      {
+        "PRONAC": "192601",
+        "valor": 3000,
+        "data_recibo": "2019-12-18",
+        "nome_projeto": "AGENDA CULTURAL 2020",
+        "cgccpf": "71981567000134",
+        "nome_doador": "Agrop - Agropecuária Orlando Prado Diniz Junqueira Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/192601",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/091517d8c6438767851dc7fde3c9705cf452dd0397459e2d11a2ce2d502b"
+        }
+      },
+      {
+        "PRONAC": "220726",
+        "valor": 8000,
+        "data_recibo": "2022-12-14",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2023",
+        "cgccpf": "71981567000134",
+        "nome_doador": "Agrop - Agropecuária Orlando Prado Diniz Junqueira Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/220726",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/2ebd3dd109137b0b392cd51b8be6b0ad0c840a40e3ba418b73c022cb44f6"
+        }
+      },
+      {
+        "PRONAC": "235686",
+        "valor": 20000,
+        "data_recibo": "2023-12-22",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2024",
+        "cgccpf": "71981567000134",
+        "nome_doador": "Agrop - Agropecuária Orlando Prado Diniz Junqueira Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/235686",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/73fb1b1de5bb22e4655b006c7430c604c9f0ffe89a8938e95f1a50fc2776"
+        }
+      },
+      {
+        "PRONAC": "248359",
+        "valor": 40000,
+        "data_recibo": "2024-12-23",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2025",
+        "cgccpf": "71981567000134",
+        "nome_doador": "Agrop - Agropecuária Orlando Prado Diniz Junqueira Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/248359",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/29334aa2dfaa96948a015f496f3f8bf00d15b3ffbd5d4f118fed50ea3f82"
+        }
+      },
+      {
+        "PRONAC": "259751",
+        "valor": 30000,
+        "data_recibo": "2025-12-05",
+        "nome_projeto": "IORM CULTURAL 2026",
+        "cgccpf": "71981567000134",
+        "nome_doador": "Agrop - Agropecuária Orlando Prado Diniz Junqueira Ltda",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/259751",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/9eaa442629edc78b48e5b57381bc4ccf7a03ae3ad45064d28cc02fe7646a"
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": "http://api.salic.cultura.gov.br/api/v1/incentivadores/71981567000134/doacoes",
+    "first": "https://api.salic.cultura.gov.br/api/v1/incentivadores/02c645793460bfb7042048a09a540d82e2d12361e1390a/doacoes?limit=100&offset=0",
+    "last": "https://api.salic.cultura.gov.br/api/v1/incentivadores/02c645793460bfb7042048a09a540d82e2d12361e1390a/doacoes?limit=100&offset=0"
+  },
+  "count": 7,
+  "total": 1
+}

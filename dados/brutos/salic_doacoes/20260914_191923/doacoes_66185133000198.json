@@ -1,0 +1,37 @@
+{
+  "_embedded": {
+    "doacoes": [
+      {
+        "PRONAC": "248359",
+        "valor": 2108.75,
+        "data_recibo": "2024-12-30",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2025",
+        "cgccpf": "66185133000198",
+        "nome_doador": "ORLASOLDA COMERCIO DE FERRAMENTAS E SOLDAS LTDA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/248359",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/419868249bab626417c98624cb71ce710455c0e069b352efebacf6c0ad77"
+        }
+      },
+      {
+        "PRONAC": "259751",
+        "valor": 3161.4,
+        "data_recibo": "2025-12-30",
+        "nome_projeto": "IORM CULTURAL 2026",
+        "cgccpf": "66185133000198",
+        "nome_doador": "ORLASOLDA COMERCIO DE FERRAMENTAS E SOLDAS LTDA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/259751",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/9e866b2b320571c3fb759291dc8fd19d2060a0f03259427e53fc3ce4ffcd"
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": "http://api.salic.cultura.gov.br/api/v1/incentivadores/66185133000198/doacoes",
+    "first": "https://api.salic.cultura.gov.br/api/v1/incentivadores/8d48c8029994a66bc1ec415af7be2b3a640b605c0c288f/doacoes?limit=100&offset=0",
+    "last": "https://api.salic.cultura.gov.br/api/v1/incentivadores/8d48c8029994a66bc1ec415af7be2b3a640b605c0c288f/doacoes?limit=100&offset=0"
+  },
+  "count": 2,
+  "total": 1
+}

@@ -1,0 +1,145 @@
+{
+  "_embedded": {
+    "doacoes": [
+      {
+        "PRONAC": "121680",
+        "valor": 5200,
+        "data_recibo": "2013-12-30",
+        "nome_projeto": "Usina da Dança",
+        "cgccpf": "65744138000140",
+        "nome_doador": "Aguetoni Transportes Ltda.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/121680",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/e083fa23e28be09a98c4b85314ad0a087f76ba05aa72355de4b262cc2edb"
+        }
+      },
+      {
+        "PRONAC": "121680",
+        "valor": 4800,
+        "data_recibo": "2014-12-29",
+        "nome_projeto": "Usina da Dança",
+        "cgccpf": "65744138000140",
+        "nome_doador": "Aguetoni Transportes Ltda.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/121680",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/9b49be58301bf53a5ccb053f6add5a5415fe015d903f710ff7337ac1e833"
+        }
+      },
+      {
+        "PRONAC": "158632",
+        "valor": 5000,
+        "data_recibo": "2016-12-26",
+        "nome_projeto": "Projeto Agenda Cultural",
+        "cgccpf": "65744138000140",
+        "nome_doador": "Aguetoni Transportes Ltda.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/158632",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/15259bf551301b374dbb62b0449c5fe310693916cf5bf2224e6785df9627"
+        }
+      },
+      {
+        "PRONAC": "176531",
+        "valor": 6000,
+        "data_recibo": "2017-12-27",
+        "nome_projeto": "Agenda Cultural Guaira",
+        "cgccpf": "65744138000140",
+        "nome_doador": "Aguetoni Transportes Ltda.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/176531",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/a2c9999514de8d3eb8412fcefcf47acb820c02b80b179807018239e3d805"
+        }
+      },
+      {
+        "PRONAC": "177611",
+        "valor": 8600,
+        "data_recibo": "2018-12-26",
+        "nome_projeto": "Agenda Cultural Miguelópolis",
+        "cgccpf": "65744138000140",
+        "nome_doador": "Aguetoni Transportes Ltda.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/177611",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/65cbd709eed8d7178bb597a08b3403ad7bbf44df7a48b89e20be9f1ea80c"
+        }
+      },
+      {
+        "PRONAC": "192601",
+        "valor": 12000,
+        "data_recibo": "2019-12-19",
+        "nome_projeto": "AGENDA CULTURAL 2020",
+        "cgccpf": "65744138000140",
+        "nome_doador": "Aguetoni Transportes Ltda.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/192601",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/8a0a712e129faa2a83b24f19ec4d5ee814c78ccda76cf810dfb6be178514"
+        }
+      },
+      {
+        "PRONAC": "192601",
+        "valor": 14800,
+        "data_recibo": "2020-12-29",
+        "nome_projeto": "AGENDA CULTURAL 2020",
+        "cgccpf": "65744138000140",
+        "nome_doador": "Aguetoni Transportes Ltda.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/192601",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/33af94f4dba4f8be5068bc868b2580c0b1c185a67042538a354ce4eb34f5"
+        }
+      },
+      {
+        "PRONAC": "212460",
+        "valor": 20000,
+        "data_recibo": "2021-12-21",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2022",
+        "cgccpf": "65744138000140",
+        "nome_doador": "Aguetoni Transportes Ltda.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/212460",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/73effdd85d8c6d977638f993ab34c6777af96e02c3f71554fc574b68e3f0"
+        }
+      },
+      {
+        "PRONAC": "220726",
+        "valor": 28000,
+        "data_recibo": "2022-12-27",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2023",
+        "cgccpf": "65744138000140",
+        "nome_doador": "Aguetoni Transportes Ltda.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/220726",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/4b5a6c0027e605ffe200abe06bf73a48140cff4731f21179b32e25715846"
+        }
+      },
+      {
+        "PRONAC": "235686",
+        "valor": 36000,
+        "data_recibo": "2023-12-27",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2024",
+        "cgccpf": "65744138000140",
+        "nome_doador": "Aguetoni Transportes Ltda.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/235686",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/b94d36c91e4a2a75eb3dee55b88d248eac007bd146dfb6c3c447d170e968"
+        }
+      },
+      {
+        "PRONAC": "248359",
+        "valor": 20000,
+        "data_recibo": "2024-12-27",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2025",
+        "cgccpf": "65744138000140",
+        "nome_doador": "Aguetoni Transportes Ltda.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/248359",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/81825576ed4e591b96702103d6096fd78b3d696313816eb482ccfb3a3fb6"
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": "http://api.salic.cultura.gov.br/api/v1/incentivadores/65744138000140/doacoes",
+    "first": "https://api.salic.cultura.gov.br/api/v1/incentivadores/38b624b43cd832cb5734f3ac70d20e76e79ba890c346af/doacoes?limit=100&offset=0",
+    "last": "https://api.salic.cultura.gov.br/api/v1/incentivadores/38b624b43cd832cb5734f3ac70d20e76e79ba890c346af/doacoes?limit=100&offset=0"
+  },
+  "count": 11,
+  "total": 1
+}

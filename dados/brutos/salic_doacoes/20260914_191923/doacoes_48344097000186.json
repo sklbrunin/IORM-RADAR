@@ -1,0 +1,25 @@
+{
+  "_embedded": {
+    "doacoes": [
+      {
+        "PRONAC": "248359",
+        "valor": 800,
+        "data_recibo": "2024-12-27",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2025",
+        "cgccpf": "48344097000186",
+        "nome_doador": "POSTO GUAIRA LTDA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/248359",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/29fc1cdd1bdb86ab764820bbced0dd6c079a25d4472aef9be5ffb5f2756c"
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": "http://api.salic.cultura.gov.br/api/v1/incentivadores/48344097000186/doacoes",
+    "first": "https://api.salic.cultura.gov.br/api/v1/incentivadores/112982f7adca76c8de08df9054d65e8c2139b4ed6e699c/doacoes?limit=100&offset=0",
+    "last": "https://api.salic.cultura.gov.br/api/v1/incentivadores/112982f7adca76c8de08df9054d65e8c2139b4ed6e699c/doacoes?limit=100&offset=0"
+  },
+  "count": 1,
+  "total": 1
+}

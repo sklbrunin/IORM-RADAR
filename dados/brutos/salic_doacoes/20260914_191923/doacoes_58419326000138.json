@@ -1,0 +1,61 @@
+{
+  "_embedded": {
+    "doacoes": [
+      {
+        "PRONAC": "158632",
+        "valor": 3200,
+        "data_recibo": "2016-12-29",
+        "nome_projeto": "Projeto Agenda Cultural",
+        "cgccpf": "58419326000138",
+        "nome_doador": "VICENTE & REGATIERI LTDA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/158632",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/787d21bef8d36e0dd92e20a7bf7d1dadb78697710f693e879595fd71ffa8"
+        }
+      },
+      {
+        "PRONAC": "176531",
+        "valor": 600,
+        "data_recibo": "2017-12-28",
+        "nome_projeto": "Agenda Cultural Guaira",
+        "cgccpf": "58419326000138",
+        "nome_doador": "VICENTE & REGATIERI LTDA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/176531",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/e38ee17d243c308ab2ec61e913d9b358098a8ca709e9299974571d186b04"
+        }
+      },
+      {
+        "PRONAC": "176531",
+        "valor": 360,
+        "data_recibo": "2018-12-28",
+        "nome_projeto": "Agenda Cultural Guaira",
+        "cgccpf": "58419326000138",
+        "nome_doador": "VICENTE & REGATIERI LTDA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/176531",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/8533670ef326d96567ac709cfbb2e7ead9cf3ea4249e6a61aedc38f492de"
+        }
+      },
+      {
+        "PRONAC": "248359",
+        "valor": 812,
+        "data_recibo": "2024-12-30",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2025",
+        "cgccpf": "58419326000138",
+        "nome_doador": "VICENTE & REGATIERI LTDA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/248359",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/a5616b9d050670499404028e372a008ee73d3aba13669fd21fa5fd6f249c"
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": "http://api.salic.cultura.gov.br/api/v1/incentivadores/58419326000138/doacoes",
+    "first": "https://api.salic.cultura.gov.br/api/v1/incentivadores/80a83208840e55c93b018b83184a6c123144817e2911e5/doacoes?limit=100&offset=0",
+    "last": "https://api.salic.cultura.gov.br/api/v1/incentivadores/80a83208840e55c93b018b83184a6c123144817e2911e5/doacoes?limit=100&offset=0"
+  },
+  "count": 4,
+  "total": 1
+}

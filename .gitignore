@@ -1,0 +1,18 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.env
+
+# Backups locais (snapshots de segurança) e fila de pesquisa não
+# precisam ir para o repositório — só o banco principal
+# (dados/iorm_radar.db) é versionado de propósito, porque é ele que
+# torna a demonstração pública utilizável com dados reais sem precisar
+# recolocar a coleta inteira no ar (ver docs/decisoes.md).
+dados/backups/
+dados/fila_pesquisa.json
+
+# Config local de ferramentas (não faz parte do produto)
+.claude/
+
+# Pasta duplicada/órfã (cópia solta da logo, não referenciada pelo código)
+/IORM - RADAR/

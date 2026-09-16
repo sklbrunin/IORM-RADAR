@@ -1,0 +1,121 @@
+{
+  "_embedded": {
+    "doacoes": [
+      {
+        "PRONAC": "121680",
+        "valor": 11161.89,
+        "data_recibo": "2014-12-30",
+        "nome_projeto": "Usina da Dança",
+        "cgccpf": "00510574000100",
+        "nome_doador": "Beira Rio Agroindustrial Ltda.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/121680",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/36c780672b9c8a6deda0d1bf8aa776f516d438cf51844fa36e3196160283"
+        }
+      },
+      {
+        "PRONAC": "121680",
+        "valor": 13268.31,
+        "data_recibo": "2015-12-30",
+        "nome_projeto": "Usina da Dança",
+        "cgccpf": "00510574000100",
+        "nome_doador": "Beira Rio Agroindustrial Ltda.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/121680",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/22ba8f80ca34761ab3263e97ef064ada2b66c4edea5d8ca070c8b843e091"
+        }
+      },
+      {
+        "PRONAC": "158632",
+        "valor": 8785.09,
+        "data_recibo": "2016-12-28",
+        "nome_projeto": "Projeto Agenda Cultural",
+        "cgccpf": "00510574000100",
+        "nome_doador": "Beira Rio Agroindustrial Ltda.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/158632",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/e3f5da49244b5e731cb86a81b697a268da667a0a84c6530eb29ab2f35dec"
+        }
+      },
+      {
+        "PRONAC": "177662",
+        "valor": 6034.52,
+        "data_recibo": "2018-12-28",
+        "nome_projeto": "AGENDA CULTURAL IPUÃ",
+        "cgccpf": "00510574000100",
+        "nome_doador": "Beira Rio Agroindustrial Ltda.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/177662",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/4db1412a79d7611786fdf1b7340007819dce966d999bf74f31de48359244"
+        }
+      },
+      {
+        "PRONAC": "193884",
+        "valor": 7869.4,
+        "data_recibo": "2019-12-23",
+        "nome_projeto": "Música Criança São Joaquim da Barra - ano 2",
+        "cgccpf": "00510574000100",
+        "nome_doador": "Beira Rio Agroindustrial Ltda.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/193884",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/a607eaf0b03dbba1350989376c66d4541af899b600af95146f36a2bd3d92"
+        }
+      },
+      {
+        "PRONAC": "193884",
+        "valor": 30000,
+        "data_recibo": "2020-12-30",
+        "nome_projeto": "Música Criança São Joaquim da Barra - ano 2",
+        "cgccpf": "00510574000100",
+        "nome_doador": "Beira Rio Agroindustrial Ltda.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/193884",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/6b25e63ae312b7f4a9a9cd599670e4c22d342146ad0784bb683b8e3af041"
+        }
+      },
+      {
+        "PRONAC": "192601",
+        "valor": 10000,
+        "data_recibo": "2020-12-30",
+        "nome_projeto": "AGENDA CULTURAL 2020",
+        "cgccpf": "00510574000100",
+        "nome_doador": "Beira Rio Agroindustrial Ltda.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/192601",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/2297c76c0ea79dc5e3b87e7aa81981cc4047f96a3038fc78194b98595fb3"
+        }
+      },
+      {
+        "PRONAC": "212460",
+        "valor": 60400,
+        "data_recibo": "2021-12-29",
+        "nome_projeto": "PLANO ANUAL AGENDA CULTURAL 2022",
+        "cgccpf": "00510574000100",
+        "nome_doador": "Beira Rio Agroindustrial Ltda.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/212460",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/ccc347f5c4ebaedf31ba491c046f3823c37ac1b87d0e43ec93c614fe4140"
+        }
+      },
+      {
+        "PRONAC": "2413129",
+        "valor": 2400.59,
+        "data_recibo": "2025-12-29",
+        "nome_projeto": "ATELIE DE ARTES - 2ª EDIÇÃO",
+        "cgccpf": "00510574000100",
+        "nome_doador": "Beira Rio Agroindustrial Ltda.",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/2413129",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/bc80924444162f61a728e1b2284a40e77fefe8489655feb1e1e43a60d88e"
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": "http://api.salic.cultura.gov.br/api/v1/incentivadores/00510574000100/doacoes",
+    "first": "https://api.salic.cultura.gov.br/api/v1/incentivadores/d5cf4374d764c1fc53cb6581951c6a6c6a444a3de1efa6/doacoes?limit=100&offset=0",
+    "last": "https://api.salic.cultura.gov.br/api/v1/incentivadores/d5cf4374d764c1fc53cb6581951c6a6c6a444a3de1efa6/doacoes?limit=100&offset=0"
+  },
+  "count": 9,
+  "total": 1
+}

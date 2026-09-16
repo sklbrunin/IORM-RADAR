@@ -1,0 +1,73 @@
+{
+  "_embedded": {
+    "doacoes": [
+      {
+        "PRONAC": "233504",
+        "valor": 30000,
+        "data_recibo": "2023-12-28",
+        "nome_projeto": "23ª Feira Internacional do Livro de Ribeirão Preto",
+        "cgccpf": "46754545000194",
+        "nome_doador": "INTELLI INDUSTRIA DE TERMINAIS ELETRICOS LTDA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/233504",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/4acf7489fb15119bef564f56dad13082d690f96cb6c57a21642ecd7ceaf0"
+        }
+      },
+      {
+        "PRONAC": "2310628",
+        "valor": 120000,
+        "data_recibo": "2024-06-28",
+        "nome_projeto": "Terzo Paradiso Brasil",
+        "cgccpf": "46754545000194",
+        "nome_doador": "INTELLI INDUSTRIA DE TERMINAIS ELETRICOS LTDA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/2310628",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/47fc9f8c98f2eaf855091281d8445510ba273653cf553af02af494e96860"
+        }
+      },
+      {
+        "PRONAC": "2413220",
+        "valor": 150000,
+        "data_recibo": "2024-12-30",
+        "nome_projeto": "Revitalização da Catedral de São Sebastião - Fase 1",
+        "cgccpf": "46754545000194",
+        "nome_doador": "INTELLI INDUSTRIA DE TERMINAIS ELETRICOS LTDA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/2413220",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/a7f34cc4fb23fa52251d40173f0e8771c157fda194f15ac755e84456f783"
+        }
+      },
+      {
+        "PRONAC": "243878",
+        "valor": 150000,
+        "data_recibo": "2025-12-22",
+        "nome_projeto": "Plano Anual de Atividades - Centenário de uma Casa Museu",
+        "cgccpf": "46754545000194",
+        "nome_doador": "INTELLI INDUSTRIA DE TERMINAIS ELETRICOS LTDA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/243878",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/9a40f42558864915205c9d226da5e3f6808ca4afdad263e8c8ac687b1915"
+        }
+      },
+      {
+        "PRONAC": "2413220",
+        "valor": 100000,
+        "data_recibo": "2026-01-13",
+        "nome_projeto": "Revitalização da Catedral de São Sebastião - Fase 1",
+        "cgccpf": "46754545000194",
+        "nome_doador": "INTELLI INDUSTRIA DE TERMINAIS ELETRICOS LTDA",
+        "_links": {
+          "projeto": "https://api.salic.cultura.gov.br/api/v1/projetos/2413220",
+          "incentivador": "https://api.salic.cultura.gov.br/api/v1/incentivadores/f0ae88b031d6950f57162327ce18bc43993fb14abf72f4ab68cde3c8f068"
+        }
+      }
+    ]
+  },
+  "_links": {
+    "self": "http://api.salic.cultura.gov.br/api/v1/incentivadores/46754545000194/doacoes",
+    "first": "https://api.salic.cultura.gov.br/api/v1/incentivadores/dfa573b9f3e459f2be42a22c80bb0b3d1c158a3e5c353d/doacoes?limit=100&offset=0",
+    "last": "https://api.salic.cultura.gov.br/api/v1/incentivadores/dfa573b9f3e459f2be42a22c80bb0b3d1c158a3e5c353d/doacoes?limit=100&offset=0"
+  },
+  "count": 5,
+  "total": 1
+}
