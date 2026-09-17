@@ -5,7 +5,7 @@ from __future__ import annotations
 import pandas as pd
 import streamlit as st
 
-from processamento import busca_providers, crm, filtros, metricas, pesquisa_empresa
+from processamento import busca_providers, crm, filtros, metricas, pesquisa_empresa, regiao
 from paginas import _shared
 
 
@@ -53,9 +53,15 @@ def _renderizar_filtros(df_empresas: pd.DataFrame) -> pd.DataFrame:
 
     st.sidebar.markdown("---")
     st.sidebar.subheader("Filtros — Radar de Empresas")
+    regioes_disponiveis = ["Todas"] + [c for c in regiao.CAMADAS if c in df_empresas.get("regiao_iorm", pd.Series(dtype=str)).unique()]
     with st.sidebar.form("form_filtros"):
         st.selectbox("Estado", estados_disponiveis, key="form_estado")
         st.selectbox("Cidade", cidades_disponiveis, key="form_cidade")
+        st.selectbox(
+            "Região IORM", regioes_disponiveis, key="form_regiao",
+            format_func=lambda r: "Todas" if r == "Todas" else regiao.rotulo(r),
+            help="Cidade de atuação / Região próxima / Interesse estratégico / Fora da região — configurado em Cérebro da OSC → Território.",
+        )
         st.slider("Score mínimo (IORM Score)", 0, 100, key="form_score_min")
         st.selectbox("CNPJ", ["Todos", "Confirmado", "Não confirmado"], key="form_cnpj")
         st.selectbox("Tipo de informação", ["Todos", "Agregado", "Detalhado"], key="form_tipo")
@@ -145,8 +151,9 @@ def _renderizar_ficha(df_mesclado: pd.DataFrame, empresa_id: int) -> None:
 
     st.markdown(f"## {empresa['razao_social']}")
     badges = [f"<span class='iorm-badge iorm-badge-azul'>📍 {empresa['cidade'] or 'Cidade não disponível'}</span>"]
-    if empresa["cidade_estrategica"]:
-        badges.append("<span class='iorm-badge iorm-badge-verde'>🎯 Cidade estratégica do IORM</span>")
+    camada_regiao = empresa.get("regiao_iorm")
+    if pd.notna(camada_regiao) and camada_regiao != "FORA_DA_REGIAO":
+        badges.append(_shared.badge_regiao_iorm(camada_regiao))
     if projetos_iorm:
         badges.append("<span class='iorm-badge iorm-badge-laranja'>🎗️ Já apoiou projeto do IORM</span>")
     if ja_no_crm:
@@ -168,8 +175,11 @@ def _renderizar_ficha(df_mesclado: pd.DataFrame, empresa_id: int) -> None:
     col_c.metric("Prioridade de Prospecção", f"{empresa['prioridade_prospeccao']}/100")
     with st.expander("Como esses scores foram calculados?"):
         st.markdown(
-            "- **IORM Score** mede afinidade/histórico com o IORM (cidade estratégica, valor histórico, "
+            "- **IORM Score** mede afinidade/histórico com o IORM (Região IORM, valor histórico, "
             "projeto ligado ao IORM, CNPJ confirmado, detalhamento disponível).\n"
+            "- **Região IORM** (25 pts no máximo) tem 4 camadas configuráveis em Cérebro da OSC → "
+            "Território: Cidade de atuação (25) → Região próxima (15) → Interesse estratégico (8) → "
+            "Fora da região (0).\n"
             "- **Contactability Score** mede o quão fácil é abordar a empresa (site, e-mail, telefone, "
             "LinkedIn, ESG identificado).\n"
             "- **Prioridade de Prospecção** combina os dois: `0,5×IORM Score + 0,5×Contactability Score`, "
@@ -179,9 +189,10 @@ def _renderizar_ficha(df_mesclado: pd.DataFrame, empresa_id: int) -> None:
 
     col_d, col_e, col_f, col_g = st.columns(4)
     col_d.metric("Cidade / UF", f"{empresa['cidade'] or '—'} / {empresa['estado'] or '—'}")
-    col_e.metric("CNPJ", _shared.formatar_cnpj(empresa["cnpj"]))
-    col_f.metric("Situação cadastral", empresa["status"] or "Não disponível")
-    col_g.metric("Valor histórico", _shared.formatar_moeda(empresa["valor_total"]))
+    col_e.metric("Região IORM", regiao.rotulo(camada_regiao) if pd.notna(camada_regiao) else "Não classificada")
+    col_f.metric("CNPJ", _shared.formatar_cnpj(empresa["cnpj"]))
+    col_g.metric("Situação cadastral", empresa["status"] or "Não disponível")
+    st.metric("Valor histórico", _shared.formatar_moeda(empresa["valor_total"]))
 
     col_h, col_i, col_j = st.columns(3)
     col_h.metric("Nº de doações", int(empresa["num_incentivos"]) if pd.notna(empresa["num_incentivos"]) else 0)

@@ -15,6 +15,40 @@ def conexao():
     conn.close()
 
 
+def test_criar_edital_sem_data_fica_nao_confirmado(conexao):
+    edital_id = editais.criar_edital(conexao, {"titulo": "Edital X", "fonte": "Busca automática"})
+    linha = conexao.execute("SELECT situacao_inscricao FROM editais WHERE id = ?", (edital_id,)).fetchone()
+    assert linha["situacao_inscricao"] == "NAO_CONFIRMADO"
+
+
+def test_classificar_situacao_sem_data_encerramento():
+    assert editais.classificar_situacao_inscricao(None, None) == "NAO_CONFIRMADO"
+
+
+def test_classificar_situacao_encerrado():
+    assert editais.classificar_situacao_inscricao(None, "2020-01-01", hoje=date(2026, 1, 1)) == "ENCERRADO"
+
+
+def test_classificar_situacao_aberto():
+    assert editais.classificar_situacao_inscricao(None, "2026-12-31", hoje=date(2026, 1, 1)) == "ABERTO"
+
+
+def test_classificar_situacao_proximo():
+    assert editais.classificar_situacao_inscricao("2026-06-01", "2026-12-31", hoje=date(2026, 1, 1)) == "PROXIMO"
+
+
+def test_classificar_situacao_data_invalida_fica_nao_confirmado():
+    assert editais.classificar_situacao_inscricao(None, "data-invalida") == "NAO_CONFIRMADO"
+
+
+def test_migrar_colunas_novas_e_idempotente(conexao):
+    editais.migrar_colunas_novas(conexao)
+    editais.migrar_colunas_novas(conexao)  # rodar de novo não deve quebrar
+    colunas = {linha["name"] for linha in conexao.execute("PRAGMA table_info(editais)")}
+    assert "situacao_inscricao" in colunas
+    assert "origem_descoberta" in colunas
+
+
 PERFIL_IORM = {
     "cidades": ["Guaíra", "Ipuã", "Miguelópolis", "Orlândia"],
     "estados": ["SP"],

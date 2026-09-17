@@ -10,6 +10,8 @@ __pycache__/
 # recolocar a coleta inteira no ar (ver docs/decisoes.md).
 dados/backups/
 dados/fila_pesquisa.json
+dados/logs/
+dados/estado_coleta_diaria.json
 
 # Config local de ferramentas (não faz parte do produto)
 .claude/

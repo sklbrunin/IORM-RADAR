@@ -42,6 +42,13 @@ TIPOS_OPORTUNIDADE = [
     "OUTRO",
 ]
 
+# Situação de inscrição — DIFERENTE do campo `status` (que é o acompanhamento
+# interno do IORM sobre o edital, tipo "em análise"/"inscrito"). Este campo
+# responde só "a inscrição está aberta?", e por padrão nunca afirma "aberto"
+# sem confirmação: só vira ABERTO/ENCERRADO/PROXIMO quando uma data real foi
+# informada; sem isso, fica NAO_CONFIRMADO (nunca inventa).
+SITUACOES_INSCRICAO = ["ABERTO", "ENCERRADO", "PROXIMO", "NAO_CONFIRMADO"]
+
 
 def _agora() -> str:
     return datetime.now(timezone.utc).isoformat()
@@ -75,6 +82,8 @@ def criar_tabelas(conexao: sqlite3.Connection) -> None:
             tipo TEXT NOT NULL DEFAULT 'OUTRO',
             status TEXT NOT NULL DEFAULT 'ENCONTRADO',
             texto_resumo TEXT,
+            situacao_inscricao TEXT NOT NULL DEFAULT 'NAO_CONFIRMADO',
+            origem_descoberta TEXT NOT NULL DEFAULT 'MANUAL',
             coletado_em TEXT NOT NULL,
             criado_em TEXT NOT NULL,
             atualizado_em TEXT NOT NULL
@@ -100,14 +109,51 @@ def criar_tabelas(conexao: sqlite3.Connection) -> None:
     conexao.commit()
 
 
+def migrar_colunas_novas(conexao: sqlite3.Connection) -> None:
+    """Migração idempotente para bancos criados antes da busca automática
+    de editais existir — adiciona colunas sem apagar nada."""
+    colunas = {linha["name"] for linha in conexao.execute("PRAGMA table_info(editais)")}
+    if "situacao_inscricao" not in colunas:
+        conexao.execute("ALTER TABLE editais ADD COLUMN situacao_inscricao TEXT NOT NULL DEFAULT 'NAO_CONFIRMADO'")
+    if "origem_descoberta" not in colunas:
+        conexao.execute("ALTER TABLE editais ADD COLUMN origem_descoberta TEXT NOT NULL DEFAULT 'MANUAL'")
+    conexao.commit()
+
+
+def classificar_situacao_inscricao(data_publicacao: str | None, data_encerramento: str | None,
+                                     hoje: date | None = None) -> str:
+    """Nunca afirma "aberto" sem uma data real que confirme isso — sem
+    data de encerramento, a situação fica sempre NAO_CONFIRMADO."""
+    hoje = hoje or datetime.now(timezone.utc).date()
+    if not data_encerramento:
+        return "NAO_CONFIRMADO"
+    try:
+        encerramento = datetime.fromisoformat(str(data_encerramento)[:10]).date()
+    except ValueError:
+        return "NAO_CONFIRMADO"
+    if encerramento < hoje:
+        return "ENCERRADO"
+    if data_publicacao:
+        try:
+            publicacao = datetime.fromisoformat(str(data_publicacao)[:10]).date()
+            if publicacao > hoje:
+                return "PROXIMO"
+        except ValueError:
+            pass
+    return "ABERTO"
+
+
 def criar_edital(conexao: sqlite3.Connection, dados: dict) -> int:
     agora = _agora()
+    situacao = dados.get("situacao_inscricao") or classificar_situacao_inscricao(
+        dados.get("data_publicacao"), dados.get("data_encerramento")
+    )
     cursor = conexao.execute(
         """INSERT INTO editais
            (titulo, organizacao_promotora, descricao, url, fonte, data_publicacao, data_encerramento,
             valor_texto, valor_numerico, territorio, publico, requisitos, tipo, status, texto_resumo,
-            coletado_em, criado_em, atualizado_em)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+            situacao_inscricao, origem_descoberta, coletado_em, criado_em, atualizado_em)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
         (
             dados["titulo"],
             dados.get("organizacao_promotora"),
@@ -124,6 +170,8 @@ def criar_edital(conexao: sqlite3.Connection, dados: dict) -> int:
             dados.get("tipo", "OUTRO"),
             dados.get("status", "ENCONTRADO"),
             dados.get("texto_resumo"),
+            situacao,
+            dados.get("origem_descoberta", "MANUAL"),
             dados.get("coletado_em", agora),
             agora,
             agora,

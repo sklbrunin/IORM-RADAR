@@ -1,6 +1,9 @@
-import pandas as pd
+import sqlite3
 
-from processamento import metricas
+import pandas as pd
+import pytest
+
+from processamento import banco, metricas
 
 
 def _linha(**overrides):
@@ -115,6 +118,60 @@ def test_mesclar_empresa_sem_pesquisa_fica_com_contactability_zero():
     assert resultado.loc[0, "contactability_score"] == 0
     assert resultado.loc[0, "pesquisado"] == False
     assert resultado.loc[0, "prioridade_prospeccao"] == 40  # 0.5*80 + 0.5*0
+
+
+@pytest.fixture
+def conexao_com_dados():
+    conn = sqlite3.connect(":memory:")
+    conn.row_factory = sqlite3.Row
+    banco.criar_tabelas(conn)
+
+    id_iorm, _ = banco.obter_ou_criar_empresa(
+        conn, {"cnpj": "11444777000161", "razao_social": "Empresa Parceira do IORM", "nome_fantasia": None,
+               "cidade": "Guaíra", "estado": "SP", "status": None},
+    )
+    banco.inserir_ou_atualizar_incentivo(
+        conn, {"empresa_id": id_iorm, "fonte": "SALIC", "tipo_incentivo": "Lei Rouanet",
+               "projeto": "Usina da Dança 2024", "ano": 2024, "valor": 50000.0, "uf": "SP", "cidade": "Guaíra",
+               "url_fonte": "https://x/1", "coletado_em": "2026-01-01", "nivel_confianca": "ALTO"},
+    )
+    id_outra, _ = banco.obter_ou_criar_empresa(
+        conn, {"cnpj": "22555888000172", "razao_social": "Empresa Qualquer", "nome_fantasia": None,
+               "cidade": "Osasco", "estado": "SP", "status": None},
+    )
+    banco.inserir_ou_atualizar_incentivo(
+        conn, {"empresa_id": id_outra, "fonte": "SALIC", "tipo_incentivo": "Lei Rouanet",
+               "projeto": "Projeto Qualquer Sem Relação", "ano": 2024, "valor": 30000.0, "uf": "SP", "cidade": "Osasco",
+               "url_fonte": "https://x/2", "coletado_em": "2026-01-01", "nivel_confianca": "ALTO"},
+    )
+    yield conn
+    conn.close()
+
+
+def test_doacoes_ligadas_ao_iorm_encontra_so_projetos_do_iorm(conexao_com_dados):
+    df = metricas.doacoes_ligadas_ao_iorm(conexao_com_dados)
+    assert len(df) == 1
+    assert df.iloc[0]["empresa"] == "Empresa Parceira do IORM"
+    assert df.iloc[0]["ano"] == 2024
+
+
+def test_resumo_por_cidade_inclui_cidade_sem_empresa(conexao_com_dados):
+    df = metricas.resumo_por_cidade(conexao_com_dados, ["Guaíra", "Cidade Sem Empresa Nenhuma"])
+    assert len(df) == 2
+    linha_vazia = df[df["cidade"] == "Cidade Sem Empresa Nenhuma"].iloc[0]
+    assert linha_vazia["empresas"] == 0
+    assert linha_vazia["valor"] == 0
+
+
+def test_carregar_empresas_com_territorios_classifica_regiao(conexao_com_dados):
+    territorios = [{"tipo": "cidade", "valor": "Guaíra"}, {"tipo": "regiao_proxima", "valor": "Barretos"}]
+    df = metricas.carregar_empresas(conexao_com_dados, territorios=territorios)
+    linha_guaira = df[df["cidade"] == "Guaíra"].iloc[0]
+    linha_osasco = df[df["cidade"] == "Osasco"].iloc[0]
+    assert linha_guaira["regiao_iorm"] == "CIDADE_ATUACAO"
+    assert linha_guaira["cidade_estrategica"] == True
+    assert linha_osasco["regiao_iorm"] == "FORA_DA_REGIAO"
+    assert linha_osasco["cidade_estrategica"] == False
 
 
 def test_mesclar_empresa_pesquisada_calcula_prioridade():

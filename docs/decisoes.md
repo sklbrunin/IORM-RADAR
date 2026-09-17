@@ -180,6 +180,69 @@ base64 tanto no bloco de marca da barra lateral quanto no banner de
 cabeçalho de cada página — decisão para evitar depender de um caminho de
 arquivo estático servido separadamente pelo Streamlit.
 
+### 7.9 Priorização geográfica em camadas (Região IORM)
+O critério geográfico binário ("cidade estratégica sim/não") virou uma
+classificação em 4 camadas (`processamento/regiao.py`): Cidade de atuação
+(25 pts, igual ao peso binário anterior) → Região próxima (15) →
+Interesse estratégico (8) → Fora da região (0). Reaproveita a tabela
+`osc_territorios` já existente (coluna `tipo`), sem migração de schema —
+só passou a aceitar `tipo='regiao_proxima'` e `tipo='interesse_estrategico'`
+além de `'cidade'`/`'estado'`. Nenhuma cidade de "região próxima" foi
+inventada: a lista nasce vazia e só cresce quando a equipe do IORM cadastra
+em Cérebro da OSC → Território — por isso, com o cadastro atual (só as 4
+cidades originais), o comportamento observável do score é idêntico ao de
+antes até alguém popular as novas camadas.
+
+### 7.10 Busca automática de editais — fontes e por que nunca afirma "aberto" sem prova
+`processamento/busca_editais.py` reaproveita o `SearchProvider` já
+validado para contatos, restringindo cada consulta com `site:` a três
+fontes específicas: `gov.br` (federal/estadual/municipal), `mapaosc.ipea.gov.br`
+e `prosas.com.br` — as duas últimas já eram conhecidas deste projeto como
+fontes reais de editais para OSCs (ver item 7.4), mesmo sem API própria;
+usar `site:` como proxy de busca dentro delas via um provedor de busca
+genérico é uma forma honesta de aproveitá-las sem depender de um scraper
+dedicado a cada uma. Testado ao vivo: uma busca real trouxe 15 candidatos,
+incluindo um edital real e vigente da Secretaria Municipal de Cultura de
+São Paulo (Fomento à Dança), com aderência 8.9/10 calculada corretamente.
+Todo candidato nasce com `situacao_inscricao='NAO_CONFIRMADO'` — só vira
+`ABERTO`/`ENCERRADO`/`PROXIMO` quando uma data real aparece literalmente
+no snippet da busca (regex para dd/mm/aaaa e aaaa-mm-dd, nunca inferência).
+Nenhum candidato é salvo sozinho: aparece como preview com aderência já
+calculada, e só vira registro em `editais` quando alguém clica "Importar"
+— evita poluir a base com resultados de busca de baixa relevância (a
+própria busca de teste trouxe candidatos claramente não relacionados,
+como "Edital ENADE 2026", corretamente pontuados com aderência baixa
+pelo motor já existente, não por um filtro novo).
+
+### 7.11 Drag-and-drop real no Pipeline via componente de terceiros
+Avaliado e adotado `streamlit-sortables` (componente Streamlit de
+terceiros, bidirecional de verdade — não um efeito visual) para o
+Kanban do Pipeline. Achado durante a implementação: o componente herda
+um `color: white` de estilo padrão (Bootstrap) nos itens, deixando o
+texto do card invisível sobre fundo branco — corrigido fixando `color`
+explicitamente no `custom_style`. Testado ao vivo arrastando um card
+entre colunas nos dois sentidos e confirmando a persistência direto no
+SQLite (não só na tela) antes de considerar a funcionalidade pronta.
+
+### 7.12 Descoberta diária de novas empresas — por que Minas Gerais e não mais São Paulo
+`coleta/coleta_diaria.py` usa a mesma API do SALIC já integrada, mas
+percorre estado por estado (`SP, MG, PR, RJ, MT, GO` por padrão) com
+memória de progresso em `dados/estado_coleta_diaria.json` — nunca refaz
+uma página já lida. Decisão importante: SP já foi coletado por completo
+nesta base (8.211 empresas), então rodar a rotina de novo nele traria
+quase só empresas "já existentes" e, pior, criaria linhas duplicadas
+para os poucos registros sem CNPJ confirmado (a regra antiga de "sem
+CNPJ, sempre cria linha nova" se aplicaria de novo). Por isso o estado
+inicial já marca SP como concluído, e a rotina avança naturalmente para
+o próximo estado da lista. Testado ao vivo com uma execução real
+(`--meta 5 --max-paginas-por-uf 1`): trouxe 100 empresas novas e reais de
+Minas Gerais (CNPJs validados, cidades reais) — a única razão de terem
+sido 100 em vez de ~5 é que a API devolve 100 registros por página e a
+rotina não descarta o restante de uma página só pra bater uma meta exata
+(isso gastaria a mesma chamada de API sem ganhar nada). Sem execução
+automática 24/7 neste ambiente — precisa ser agendada (Windows Task
+Scheduler; passo a passo no fim do próprio arquivo do script).
+
 ### 7.8 Arquitetura pronta para múltiplas OSCs, mas sem multi-tenant implementado agora
 A tabela `osc` já é desenhada para múltiplas linhas (não existe premissa
 de "OSC única" no schema), e `osc.obter_osc_principal()` é a única função

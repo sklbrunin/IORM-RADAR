@@ -411,16 +411,34 @@ def badge_status_integracao(status: str) -> str:
     return f"<span class='iorm-badge {classe}'>{emoji} {texto}</span>"
 
 
+# Camada de Região IORM (ver processamento/regiao.py) -> (emoji, classe CSS).
+_BADGE_REGIAO = {
+    "CIDADE_ATUACAO": ("🎯", "iorm-badge-verde"),
+    "REGIAO_PROXIMA": ("📍", "iorm-badge-azul"),
+    "INTERESSE_ESTRATEGICO": ("🔶", "iorm-badge-laranja"),
+    "FORA_DA_REGIAO": ("⚪", "iorm-badge-cinza"),
+}
+
+
+def badge_regiao_iorm(camada: str) -> str:
+    from processamento import regiao
+
+    emoji, classe = _BADGE_REGIAO.get(camada, ("⚪", "iorm-badge-cinza"))
+    return f"<span class='iorm-badge {classe}'>{emoji} {regiao.rotulo(camada)}</span>"
+
+
 @st.cache_data(ttl=60)
 def carregar_dados_salic(caminho_db_str: str):
     conexao = metricas.conectar_leitura(Path(caminho_db_str))
 
     principal = osc.obter_osc_principal(conexao)
-    cidades_osc = osc.carregar_perfil_completo(conexao, principal["id"])["cidades"] if principal else None
+    perfil_osc = osc.carregar_perfil_completo(conexao, principal["id"]) if principal else None
+    cidades_osc = perfil_osc["cidades"] if perfil_osc else None
+    territorios_osc = perfil_osc["territorios"] if perfil_osc else None
 
     estatisticas = metricas.estatisticas_gerais(conexao, cidades_osc)
     estatisticas_contatos = metricas.estatisticas_enriquecimento(conexao)
-    df_empresas = metricas.carregar_empresas(conexao, cidades_osc)
+    df_empresas = metricas.carregar_empresas(conexao, cidades_osc, territorios_osc)
     df_enriquecimento = metricas.carregar_enriquecimento(conexao)
     df_mesclado = metricas.mesclar_empresas_e_enriquecimento(df_empresas, df_enriquecimento)
     df_danca = metricas.doacoes_usina_da_danca(conexao)
@@ -437,6 +455,7 @@ def carregar_dados_salic(caminho_db_str: str):
         "df_cidades": df_cidades,
         "df_fontes": df_fontes,
         "df_contatos_export": df_contatos_export,
+        "territorios_osc": territorios_osc or [],
     }
 
 
@@ -457,6 +476,7 @@ def garantir_tabelas_novas() -> None:
     conexao = conectar()
     osc.criar_tabelas(conexao)
     editais.criar_tabelas(conexao)
+    editais.migrar_colunas_novas(conexao)
     crm.criar_tabelas(conexao)
     crm.migrar_colunas_novas(conexao)
     osc.semear_organizacao_padrao(conexao)

@@ -82,6 +82,19 @@ python coleta/coleta_salic.py --uf SP --max-paginas 3
 Rodar de novo não duplica dados — o script atualiza os registros já
 existentes em vez de criar cópias (ver `docs/decisoes.md`, item 4).
 
+## Descoberta diária de novas empresas (opcional)
+
+```bash
+python coleta/coleta_diaria.py
+```
+
+Percorre estados além de SP (MG, PR, RJ, MT, GO, nessa ordem), com meta
+de ~30 empresas novas por execução, lembrando entre execuções de onde
+parou em cada estado (`dados/estado_coleta_diaria.json`). Não roda
+sozinho 24/7 — precisa ser agendado (ex: Windows Task Scheduler; o passo
+a passo completo está comentado no fim de `coleta/coleta_diaria.py`).
+Log de cada execução em `dados/logs/coleta_diaria.log`.
+
 ## Como ver o relatório sem coletar de novo
 
 ```bash

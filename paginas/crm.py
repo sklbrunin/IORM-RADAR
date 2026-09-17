@@ -4,13 +4,44 @@ Toda oportunidade pode (opcionalmente) estar ligada a uma empresa do
 Radar — sem precisar recadastrar nada."""
 from __future__ import annotations
 
+import re
 from datetime import date
 
 import pandas as pd
 import streamlit as st
+from streamlit_sortables import sort_items
 
 from processamento import crm, osc
 from paginas import _shared
+
+_ESTILO_KANBAN = """
+.sortable-component { display: flex; gap: 0.7rem; overflow-x: auto; padding-bottom: 0.5rem; }
+.sortable-container {
+    background: #FAFBFC; border: 1px solid #E3E8ED;
+    border-radius: 12px; min-width: 210px; flex: 1 1 0;
+}
+.sortable-container-header {
+    font-weight: 800; color: #132A3A !important; font-size: 0.74rem; text-transform: uppercase;
+    letter-spacing: 0.03em; padding: 0.6rem 0.7rem 0.5rem 0.7rem; border-bottom: 2px solid #E3E8ED;
+}
+.sortable-container-body { padding: 0.5rem; min-height: 120px; }
+.sortable-item {
+    background: white !important; color: #132A3A !important; border: 1px solid #E3E8ED; border-left: 4px solid #29ABE2;
+    border-radius: 8px; padding: 0.55rem 0.65rem; margin-bottom: 0.5rem; font-size: 0.82rem; cursor: grab;
+    box-shadow: 0 1px 2px rgba(19,42,58,0.05); text-align: left; white-space: normal; line-height: 1.35;
+}
+.sortable-item:hover { box-shadow: 0 3px 8px rgba(19,42,58,0.12); color: #132A3A !important; }
+.sortable-item:focus { color: #132A3A !important; }
+.sortable-item.dragging { opacity: 0.6; }
+"""
+
+_PADRAO_ID_CARTAO = re.compile(r"^#(\d+)")
+
+
+def _rotulo_cartao(op: dict) -> str:
+    empresa_nome = op.get("empresa_nome") or "Sem empresa vinculada"
+    valor = _shared.formatar_moeda(op["valor_potencial"]) if op["valor_potencial"] else "Valor não informado"
+    return f"#{op['id']} — {op['titulo']} · {empresa_nome} · {valor}"
 
 
 def _linha_para_dict(linha) -> dict:
@@ -57,21 +88,45 @@ def _formulario_nova_oportunidade(conexao, df_empresas: pd.DataFrame, programas_
 
 
 def _kanban(conexao, oportunidades: list[dict]) -> None:
-    _shared.secao("Pipeline de Captação", "🔀", "Arraste mentalmente: mude o estágio na ficha da oportunidade abaixo.")
-    colunas = st.columns(len(crm.ESTAGIOS))
-    for coluna, estagio in zip(colunas, crm.ESTAGIOS):
-        with coluna:
-            st.markdown(f"<div class='iorm-kanban-titulo'>{estagio}</div>", unsafe_allow_html=True)
-            itens = [op for op in oportunidades if op["estagio"] == estagio]
-            st.caption(f"{len(itens)} oportunidade(s)")
-            for op in itens:
-                empresa_nome = op.get("empresa_nome") or "Sem empresa vinculada"
-                valor = _shared.formatar_moeda(op["valor_potencial"]) if op["valor_potencial"] else "Valor não informado"
-                st.markdown(
-                    f"<div class='iorm-kanban-cartao'><b>{op['titulo']}</b><br>{empresa_nome}<br>"
-                    f"<span class='iorm-kanban-cartao-valor'>{valor}</span></div>",
-                    unsafe_allow_html=True,
-                )
+    _shared.secao(
+        "Pipeline de Captação", "🔀",
+        "Arraste um card para outra coluna para mudar o estágio — a alteração é salva no banco na hora.",
+    )
+
+    por_id = {op["id"]: op for op in oportunidades}
+    estrutura = [
+        {"header": estagio, "items": [_rotulo_cartao(op) for op in oportunidades if op["estagio"] == estagio]}
+        for estagio in crm.ESTAGIOS
+    ]
+
+    resultado = sort_items(
+        estrutura, multi_containers=True, direction="horizontal",
+        custom_style=_ESTILO_KANBAN, key="kanban_pipeline",
+    )
+
+    # Compara com o estado salvo: qualquer cartão que apareça agora sob um header
+    # diferente do estágio atual no banco foi arrastado — persiste e recarrega.
+    moveu = False
+    for container in resultado:
+        novo_estagio = container["header"]
+        for rotulo in container["items"]:
+            m = _PADRAO_ID_CARTAO.match(rotulo)
+            if not m:
+                continue
+            op_id = int(m.group(1))
+            op = por_id.get(op_id)
+            if op and op["estagio"] != novo_estagio:
+                crm.mover_estagio(conexao, op_id, novo_estagio)
+                moveu = True
+
+    if moveu:
+        st.toast("Estágio atualizado.", icon="✅")
+        _shared.limpar_cache()
+        st.rerun()
+
+    st.caption(
+        " · ".join(f"{estagio}: {len([op for op in oportunidades if op['estagio'] == estagio])}" for estagio in crm.ESTAGIOS)
+    )
 
 
 def _secao_detalhe(conexao, oportunidades: list[dict]) -> None:

@@ -9,6 +9,7 @@ import pandas as pd
 FILTROS_PADRAO = {
     "estado": "Todos",
     "cidade": "Todas",
+    "regiao": "Todas",
     "score_min": 0,
     "cnpj": "Todos",
     "tipo": "Todos",
@@ -35,6 +36,10 @@ def aplicar_filtros(df: pd.DataFrame, filtros: dict) -> pd.DataFrame:
 
     if filtros.get("cidade", "Todas") != "Todas":
         resultado = resultado[resultado["cidade"] == filtros["cidade"]]
+
+    regiao_filtro = filtros.get("regiao", "Todas")
+    if regiao_filtro != "Todas" and "regiao_iorm" in resultado.columns:
+        resultado = resultado[resultado["regiao_iorm"] == regiao_filtro]
 
     resultado = resultado[resultado["score"] >= filtros.get("score_min", 0)]
 

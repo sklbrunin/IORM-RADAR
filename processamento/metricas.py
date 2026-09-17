@@ -11,6 +11,8 @@ from pathlib import Path
 
 import pandas as pd
 
+from processamento import regiao
+
 CIDADES_IORM = ["Ipuã", "Guaíra", "Miguelópolis", "Orlândia"]
 
 # Nomes (em minúsculo) de programas do IORM, usados para reconhecer se um
@@ -93,7 +95,11 @@ def _calcular_score(linha: pd.Series) -> int:
       10 - tem histórico de incentivo via Lei Rouanet
       15 - CNPJ confirmado matematicamente
       15 - doação detalhada por projeto/ano disponível (não só agregado)
-      25 - empresa em cidade estratégica do IORM (Ipuã/Guaíra/Miguelópolis/Orlândia)
+      25 - critério geográfico ("Região IORM" — ver processamento/regiao.py):
+           25 se cidade de atuação, 15 se região próxima, 8 se interesse
+           estratégico, 0 fora da região. Camadas e pontos são
+           configuráveis num único lugar (regiao.PONTOS_REGIAO), e vêm do
+           território cadastrado em Cérebro da OSC — nunca inventados.
       20 - algum projeto financiado bate com um programa do IORM
       15 - valor histórico comprovado (faixas: >=500k / >=100k / >=10k)
     """
@@ -104,8 +110,13 @@ def _calcular_score(linha: pd.Series) -> int:
         pontos += 15
     if linha["tem_detalhe"]:
         pontos += 15
-    if linha["cidade_estrategica"]:
-        pontos += 25
+
+    camada_regiao = linha.get("regiao_iorm")
+    if pd.notna(camada_regiao):
+        pontos += regiao.pontos(camada_regiao)
+    elif linha.get("cidade_estrategica"):
+        pontos += 25  # compatibilidade: chamado sem classificação de região (ex: código/teste antigo)
+
     if linha["projeto_iorm"]:
         pontos += 20
 
@@ -120,13 +131,20 @@ def _calcular_score(linha: pd.Series) -> int:
     return int(pontos)
 
 
-def carregar_empresas(conexao: sqlite3.Connection, cidades_estrategicas: list[str] | None = None) -> pd.DataFrame:
+def carregar_empresas(
+    conexao: sqlite3.Connection,
+    cidades_estrategicas: list[str] | None = None,
+    territorios: list[dict] | None = None,
+) -> pd.DataFrame:
     """Uma linha por empresa, com métricas agregadas de incentivos e o
     IORM Score já calculado.
 
-    `cidades_estrategicas` vem do território cadastrado no Cérebro da
-    OSC — é assim que o cadastro da OSC "alimenta" o Radar de Empresas.
-    Sem OSC configurada, cai no padrão histórico das 4 cidades do IORM."""
+    `cidades_estrategicas` (lista simples de nomes) vem do território
+    cadastrado no Cérebro da OSC — mantido por compatibilidade. Quando
+    `territorios` (lista de {tipo, valor}, também do Cérebro da OSC) é
+    informado, o critério geográfico passa a usar as camadas de
+    Região IORM (processamento/regiao.py) em vez do binário antigo.
+    Sem nenhum dos dois, cai no padrão histórico das 4 cidades do IORM."""
     cidades = cidades_estrategicas or CIDADES_IORM
     linhas = conexao.execute(
         """
@@ -151,7 +169,12 @@ def carregar_empresas(conexao: sqlite3.Connection, cidades_estrategicas: list[st
         return df
 
     df["cnpj_confirmado"] = df["cnpj"].notna()
-    df["cidade_estrategica"] = df["cidade"].isin(cidades)
+    if territorios:
+        df["regiao_iorm"] = df["cidade"].apply(lambda c: regiao.classificar_cidade(c, territorios))
+        df["cidade_estrategica"] = df["regiao_iorm"] == "CIDADE_ATUACAO"
+    else:
+        df["cidade_estrategica"] = df["cidade"].isin(cidades)
+        df["regiao_iorm"] = df["cidade_estrategica"].map({True: "CIDADE_ATUACAO", False: "FORA_DA_REGIAO"})
     df["tem_detalhe"] = df["num_doacoes_detalhadas"] > 0
     df["projeto_iorm"] = df["projetos"].apply(_projeto_ligado_iorm)
     df["tipo_dado"] = df["tem_detalhe"].map({True: "Detalhado", False: "Agregado"})
@@ -177,7 +200,34 @@ def resumo_cidades_iorm(conexao: sqlite3.Connection, cidades_estrategicas: list[
     """Uma linha por cidade estratégica — inclui a cidade mesmo que não
     tenha nenhuma empresa encontrada (ex: Miguelópolis). Território vem
     do Cérebro da OSC quando disponível."""
-    cidades = cidades_estrategicas or CIDADES_IORM
+    return resumo_por_cidade(conexao, cidades_estrategicas or CIDADES_IORM)
+
+
+def doacoes_ligadas_ao_iorm(conexao: sqlite3.Connection) -> pd.DataFrame:
+    """Todas as doações cujo projeto bate com um programa do próprio IORM
+    (ver PROGRAMAS_IORM) — uma linha por (empresa, ano, projeto). Base da
+    "Linha Cruzada": empresas com relação direta e já comprovada com o
+    IORM, tratadas à parte da lista de prospecção (nunca removidas da
+    base — só apresentadas separadamente, ver paginas/oportunidades.py)."""
+    condicoes = " OR ".join("LOWER(i.projeto) LIKE ?" for _ in PROGRAMAS_IORM)
+    parametros = [f"%{p}%" for p in PROGRAMAS_IORM]
+    linhas = conexao.execute(
+        f"""
+        SELECT e.id AS empresa_id, e.razao_social AS empresa, e.cidade, e.estado,
+               i.ano, i.projeto, i.valor, i.url_fonte AS fonte
+        FROM incentivos i JOIN empresas e ON e.id = i.empresa_id
+        WHERE {condicoes}
+        ORDER BY e.razao_social, i.ano DESC
+        """,
+        parametros,
+    ).fetchall()
+    return pd.DataFrame([dict(linha) for linha in linhas])
+
+
+def resumo_por_cidade(conexao: sqlite3.Connection, cidades: list[str]) -> pd.DataFrame:
+    """Uma linha por cidade informada — inclui a cidade mesmo sem
+    nenhuma empresa encontrada. Função genérica por trás de
+    `resumo_cidades_iorm` e da navegação por Região IORM (Oportunidades)."""
     dados = []
     for cidade in cidades:
         linha = conexao.execute(
@@ -190,12 +240,7 @@ def resumo_cidades_iorm(conexao: sqlite3.Connection, cidades_estrategicas: list[
             (cidade,),
         ).fetchone()
         dados.append(
-            {
-                "cidade": cidade,
-                "empresas": linha["empresas"],
-                "valor": linha["valor"] or 0,
-                "doacoes": linha["doacoes"],
-            }
+            {"cidade": cidade, "empresas": linha["empresas"], "valor": linha["valor"] or 0, "doacoes": linha["doacoes"]}
         )
     return pd.DataFrame(dados)
 

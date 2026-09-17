@@ -68,3 +68,15 @@ def test_filtros_combinados(df_exemplo):
 def test_df_vazio_nao_quebra():
     vazio = pd.DataFrame()
     assert filtros.aplicar_filtros(vazio, filtros.FILTROS_PADRAO).empty
+
+
+def test_filtro_regiao_iorm(df_exemplo):
+    df_exemplo["regiao_iorm"] = ["CIDADE_ATUACAO", "CIDADE_ATUACAO", "FORA_DA_REGIAO"]
+    resultado = filtros.aplicar_filtros(df_exemplo, {**filtros.FILTROS_PADRAO, "regiao": "FORA_DA_REGIAO"})
+    assert list(resultado["razao_social"]) == ["Empresa C"]
+
+
+def test_filtro_regiao_iorm_sem_coluna_nao_quebra(df_exemplo):
+    # DataFrame sem regiao_iorm (código antigo) + filtro de região setado -> não deve dar KeyError
+    resultado = filtros.aplicar_filtros(df_exemplo, {**filtros.FILTROS_PADRAO, "regiao": "CIDADE_ATUACAO"})
+    assert len(resultado) == 3

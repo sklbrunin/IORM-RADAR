@@ -7,10 +7,16 @@ from __future__ import annotations
 import pandas as pd
 import streamlit as st
 
-from processamento import osc
+from processamento import osc, regiao
 from paginas import _shared
 
-TIPOS_TERRITORIO = ["cidade", "estado", "regiao"]
+TIPOS_TERRITORIO = ["cidade", "regiao_proxima", "interesse_estrategico", "estado"]
+_ROTULOS_TIPO_TERRITORIO = {
+    "cidade": "Cidade de atuação",
+    "regiao_proxima": "Região próxima",
+    "interesse_estrategico": "Interesse estratégico",
+    "estado": "Estado",
+}
 TIPOS_LINK = ["site", "instagram", "linkedin", "facebook", "youtube", "transparencia", "outro"]
 TIPOS_DOCUMENTO = ["estatuto", "certificado", "relatorio", "apresentacao", "projeto", "outro"]
 
@@ -50,24 +56,50 @@ def _secao_identidade(conexao, perfil) -> None:
 
 
 def _secao_territorios(conexao, osc_id: int) -> None:
-    st.markdown("#### Atuação territorial")
+    st.markdown("#### Região IORM — priorização geográfica")
+    st.caption(
+        "Esta é a configuração que o Radar de Empresas e o Radar de Editais usam para priorizar por "
+        "geografia. Quatro camadas, da mais forte pra mais fraca: Cidade de atuação → Região próxima → "
+        "Interesse estratégico → (qualquer outra cidade, fora da região). A pontuação de cada camada é "
+        "editável em `processamento/regiao.py`."
+    )
     territorios = conexao.execute("SELECT * FROM osc_territorios WHERE osc_id = ? ORDER BY tipo, valor", (osc_id,)).fetchall()
+    territorios_dict = [dict(t) for t in territorios]
+
     if not territorios:
         _shared.estado_vazio("Nenhum território cadastrado ainda.")
     else:
-        for t in territorios:
-            prioridade = "⭐ prioritário" if t["prioritario"] else ""
-            st.markdown(f"- **{t['tipo']}**: {t['valor']} {prioridade} — {_shared.badge_origem(t['origem'])}", unsafe_allow_html=True)
+        grupos = regiao.cidades_por_camada(territorios_dict)
+        for camada in ["CIDADE_ATUACAO", "REGIAO_PROXIMA", "INTERESSE_ESTRATEGICO"]:
+            cidades_camada = grupos.get(camada, [])
+            st.markdown(
+                f"{_shared.badge_regiao_iorm(camada)} &nbsp; "
+                f"<span style='color:var(--iorm-cinza);font-size:0.82rem;'>({regiao.pontos(camada)} pontos no IORM Score)</span>",
+                unsafe_allow_html=True,
+            )
+            if cidades_camada:
+                st.markdown(", ".join(cidades_camada))
+            else:
+                st.caption("Nenhuma cidade cadastrada nesta camada ainda.")
+        estados = [t for t in territorios_dict if t["tipo"] == "estado"]
+        if estados:
+            st.markdown(f"**Estado(s) de referência:** {', '.join(t['valor'] for t in estados)}")
+
+        with st.expander("Ver cadastro completo (com origem/fonte de cada item)"):
+            for t in territorios:
+                prioridade = "⭐ prioritário" if t["prioritario"] else ""
+                rotulo_tipo = _ROTULOS_TIPO_TERRITORIO.get(t["tipo"], t["tipo"])
+                st.markdown(f"- **{rotulo_tipo}**: {t['valor']} {prioridade} — {_shared.badge_origem(t['origem'])}", unsafe_allow_html=True)
 
     with st.form("form_territorio", clear_on_submit=True):
         col_a, col_b, col_c = st.columns([2, 3, 2])
-        tipo = col_a.selectbox("Tipo", TIPOS_TERRITORIO)
-        valor = col_b.text_input("Cidade/Estado/Região")
+        tipo = col_a.selectbox("Camada", TIPOS_TERRITORIO, format_func=lambda t: _ROTULOS_TIPO_TERRITORIO[t])
+        valor = col_b.text_input("Cidade/Estado", help="Use o nome exatamente como aparece no Radar de Empresas (ex: Barretos).")
         prioritario = col_c.checkbox("Prioritário")
-        enviar = st.form_submit_button("➕ Adicionar território")
+        enviar = st.form_submit_button("➕ Adicionar")
     if enviar and valor:
         osc.adicionar_territorio(conexao, osc_id, tipo, valor.strip(), prioritario=prioritario, origem="MANUAL", fonte="Cadastro manual")
-        st.success(f"Território '{valor}' adicionado.")
+        st.success(f"'{valor}' adicionado como {_ROTULOS_TIPO_TERRITORIO[tipo].lower()}.")
         _shared.limpar_cache()
         st.rerun()
 
