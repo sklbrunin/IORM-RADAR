@@ -11,25 +11,38 @@ from __future__ import annotations
 import pandas as pd
 import streamlit as st
 
+from processamento import enriquecimento
 from paginas import _shared
 
 _CONFIG_LARGURA_EMPRESA = {
-    "Empresa": st.column_config.TextColumn("Empresa", width="large"),
-    "Nome": st.column_config.TextColumn("Nome", width="medium"),
-    "Cargo": st.column_config.TextColumn("Cargo", width="large"),
-    "Departamento": st.column_config.TextColumn("Departamento", width="medium"),
-    "Fonte": st.column_config.TextColumn("Fonte", width="large"),
+    "Empresa": st.column_config.TextColumn("Empresa", width=600),
+    "Nome": st.column_config.TextColumn("Nome", width=280),
+    "Cargo": st.column_config.TextColumn("Cargo", width=620),
+    "Fonte": st.column_config.TextColumn("Fonte", width=460),
     "Site": st.column_config.LinkColumn("Site", display_text="Abrir ↗", width="small"),
     "LinkedIn": st.column_config.LinkColumn("LinkedIn", display_text="Abrir ↗", width="small"),
     "Instagram": st.column_config.LinkColumn("Instagram", display_text="Abrir ↗", width="small"),
-    "Perfil": st.column_config.LinkColumn("Perfil", display_text="Abrir ↗", width="small"),
+    "Perfil (LinkedIn)": st.column_config.LinkColumn("Perfil (LinkedIn)", display_text="Abrir ↗", width=130),
+    "Link da fonte": st.column_config.LinkColumn("Link da fonte", display_text="Abrir ↗", width=120),
+    "Área": st.column_config.TextColumn("Área", width=190),
+    "Área do e-mail": st.column_config.TextColumn("Área do e-mail", width=170),
+    "E-mail institucional": st.column_config.TextColumn("E-mail institucional", width=280),
+    "E-mail profissional": st.column_config.TextColumn("E-mail profissional", width=190),
+    "Telefone institucional": st.column_config.TextColumn("Telefone institucional", width=180),
+    "Telefone profissional": st.column_config.TextColumn("Telefone profissional", width=180),
+    "Tipo": st.column_config.TextColumn("Tipo", width=110),
+    "Prioridade": st.column_config.TextColumn("Prioridade", width=130),
+    "Confiança": st.column_config.TextColumn("Confiança", width=110),
+    "Data da pesquisa": st.column_config.TextColumn("Data da pesquisa", width=200),
 }
 
 
 def _tabela_canais_empresa(df: pd.DataFrame) -> pd.DataFrame:
     """Uma linha por EMPRESA: canais institucionais encontrados (não
     pessoas). E-mail/telefone só aparecem aqui quando o tipo de contato
-    era institucional (não confunde com contato pessoal de alguém)."""
+    era institucional (não confunde com contato pessoal de alguém). A
+    "área" do e-mail descreve a caixa postal (financeiro@, rh@...), nunca
+    uma pessoa."""
     agrupado = df.groupby(["empresa_id", "empresa", "cidade", "estado"], as_index=False).agg(
         site=("site", "first"),
         linkedin=("linkedin", "first"),
@@ -39,35 +52,45 @@ def _tabela_canais_empresa(df: pd.DataFrame) -> pd.DataFrame:
         confianca=("nivel_confianca", "first"),
         fonte=("fonte", "first"),
     )
+    agrupado["area_email"] = agrupado["email"].apply(
+        lambda e: (enriquecimento.area_do_email(e) or "Não identificada") if isinstance(e, str) and e else "—")
     for coluna in ["site", "linkedin", "instagram", "email", "telefone"]:
         agrupado[coluna] = agrupado[coluna].fillna("Não disponível")
+    agrupado["tipo"] = "Institucional"
     return agrupado.rename(
         columns={"empresa": "Empresa", "cidade": "Cidade", "estado": "UF", "email": "E-mail institucional",
-                 "telefone": "Telefone institucional", "site": "Site", "linkedin": "LinkedIn",
-                 "instagram": "Instagram", "confianca": "Confiança", "fonte": "Fonte"}
-    )[["Empresa", "Cidade", "UF", "Site", "E-mail institucional", "Telefone institucional", "LinkedIn", "Instagram", "Confiança", "Fonte"]]
+                 "area_email": "Área do e-mail", "telefone": "Telefone institucional", "site": "Site", "linkedin": "LinkedIn",
+                 "instagram": "Instagram", "confianca": "Confiança", "fonte": "Fonte", "tipo": "Tipo"}
+    )[["Empresa", "Cidade", "UF", "Tipo", "Site", "E-mail institucional", "Área do e-mail", "Telefone institucional",
+       "LinkedIn", "Instagram", "Confiança", "Fonte"]]
 
 
 def _tabela_pessoas(df: pd.DataFrame) -> pd.DataFrame:
     """Uma linha por PESSOA identificada publicamente — nunca um e-mail
     pessoal inventado; quando não há e-mail/telefone profissional
-    encontrado especificamente para essa pessoa, mostra "Não disponível"."""
+    encontrado especificamente para essa pessoa, mostra "Não disponível".
+    O link "Perfil" só existe quando a fonte trouxe um perfil público (ex:
+    LinkedIn); pessoas do quadro societário da Receita não têm perfil."""
     pessoas = df[df["tipo_contato"] == "PESSOA_CARGO"].copy()
     if pessoas.empty:
         return pessoas
     pessoas["nome"] = pessoas["nome"].fillna("Nome não identificado")
     pessoas["cargo"] = pessoas["cargo"].fillna("Não disponível")
-    pessoas["departamento"] = pessoas["departamento"].fillna("Não disponível")
-    pessoas["email_profissional"] = "Não disponível"
+    pessoas["departamento"] = pessoas.apply(
+        lambda l: l["departamento"] if pd.notna(l["departamento"]) and l["departamento"]
+        else (enriquecimento.classificar_area(l["cargo"]) or "Não disponível"), axis=1)
+    pessoas["perfil"] = pessoas["valor"].apply(lambda v: v if isinstance(v, str) and v.startswith("http") else None)
+    pessoas["email_profissional"] = pessoas["valor"].apply(
+        lambda v: v if isinstance(v, str) and "@" in v and not v.startswith("http") else "Não disponível")
     pessoas["telefone_profissional"] = "Não disponível"
-    pessoas["perfil"] = pessoas["valor"]
+    pessoas["prioridade"] = pessoas["prioridade"].fillna("—")
     return pessoas.rename(
-        columns={"empresa": "Empresa", "nome": "Nome", "cargo": "Cargo", "departamento": "Departamento",
-                 "perfil": "Perfil", "email_profissional": "E-mail profissional",
+        columns={"empresa": "Empresa", "nome": "Nome", "cargo": "Cargo", "departamento": "Área", "prioridade": "Prioridade",
+                 "perfil": "Perfil (LinkedIn)", "email_profissional": "E-mail profissional",
                  "telefone_profissional": "Telefone profissional", "nivel_confianca": "Confiança",
-                 "fonte": "Fonte", "coletado_em": "Data da pesquisa"}
-    )[["Empresa", "Nome", "Cargo", "Departamento", "Perfil", "E-mail profissional", "Telefone profissional",
-       "Confiança", "Fonte", "Data da pesquisa"]]
+                 "fonte": "Fonte", "url_fonte": "Link da fonte", "coletado_em": "Data da pesquisa"}
+    )[["Empresa", "Nome", "Cargo", "Área", "Prioridade", "Perfil (LinkedIn)", "E-mail profissional", "Telefone profissional",
+       "Confiança", "Fonte", "Link da fonte", "Data da pesquisa"]]
 
 
 def render() -> None:
@@ -103,6 +126,10 @@ def render() -> None:
     with aba_empresas:
         _shared.secao("Canais institucionais", "🏢", "Site, e-mail, telefone e redes oficiais da empresa — não pessoas.")
         tabela_empresas = _tabela_canais_empresa(df_contatos_export)
+        busca_emp = st.text_input("Buscar empresa", key="busca_canais", placeholder="Digite parte do nome da empresa")
+        if busca_emp:
+            tabela_empresas = tabela_empresas[tabela_empresas["Empresa"].str.contains(busca_emp, case=False, na=False)]
+        st.caption(f"{len(tabela_empresas)} empresa(s) com canais registrados.")
         st.dataframe(
             tabela_empresas, use_container_width=True, hide_index=True,
             column_config=_CONFIG_LARGURA_EMPRESA, height=min(35 + 36 * len(tabela_empresas), 560),
@@ -114,7 +141,10 @@ def render() -> None:
             "Prioriza cargos em Responsabilidade Social/ESG/Sustentabilidade/Relações Institucionais/"
             "Marketing/Comunicação/Fiscal/Diretoria — nunca presume cargo, só o que a fonte já mostrava.",
         )
-        prioridade_sel = st.selectbox("Filtrar por prioridade", ["Todas", "PRIORIDADE_1", "PRIORIDADE_2", "PRIORIDADE_3", "Sem prioridade"])
+        col_f1, col_f2, col_f3 = st.columns([2, 1.5, 1.5])
+        busca = col_f1.text_input("Buscar por empresa, nome ou cargo", key="busca_pessoas")
+        area_sel = col_f2.selectbox("Área", ["Todas"] + [a for a, _ in enriquecimento.AREAS_PROFISSIONAIS])
+        prioridade_sel = col_f3.selectbox("Prioridade", ["Todas", "PRIORIDADE_1", "PRIORIDADE_2", "PRIORIDADE_3", "Sem prioridade"])
         base_pessoas = df_contatos_export.copy()
         if prioridade_sel == "Sem prioridade":
             base_pessoas = base_pessoas[base_pessoas["prioridade"].isna()]
@@ -122,9 +152,16 @@ def render() -> None:
             base_pessoas = base_pessoas[base_pessoas["prioridade"] == prioridade_sel]
 
         tabela_pessoas = _tabela_pessoas(base_pessoas)
+        if not tabela_pessoas.empty:
+            if area_sel != "Todas":
+                tabela_pessoas = tabela_pessoas[tabela_pessoas["Área"] == area_sel]
+            if busca:
+                alvo = (tabela_pessoas["Empresa"] + " " + tabela_pessoas["Nome"] + " " + tabela_pessoas["Cargo"])
+                tabela_pessoas = tabela_pessoas[alvo.str.contains(busca, case=False, na=False)]
         if tabela_pessoas.empty:
             _shared.estado_vazio("Nenhuma pessoa identificada ainda com esse filtro.", "👤")
         else:
+            st.caption(f"{len(tabela_pessoas)} pessoa(s). Origem \"quadro societário — Receita Federal\" = sócio/administrador registrado no CNPJ, não necessariamente responsável por ESG/marketing.")
             st.dataframe(
                 tabela_pessoas, use_container_width=True, hide_index=True,
                 column_config=_CONFIG_LARGURA_EMPRESA, height=min(35 + 36 * len(tabela_pessoas), 560),

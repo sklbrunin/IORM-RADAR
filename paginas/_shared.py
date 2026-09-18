@@ -17,10 +17,13 @@ RAIZ_PROJETO = Path(__file__).resolve().parent.parent
 if str(RAIZ_PROJETO) not in sys.path:
     sys.path.insert(0, str(RAIZ_PROJETO))
 
-from processamento import crm, editais, enriquecimento, filtros, formatacao, metricas, osc  # noqa: E402
+from processamento import (  # noqa: E402
+    banco, crm, documentos, editais, enriquecimento, filtros, formatacao, geografia, metricas, osc, relacionamento,
+)
 
 CAMINHO_DB = RAIZ_PROJETO / "dados" / "iorm_radar.db"
 CAMINHO_FILA_PESQUISA = RAIZ_PROJETO / "dados" / "fila_pesquisa.json"
+PASTA_DOCUMENTOS_OSC = RAIZ_PROJETO / "dados" / "documentos_osc"
 CAMINHO_LOGO = RAIZ_PROJETO / "assets" / "logo-iorm.png.jpeg"
 # Versão com fundo transparente e recorte justo (gerada a partir da logo
 # original, sem redesenhar/distorcer a marca) — usada onde a logo aparece
@@ -278,6 +281,32 @@ def injetar_css() -> None:
         /* ---------- dataframe ---------- */
         [data-testid="stDataFrame"] { border-radius: 10px; overflow: hidden; border: 1px solid var(--iorm-borda); }
 
+        /* ---------- LEGIBILIDADE: nada de "..." em informação importante ---------- */
+        [data-testid="stAppViewContainer"] .block-container { max-width: 1500px; }
+        div[data-testid="stMetric"] { min-height: 104px; height: 100%; }
+        div[data-testid="stMetricLabel"], div[data-testid="stMetricLabel"] * {
+            white-space: normal !important; overflow: visible !important; text-overflow: clip !important; line-height: 1.25;
+        }
+        div[data-testid="stMetricValue"], div[data-testid="stMetricValue"] * {
+            white-space: normal !important; overflow: visible !important; text-overflow: clip !important;
+            overflow-wrap: anywhere; line-height: 1.15; font-size: clamp(1.1rem, 1.9vw, 1.9rem);
+        }
+        div[data-testid="stMetricDelta"] { white-space: normal !important; }
+        .stButton > button, [data-testid^="stBaseLinkButton"], .stDownloadButton > button, [data-testid="stFormSubmitButton"] > button {
+            white-space: normal !important; height: auto !important; min-height: 2.5rem; line-height: 1.25; padding-top: 0.45rem; padding-bottom: 0.45rem;
+        }
+        [data-testid="stExpander"] summary p, [data-testid="stExpander"] summary span {
+            white-space: normal !important; overflow: visible !important; text-overflow: clip !important;
+        }
+        .stTabs [data-baseweb="tab"] { white-space: normal; height: auto; padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        [data-testid="stCaptionContainer"], [data-testid="stMarkdownContainer"] { overflow-wrap: anywhere; }
+        [data-baseweb="select"] > div { height: auto; min-height: 2.5rem; }
+        [data-baseweb="select"] [class*="ValueContainer"], [data-baseweb="select"] div[value] {
+            white-space: normal !important; overflow: visible !important; text-overflow: clip !important;
+        }
+        .iorm-cartao, .iorm-proxima-acao-texto, .iorm-kanban-cartao { overflow-wrap: anywhere; }
+        .iorm-cartao { min-height: 118px; }
+
         /* ---------- expander (usado como "cartão clicável" em editais etc.) ---------- */
         [data-testid="stExpander"] {
             border: 1px solid var(--iorm-borda) !important; border-radius: var(--iorm-raio) !important;
@@ -392,6 +421,25 @@ def estado_vazio(mensagem: str, icone: str = "🗂️") -> None:
     )
 
 
+def grafico_barras(serie: pd.Series, rotulo_valor: str = "Quantidade", cor: str = "#1F5F8B") -> None:
+    """Barras horizontais com o texto COMPLETO de cada categoria (st.bar_chart corta rótulos
+    longos com "…"). Mantém a ordem recebida; a altura cresce com o número de barras."""
+    import altair as alt
+
+    dados = serie.rename(rotulo_valor).rename_axis("Categoria").reset_index()
+    grafico = (
+        alt.Chart(dados)
+        .mark_bar(color=cor)
+        .encode(
+            y=alt.Y("Categoria:N", sort=None, title=None, axis=alt.Axis(labelLimit=0)),
+            x=alt.X(f"{rotulo_valor}:Q", title=rotulo_valor, axis=alt.Axis(tickMinStep=1, format="d")),
+            tooltip=["Categoria", rotulo_valor],
+        )
+        .properties(height=max(120, 30 * len(dados)))
+    )
+    st.altair_chart(grafico, use_container_width=True)
+
+
 def badge_origem(origem: str) -> str:
     if origem == "FONTE_EXTERNA":
         return "<span class='iorm-badge iorm-badge-azul'>✓ Fonte verificada</span>"
@@ -474,12 +522,16 @@ def garantir_tabelas_novas() -> None:
     leves e seguras (ALTER TABLE ADD COLUMN) e semeia o IORM como OSC
     padrão se a tabela `osc` ainda estiver vazia."""
     conexao = conectar()
+    banco.migrar_empresas(conexao)
     osc.criar_tabelas(conexao)
+    documentos.migrar(conexao)
+    geografia.criar_tabelas(conexao)
     editais.criar_tabelas(conexao)
     editais.migrar_colunas_novas(conexao)
     crm.criar_tabelas(conexao)
     crm.migrar_colunas_novas(conexao)
     osc.semear_organizacao_padrao(conexao)
+    relacionamento.sincronizar(conexao)
     conexao.commit()
     conexao.close()
 

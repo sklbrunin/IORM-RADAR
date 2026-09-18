@@ -252,3 +252,77 @@ nesta etapa — ficaria sobre-engenharia para um produto com um único
 cliente piloto (IORM) agora. Quando houver uma segunda OSC real, o
 próximo passo é trocar `obter_osc_principal()` por uma OSC vinculada à
 sessão do usuário logado.
+
+## 8. Rodada v6 — Linha Cruzada, região por polo, links de editais, documentos, contatos e rotina diária
+
+### 8.1 Empresa com relacionamento não é prospect (Linha Cruzada persistida)
+`empresas` ganhou `relacionamento_iorm`, `relacionamento_tipo`, `relacionamento_fonte`, `relacionamento_em`,
+`reabrir_prospeccao` e `reabrir_justificativa` (migração idempotente em `banco.migrar_empresas`).
+`processamento/relacionamento.sincronizar` marca automaticamente: (a) a própria OSC (pelo CNPJ da tabela `osc`);
+(b) doadoras com projeto de programa do IORM (`metricas.PROGRAMAS_IORM`); (c) empresas com oportunidade
+"Fechado — ganho" no CRM. Marcação manual exige justificativa. Regra de negócio: **prospect e relacionamento são
+mutuamente exclusivos**, exceto quando alguém reabre a prospecção com justificativa escrita
+(`relacionamento.eh_prospect`). Nada é apagado: a empresa só troca de aba (Radar → Linha Cruzada).
+
+### 8.2 "Região" de um polo vem do IBGE, não de escolha nossa
+Fonte: API de Localidades do IBGE, Região Geográfica Imediata (divisão 2017). Região do polo = municípios da mesma
+Região Imediata. Ipuã e Orlândia caem na mesma região ("São Joaquim da Barra – Orlândia"), Guaíra em Barretos,
+Miguelópolis em Ituverava. Guardado em `regiao_municipios` (UNIQUE polo+município+UF; origem IBGE ou MANUAL;
+flag `ativo`). A sincronização usa INSERT OR IGNORE e **nunca reativa** o que o usuário desativou. Ajustes manuais
+exigem motivo. Esses municípios entram como `regiao_proxima` no score e nos filtros.
+
+### 8.3 Links de editais: página do edital ≠ link de inscrição
+`processamento/links_editais.py` classifica cada URL como PAGINA_ESPECIFICA_CONFIRMADA, RESPONDE_SEM_CORRESPONDENCIA,
+PORTAL_GENERICO, NAO_RESPONDE ou NAO_VERIFICADO (resposta HTTP + correspondência de palavras do título na página +
+heurística de portal genérico). O link de inscrição só é exibido como tal se a própria URL indicar inscrição ou se
+foi extraído da página verificada; caso contrário a tela diz "Link direto de inscrição não localizado". Portal
+genérico aparece como "Abrir portal (página genérica)", nunca como INSCREVER-SE. Limite conhecido: a heurística não
+lê PDFs nem páginas que exigem JavaScript.
+O edital #1 ("Edital Municipal de Cultura e Dança 2026") foi um registro de TESTE que criei durante o desenvolvimento;
+não é um edital real. Está marcado `origem_descoberta='TESTE_NAO_REAL'`, aparece com aviso e fica fora do Dashboard.
+Não foi apagado (regra: não apagar histórico) — o usuário pode excluí-lo se quiser.
+
+### 8.4 Documentos da OSC (repositório real)
+`processamento/documentos.py`: upload PDF/DOCX/TXT/XLSX/XLS (25 MB), original preservado em `dados/documentos_osc/`
+(fora do Git), texto extraído (pypdf, python-docx, openpyxl, xlrd) e guardado em `osc_documentos.texto_extraido`,
+deduplicação por SHA-256, status de processamento explícito (inclusive "sem texto extraído", ex.: PDF escaneado —
+não há OCR). A busca devolve trechos literais com "Fonte: documento X"; nenhuma IA interpreta o conteúdo.
+Atenção de privacidade: o texto extraído fica no banco `dados/iorm_radar.db`, que é versionado no Git (ver 7.6).
+Antes de publicar o repositório, considere isso.
+
+### 8.5 Contatos: empresa ≠ pessoa
+E-mail genérico (financeiro@, contato@) é sempre canal **institucional** com "área do e-mail"; nunca vira pessoa.
+Pessoa exige nome + cargo/área + fonte + data. Sócios/administradores do quadro societário da Receita
+(BrasilAPI) entram como pessoa com origem "quadro societário — Receita Federal" e confiança ALTA quanto ao vínculo
+societário — mas **não são necessariamente responsáveis por ESG/marketing**; a tela avisa isso. De cada sócio só
+guardamos nome e qualificação (CPF mascarado e faixa etária da API são descartados — LGPD). O Contactability Score
+só conta contato profissional que tenha `prioridade` (áreas-alvo), para que sócio genérico não infle a nota.
+Não há scraping de LinkedIn: só perfis que apareçam em resultados de busca oficiais/legais.
+
+### 8.6 Provedores de enriquecimento de contatos (avaliação)
+Arquitetura em `processamento/contact_providers.py`: provider → enriquecer → normalizar/validar → `persistir()`
+(único ponto de escrita) → evidência. Avaliados:
+- **BrasilAPI / Receita Federal** — gratuito, sem chave, testado ao vivo (30 empresas reais). Cobre situação cadastral,
+  nome fantasia, CNAE, telefone e QSA. Não traz e-mail de pessoa.
+- **Busca web via SerpApi** — já integrada; plano gratuito pequeno (fontes divergem entre ~100 e ~250 buscas/mês).
+  Não sustenta 30 empresas/dia com busca web (ver 8.7).
+- **Hunter.io** — e-mail profissional por domínio, com cargo/departamento. O plano gratuito (≈50 créditos/mês) não
+  dá acesso à API; API exige plano pago. Implementado e testado só com resposta simulada — **nunca contra a API real**.
+- **Apollo** — plano gratuito sem API; cobertura de PMEs brasileiras incerta. Não implementado.
+Nenhum dado de terceiros é raspado; credenciais só por variável de ambiente (`.env.example`).
+
+### 8.7 Rotina diária de 30 empresas — o que ela realmente garante
+`coleta/enriquecimento_diario.py` (fila em `processamento/fila_enriquecimento.py`): seleciona até 30 prospects
+elegíveis com CNPJ (exclui Linha Cruzada), prioriza os nunca pesquisados e a Região IORM, consulta a Receita Federal
+para as 30 e usa busca web só dentro do orçamento mensal da SerpApi (`SERPAPI_LIMITE_MENSAL`, `SERPAPI_RESERVA_MANUAL`).
+Resultado por empresa: SUCESSO / PARCIAL / FALHA, com tentativa e evidência. Falha volta à fila em 1 dia, parcial em
+3 dias, máximo 3 tentativas. É idempotente por dia (rodar duas vezes no mesmo dia não reprocessa) e faz backup do
+banco antes de cada execução. Se houver menos de 30 elegíveis, registra isso no log. **Realidade da cota:** com o
+plano gratuito, ~80 buscas/mês para a rotina ≈ 26 empresas/mês com busca web; as 30/dia são enriquecidas via
+Receita Federal (QSA, situação, telefone) e a camada web fica em "PARCIAL" quando a cota acaba. Para 30/dia com busca
+web completa é preciso plano pago da SerpApi (ou de outro provedor).
+Agendamento: `coleta\agendar_enriquecimento_windows.ps1` (Agendador de Tarefas do Windows, usuário atual, sem
+administrador, `StartWhenAvailable`). Testado: instalar → Start-ScheduledTask → resultado 0 → remover. A tarefa NÃO
+fica instalada por padrão porque é uma configuração persistente na máquina e consome cota de API.
+Para nuvem: o mesmo comando (`python coleta/enriquecimento_diario.py --agendada`) roda em cron/GitHub Actions/
+Streamlit Cloud + agendador externo; o SQLite local precisaria ser trocado por banco compartilhado.

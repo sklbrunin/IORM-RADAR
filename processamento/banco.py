@@ -31,7 +31,13 @@ def criar_tabelas(conexao: sqlite3.Connection) -> None:
             estado TEXT,
             status TEXT,
             criado_em TEXT NOT NULL,
-            atualizado_em TEXT NOT NULL
+            atualizado_em TEXT NOT NULL,
+            relacionamento_iorm INTEGER NOT NULL DEFAULT 0,
+            relacionamento_tipo TEXT,
+            relacionamento_fonte TEXT,
+            relacionamento_em TEXT,
+            reabrir_prospeccao INTEGER NOT NULL DEFAULT 0,
+            reabrir_justificativa TEXT
         );
 
         CREATE TABLE IF NOT EXISTS incentivos (
@@ -58,6 +64,27 @@ def criar_tabelas(conexao: sqlite3.Connection) -> None:
         );
         """
     )
+    conexao.commit()
+
+
+_COLUNAS_RELACIONAMENTO = {
+    "relacionamento_iorm": "INTEGER NOT NULL DEFAULT 0",
+    "relacionamento_tipo": "TEXT",
+    "relacionamento_fonte": "TEXT",
+    "relacionamento_em": "TEXT",
+    "reabrir_prospeccao": "INTEGER NOT NULL DEFAULT 0",
+    "reabrir_justificativa": "TEXT",
+}
+
+
+def migrar_empresas(conexao: sqlite3.Connection) -> None:
+    """Migração idempotente: adiciona à tabela `empresas` as colunas da
+    classificação de relacionamento (Linha Cruzada) em bancos criados antes
+    dela existir. Nunca apaga nem altera dado existente."""
+    atuais = {linha["name"] for linha in conexao.execute("PRAGMA table_info(empresas)")}
+    for coluna, definicao in _COLUNAS_RELACIONAMENTO.items():
+        if coluna not in atuais:
+            conexao.execute(f"ALTER TABLE empresas ADD COLUMN {coluna} {definicao}")
     conexao.commit()
 
 

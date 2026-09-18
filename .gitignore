@@ -11,6 +11,8 @@ __pycache__/
 dados/backups/
 dados/fila_pesquisa.json
 dados/logs/
+# Arquivos originais da OSC (estatuto, certificados etc.) podem ser sensíveis — nunca vão pro repositório.
+dados/documentos_osc/
 dados/estado_coleta_diaria.json
 
 # Config local de ferramentas (não faz parte do produto)

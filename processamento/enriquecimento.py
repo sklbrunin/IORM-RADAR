@@ -52,13 +52,19 @@ _PALAVRAS_PRIORIDADE_1 = [
     "investimento social",
     "relacoes institucionais",
     "patrocinio",
+    "captacao de recursos",
+    "captacao",
 ]
 _PALAVRAS_PRIORIDADE_2 = [
     "marketing",
     "comunicacao",
     "relacoes publicas",
     "diretoria",
+    "diretor",
     "presidencia",
+    "presidente",
+    "relacoes com investidores",
+    "investidores",
 ]
 _PALAVRAS_PRIORIDADE_3 = [
     "recursos humanos",
@@ -67,7 +73,36 @@ _PALAVRAS_PRIORIDADE_3 = [
     "fiscal",
     "tributario",
     "contabilidade",
+    "contabil",
     "controladoria",
+    "controller",
+    "juridico",
+    "jurídico",
+]
+
+# Áreas oficiais do sistema (rótulo exibido) e as palavras-chave, sem acento,
+# que a identificam num cargo/departamento OU no início de um e-mail
+# institucional. Ordem = precedência (a mais específica primeiro).
+AREAS_PROFISSIONAIS: list[tuple[str, list[str]]] = [
+    ("Responsabilidade Social", ["responsabilidade social", "responsabilidadesocial", "rsc", "social"]),
+    ("ESG", ["esg"]),
+    ("Sustentabilidade", ["sustentabilidade", "sustentavel", "meio ambiente", "ambiental"]),
+    ("Instituto/Fundação", ["instituto", "fundacao", "investimento social"]),
+    ("Captação/Patrocínios", ["captacao", "patrocinio", "patrocinios", "incentivo"]),
+    ("Relações Institucionais", ["relacoes institucionais", "institucional", "relacoes publicas", "relacionamento"]),
+    ("Relações com Investidores", ["relacoes com investidores", "investidores", "ri"]),
+    ("Marketing", ["marketing", "mkt"]),
+    ("Comunicação", ["comunicacao", "imprensa", "assessoria"]),
+    ("Fiscal", ["fiscal"]),
+    ("Tributário", ["tributario", "tributos", "impostos"]),
+    ("Contabilidade", ["contabilidade", "contabil", "contador"]),
+    ("Controladoria", ["controladoria", "controller"]),
+    ("Jurídico", ["juridico", "legal", "advogado"]),
+    ("RH", ["recursos humanos", "rh", "pessoas", "curriculo", "gente e gestao"]),
+    ("Diretoria", ["diretoria", "diretor", "presidencia", "presidente", "ceo"]),
+    ("Financeiro", ["financeiro", "tesouraria"]),
+    ("Comercial", ["comercial", "vendas"]),
+    ("Atendimento/Geral", ["atendimento", "contato", "faleconosco", "sac", "ouvidoria", "geral", "info", "secretaria"]),
 ]
 
 
@@ -88,6 +123,49 @@ def classificar_prioridade(cargo_ou_departamento: str | None) -> str | None:
     if any(p in texto for p in _PALAVRAS_PRIORIDADE_3):
         return "PRIORIDADE_3"
     return None
+
+
+def classificar_area(texto: str | None) -> str | None:
+    """Área profissional (rótulo de AREAS_PROFISSIONAIS) citada num cargo ou
+    departamento. Só reconhece palavra que está escrita — sem palavra, None."""
+    if not texto:
+        return None
+    limpo = _remover_acentos(texto.lower())
+    palavras = set(re.findall(r"[a-z0-9]+", limpo))
+    for rotulo, chaves in AREAS_PROFISSIONAIS:
+        for chave in chaves:
+            if (" " in chave and chave in limpo) or chave in palavras:
+                return rotulo
+    return None
+
+
+def area_do_email(email: str | None) -> str | None:
+    """Área de um e-mail INSTITUCIONAL a partir da parte antes do "@"
+    (ex: financeiro@ -> Financeiro). Isso descreve o setor da caixa
+    postal — nunca identifica uma pessoa. Sem correspondência, None."""
+    email = normalizar_email(email)
+    if not email:
+        return None
+    parte = _remover_acentos(email.split("@", 1)[0])
+    palavras = set(re.findall(r"[a-z0-9]+", parte))
+    juntas = re.sub(r"[^a-z0-9]", "", parte)
+    for rotulo, chaves in AREAS_PROFISSIONAIS:
+        for chave in chaves:
+            chave_junta = chave.replace(" ", "")
+            if chave in palavras or (len(chave_junta) >= 5 and chave_junta in juntas):
+                return rotulo
+    return None
+
+
+def parece_email_de_pessoa(email: str | None) -> bool:
+    """Heurística conservadora: nome.sobrenome@ ou inicial+sobrenome sugere
+    caixa pessoal. Serve para NUNCA rotular um e-mail como "do responsável"
+    sem evidência — a tela só o chama de pessoal quando há nome+cargo na fonte."""
+    email = normalizar_email(email)
+    if not email or area_do_email(email):
+        return False
+    parte = email.split("@", 1)[0]
+    return bool(re.fullmatch(r"[a-z]{2,}[._-][a-z]{2,}", parte))
 
 
 def normalizar_email(email: str | None) -> str | None:

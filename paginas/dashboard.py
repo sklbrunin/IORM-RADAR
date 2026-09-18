@@ -25,7 +25,7 @@ def render() -> None:
     perfil_osc = osc.carregar_perfil_completo(conexao, perfil_osc_row["id"]) if perfil_osc_row else None
 
     oportunidades_crm = [dict(o) for o in crm.listar_oportunidades(conexao)]
-    lista_editais = [dict(e) for e in editais.listar_editais(conexao)]
+    lista_editais = [dict(e) for e in editais.listar_editais(conexao) if e["origem_descoberta"] != "TESTE_NAO_REAL"]
 
     empresas_ja_no_crm = {op["empresa_id"] for op in oportunidades_crm if op.get("empresa_id")}
 
@@ -38,7 +38,7 @@ def render() -> None:
     conexao.close()
 
     empresas_prioritarias_df = (
-        df_mesclado[df_mesclado["prioridade_prospeccao"] >= LIMIAR_PRIORITARIA] if not df_mesclado.empty else df_mesclado
+        df_mesclado[(df_mesclado["prioridade_prospeccao"] >= LIMIAR_PRIORITARIA) & df_mesclado["eh_prospect"]] if not df_mesclado.empty else df_mesclado
     )
     empresas_prioritarias_fora_crm = (
         empresas_prioritarias_df[~empresas_prioritarias_df["id"].isin(empresas_ja_no_crm)]
@@ -57,10 +57,14 @@ def render() -> None:
     # ============================================================ VISÃO DA CAPTAÇÃO
     _shared.secao("Visão da Captação", "📊")
     c1, c2, c3, c4 = st.columns(4)
-    c1.metric("Empresas no radar", _shared.formatar_numero(estatisticas["empresas_mapeadas"]))
+    qtd_linha_cruzada = int(df_mesclado["linha_cruzada"].sum())
+    c1.metric(
+        "Prospects no radar", _shared.formatar_numero(int(df_mesclado["eh_prospect"].sum())),
+        help=f"{qtd_linha_cruzada} empresa(s) com relacionamento ficam em Linha Cruzada, fora da prospecção.",
+    )
     c2.metric(f"Empresas prioritárias (score ≥{LIMIAR_PRIORITARIA})", len(empresas_prioritarias_df))
     c3.metric("Contatos encontrados", len(dados["df_contatos_export"]))
-    c4.metric("Editais abertos", len(lista_editais))
+    c4.metric("Editais monitorados", len(lista_editais), help="Inclui status não confirmado: só é aberto com data de encerramento futura confirmada.")
     c5, c6, c7 = st.columns(3)
     c5.metric("Oportunidades em andamento", sum(1 for o in oportunidades_crm if not o["estagio"].startswith("Fechado")))
     c6.metric("Follow-ups pendentes", len(follow_ups["atrasadas"]) + len(follow_ups["hoje"]))
@@ -125,10 +129,7 @@ def render() -> None:
     if not oportunidades_crm:
         _shared.estado_vazio("Nenhuma oportunidade no Pipeline ainda. Crie uma em Captação → Pipeline.", "🤝")
     else:
-        df_funil = pd.DataFrame(
-            [{"Estágio": estagio, "Oportunidades": qtd} for estagio, qtd in contagem_estagios.items()]
-        ).set_index("Estágio")
-        st.bar_chart(df_funil)
+        _shared.grafico_barras(pd.Series(dict(contagem_estagios)), "Oportunidades")
 
     # ============================================================ RADAR DE OPORTUNIDADES
     _shared.secao("Radar de Oportunidades", "🎯", "As empresas e os editais mais relevantes agora.")

@@ -157,7 +157,9 @@ def carregar_empresas(
             MAX(i.nivel_confianca) AS nivel_confianca,
             MAX(i.fonte) AS fonte,
             MAX(i.url_fonte) AS url_fonte,
-            MAX(i.coletado_em) AS coletado_em
+            MAX(i.coletado_em) AS coletado_em,
+            e.relacionamento_iorm, e.relacionamento_tipo, e.relacionamento_fonte, e.relacionamento_em,
+            e.reabrir_prospeccao, e.reabrir_justificativa
         FROM empresas e
         LEFT JOIN incentivos i ON i.empresa_id = e.id
         GROUP BY e.id
@@ -170,13 +172,21 @@ def carregar_empresas(
 
     df["cnpj_confirmado"] = df["cnpj"].notna()
     if territorios:
-        df["regiao_iorm"] = df["cidade"].apply(lambda c: regiao.classificar_cidade(c, territorios))
+        mapa = regiao.mapa_cidade_camada(territorios)
+        df["regiao_iorm"] = df["cidade"].apply(lambda c: mapa.get(regiao.normalizar_cidade(c), "FORA_DA_REGIAO") if c else "FORA_DA_REGIAO")
         df["cidade_estrategica"] = df["regiao_iorm"] == "CIDADE_ATUACAO"
     else:
         df["cidade_estrategica"] = df["cidade"].isin(cidades)
         df["regiao_iorm"] = df["cidade_estrategica"].map({True: "CIDADE_ATUACAO", False: "FORA_DA_REGIAO"})
     df["tem_detalhe"] = df["num_doacoes_detalhadas"] > 0
     df["projeto_iorm"] = df["projetos"].apply(_projeto_ligado_iorm)
+    # Linha Cruzada: relacionamento persistido (coluna em `empresas`) OU evidência direta nos dados
+    # (projeto do IORM), exceto quando a equipe classificou manualmente como "não relacionada".
+    manual = df["relacionamento_tipo"].fillna("") == "MANUAL"
+    df["linha_cruzada"] = (df["relacionamento_iorm"].fillna(0).astype(int) == 1) | (df["projeto_iorm"] & ~manual)
+    df["reabrir_prospeccao"] = df["reabrir_prospeccao"].fillna(0).astype(int) == 1
+    # Única definição de prospect (ver processamento/relacionamento.py::eh_prospect).
+    df["eh_prospect"] = ~df["linha_cruzada"] | df["reabrir_prospeccao"]
     df["tipo_dado"] = df["tem_detalhe"].map({True: "Detalhado", False: "Agregado"})
     df["score"] = df.apply(_calcular_score, axis=1)
 
@@ -347,11 +357,15 @@ def carregar_enriquecimento(conexao: sqlite3.Connection) -> pd.DataFrame:
         tipos_presenca = {p["tipo"] for p in presencas}
 
         contatos = conexao.execute(
-            "SELECT tipo_contato, nivel_confianca FROM contatos WHERE empresa_id = ?", (empresa_id,)
+            "SELECT tipo_contato, nivel_confianca, prioridade FROM contatos WHERE empresa_id = ?", (empresa_id,)
         ).fetchall()
         tipos_contato = {c["tipo_contato"] for c in contatos}
+        # "Contato profissional relevante": pessoa com cargo numa das áreas prioritárias (prioridade
+        # reconhecida) e confiança ALTO/MEDIO. Sócio/"Administrador" da Receita sem área reconhecida
+        # NÃO conta — senão todo CNPJ enriquecido pela Receita ganharia pontos de "responsável".
         tem_contato_confirmado = any(
-            c["tipo_contato"] == "PESSOA_CARGO" and c["nivel_confianca"] in ("ALTO", "MEDIO") for c in contatos
+            c["tipo_contato"] == "PESSOA_CARGO" and c["nivel_confianca"] in ("ALTO", "MEDIO") and c["prioridade"]
+            for c in contatos
         )
 
         evidencias = conexao.execute(

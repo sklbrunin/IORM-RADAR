@@ -12,7 +12,7 @@ from datetime import date
 import pandas as pd
 import streamlit as st
 
-from processamento import busca_editais, busca_providers, editais, osc
+from processamento import busca_editais, busca_providers, editais, links_editais, osc
 from paginas import _shared
 
 _ROTULOS_STATUS = {
@@ -31,6 +31,55 @@ _ROTULOS_SITUACAO = {
     "PROXIMO": ("🔵", "Em breve", "iorm-badge-azul"),
     "NAO_CONFIRMADO": ("⚪", "Status não confirmado", "iorm-badge-cinza"),
 }
+
+
+def _bloco_links(edital, chave: str, conexao=None, candidato: bool = False) -> None:
+    """VER EDITAL / INSCREVER-SE com a honestidade exigida: o botão de
+    edital só é "VER EDITAL" quando a página não é portal genérico; o de
+    inscrição só existe se um link de inscrição foi encontrado — do contrário,
+    o texto diz que não foi localizado."""
+    def campo(nome, padrao=None):
+        try:
+            return edital[nome]
+        except (KeyError, IndexError):
+            return padrao
+
+    url = campo("url")
+    url_inscricao = campo("url_inscricao")
+    status = campo("link_status", "NAO_VERIFICADO")
+    generico_provavel = campo("link_generico_provavel", False) or status == links_editais.STATUS_GENERICO
+
+    col_a, col_b = st.columns(2)
+    with col_a:
+        if not url:
+            st.markdown("<div class='iorm-aviso'>Este edital não tem link cadastrado.</div>", unsafe_allow_html=True)
+        elif generico_provavel:
+            st.link_button("↗ Abrir portal (página genérica)", url, use_container_width=True)
+            motivo = campo("link_generico_motivo") or campo("link_motivo") or "endereço genérico"
+            st.caption(f"⚠ Não é a página específica do edital: {motivo}.")
+        else:
+            st.link_button("VER EDITAL", url, type="primary", use_container_width=True)
+    with col_b:
+        if url_inscricao:
+            verificada = bool(campo("inscricao_verificada", 0))
+            st.link_button("INSCREVER-SE", url_inscricao, use_container_width=True)
+            st.caption("✓ Link de inscrição verificado (responde)." if verificada else "Link de inscrição ainda não verificado.")
+        else:
+            st.markdown("<div class='iorm-aviso'>Link direto de inscrição não localizado.</div>", unsafe_allow_html=True)
+
+    if not candidato:
+        rotulo = links_editais.ROTULOS_STATUS.get(status, status)
+        verificado_em = campo("link_verificado_em")
+        st.caption(
+            f"Verificação do link: {rotulo}"
+            + (f" — {campo('link_motivo')}" if campo("link_motivo") else "")
+            + (f" · verificado em {_shared.formatar_data(verificado_em)}" if verificado_em else "")
+        )
+        if conexao is not None and url and st.button("🔄 Verificar link agora", key=f"verificar_link_{chave}"):
+            with st.spinner("Acessando a página do edital..."):
+                editais.verificar_e_registrar(conexao, edital["id"])
+            _shared.limpar_cache()
+            st.rerun()
 
 
 def _badge_situacao(situacao: str) -> str:
@@ -189,14 +238,15 @@ def _secao_busca_automatica(conexao, perfil: dict, perfil_osc_row) -> None:
             st.markdown(_badge_situacao(candidato["situacao_inscricao"]), unsafe_allow_html=True)
             if candidato["descricao"]:
                 st.markdown(f"**Trecho encontrado:** {candidato['descricao']}")
-            st.caption(f"Fonte: {candidato['fonte']}")
-            if candidato["url"]:
-                st.link_button("↗ Abrir fonte", candidato["url"])
+            st.caption(f"Fonte: {candidato['fonte']} · URL: {candidato['url']}")
+            _bloco_links(candidato, f"cand_{i}", candidato=True)
             _mostrar_aderencia(resultado_aderencia)
             if st.button("➕ Importar para oportunidades cadastradas", key=f"importar_edital_{i}"):
                 edital_id = editais.criar_edital(conexao, candidato)
                 editais.salvar_aderencia(conexao, edital_id, perfil_osc_row["id"], resultado_aderencia)
-                st.success(f"Importado (nº {edital_id}).")
+                with st.spinner("Verificando o link do edital..."):
+                    editais.verificar_e_registrar(conexao, edital_id)
+                st.success(f"Importado e link verificado (nº {edital_id}).")
                 _shared.limpar_cache()
                 st.rerun()
 
@@ -239,6 +289,12 @@ def render() -> None:
         with st.expander(f"{edital['titulo']} — {_ROTULOS_STATUS.get(edital['status'], edital['status'])} — Aderência {nota_texto}"):
             situacao = edital["situacao_inscricao"] if "situacao_inscricao" in edital.keys() else "NAO_CONFIRMADO"
             st.markdown(_badge_situacao(situacao), unsafe_allow_html=True)
+            if edital["origem_descoberta"] == "TESTE_NAO_REAL":
+                st.markdown(
+                    "<div class='iorm-limitacao'><b>Registro de teste — não é um edital real.</b> Foi cadastrado "
+                    "durante o desenvolvimento para testar a aderência; não use como oportunidade.</div>",
+                    unsafe_allow_html=True,
+                )
             col_a, col_b = st.columns(2)
             col_a.markdown(f"**Organização:** {edital['organizacao_promotora'] or 'Não disponível'}")
             col_b.markdown(f"**Tipo:** {_ROTULOS_TIPO.get(edital['tipo'], edital['tipo'])}")
@@ -246,10 +302,13 @@ def render() -> None:
             col_b.markdown(f"**Público:** {edital['publico'] or 'Não disponível'}")
             col_a.markdown(f"**Valor:** {edital['valor_texto'] or (_shared.formatar_moeda(edital['valor_numerico']) if edital['valor_numerico'] else 'Não disponível')}")
             col_b.markdown(f"**Encerramento:** {_shared.formatar_data(edital['data_encerramento'])}")
+            col_a.markdown(f"**Abertura:** {_shared.formatar_data(edital['data_abertura']) if edital['data_abertura'] else 'Não disponível'}")
+            col_b.markdown(f"**Área temática:** {edital['area_tematica'] or 'Não disponível'}")
+            if edital["requisitos"]:
+                st.markdown(f"**Requisitos:** {edital['requisitos']}")
             if edital["descricao"]:
                 st.markdown(f"**Descrição:** {edital['descricao']}")
-            if edital["url"]:
-                st.link_button("↗ Abrir fonte", edital["url"])
+            _bloco_links(edital, str(edital["id"]), conexao)
             st.caption(f"Fonte: {edital['fonte']} · Coletado em {_shared.formatar_data(edital['coletado_em'])}")
 
             _mostrar_aderencia(resultado)

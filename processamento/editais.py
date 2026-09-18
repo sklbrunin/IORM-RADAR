@@ -107,17 +107,74 @@ def criar_tabelas(conexao: sqlite3.Connection) -> None:
         """
     )
     conexao.commit()
+    migrar_colunas_novas(conexao)  # bancos novos e antigos terminam com o mesmo conjunto de colunas
+
+
+_COLUNAS_MIGRACAO = {
+    "situacao_inscricao": "TEXT NOT NULL DEFAULT 'NAO_CONFIRMADO'",
+    "origem_descoberta": "TEXT NOT NULL DEFAULT 'MANUAL'",
+    "url_inscricao": "TEXT",
+    "area_tematica": "TEXT",
+    "data_abertura": "TEXT",
+    "link_status": "TEXT NOT NULL DEFAULT 'NAO_VERIFICADO'",
+    "link_http_status": "INTEGER",
+    "link_url_final": "TEXT",
+    "link_correspondencia": "REAL",
+    "link_motivo": "TEXT",
+    "link_verificado_em": "TEXT",
+    "inscricao_verificada": "INTEGER NOT NULL DEFAULT 0",
+    "inscricao_origem": "TEXT",
+    "inscricao_motivo": "TEXT",
+}
 
 
 def migrar_colunas_novas(conexao: sqlite3.Connection) -> None:
-    """Migração idempotente para bancos criados antes da busca automática
-    de editais existir — adiciona colunas sem apagar nada."""
+    """Migração idempotente para bancos criados antes de cada recurso
+    existir — adiciona colunas sem apagar nada."""
     colunas = {linha["name"] for linha in conexao.execute("PRAGMA table_info(editais)")}
-    if "situacao_inscricao" not in colunas:
-        conexao.execute("ALTER TABLE editais ADD COLUMN situacao_inscricao TEXT NOT NULL DEFAULT 'NAO_CONFIRMADO'")
-    if "origem_descoberta" not in colunas:
-        conexao.execute("ALTER TABLE editais ADD COLUMN origem_descoberta TEXT NOT NULL DEFAULT 'MANUAL'")
+    for coluna, definicao in _COLUNAS_MIGRACAO.items():
+        if coluna not in colunas:
+            conexao.execute(f"ALTER TABLE editais ADD COLUMN {coluna} {definicao}")
     conexao.commit()
+
+
+def registrar_verificacao(conexao: sqlite3.Connection, edital_id: int, verificacao: dict,
+                          inscricao: dict | None = None) -> None:
+    """Grava o resultado de links_editais.verificar_link (+ verificar_inscricao).
+    O link de inscrição só é guardado quando foi ENCONTRADO na página do
+    edital (ou já vinha cadastrado como tal); nunca é copiado do link do
+    edital. Se a página traz sinal claro de inscrições encerradas, a
+    situação passa a ENCERRADO (evidência literal na página oficial)."""
+    campos = {
+        "link_status": verificacao["status"], "link_http_status": verificacao.get("http_status"),
+        "link_url_final": verificacao.get("url_final"), "link_correspondencia": verificacao.get("correspondencia"),
+        "link_motivo": verificacao.get("motivo"), "link_verificado_em": verificacao.get("verificado_em") or _agora(),
+    }
+    encontrada = verificacao.get("url_inscricao_encontrada")
+    if encontrada:
+        campos["url_inscricao"] = encontrada
+        campos["inscricao_origem"] = "EXTRAIDO_DA_PAGINA_DO_EDITAL"
+    if inscricao is not None:
+        campos["inscricao_verificada"] = int(inscricao["ok"])
+        campos["inscricao_motivo"] = inscricao["motivo"]
+    if verificacao.get("indicio_encerrado"):
+        campos["situacao_inscricao"] = "ENCERRADO"
+    campos["atualizado_em"] = _agora()
+    atribuicoes = ", ".join(f"{k} = ?" for k in campos)
+    conexao.execute(f"UPDATE editais SET {atribuicoes} WHERE id = ?", (*campos.values(), edital_id))
+    conexao.commit()
+
+
+def verificar_e_registrar(conexao: sqlite3.Connection, edital_id: int, buscador=None) -> dict:
+    """Verifica a página do edital e o link de inscrição (se houver) e grava."""
+    from processamento import links_editais
+
+    linha = conexao.execute("SELECT titulo, url, url_inscricao FROM editais WHERE id = ?", (edital_id,)).fetchone()
+    verificacao = links_editais.verificar_link(linha["url"], linha["titulo"], buscador)
+    url_inscricao = verificacao.get("url_inscricao_encontrada") or linha["url_inscricao"]
+    inscricao = links_editais.verificar_inscricao(url_inscricao, buscador) if url_inscricao else None
+    registrar_verificacao(conexao, edital_id, verificacao, inscricao)
+    return {"verificacao": verificacao, "inscricao": inscricao}
 
 
 def classificar_situacao_inscricao(data_publicacao: str | None, data_encerramento: str | None,
@@ -148,38 +205,36 @@ def criar_edital(conexao: sqlite3.Connection, dados: dict) -> int:
     situacao = dados.get("situacao_inscricao") or classificar_situacao_inscricao(
         dados.get("data_publicacao"), dados.get("data_encerramento")
     )
-    cursor = conexao.execute(
-        """INSERT INTO editais
-           (titulo, organizacao_promotora, descricao, url, fonte, data_publicacao, data_encerramento,
-            valor_texto, valor_numerico, territorio, publico, requisitos, tipo, status, texto_resumo,
-            situacao_inscricao, origem_descoberta, coletado_em, criado_em, atualizado_em)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-        (
-            dados["titulo"],
-            dados.get("organizacao_promotora"),
-            dados.get("descricao"),
-            dados.get("url"),
-            dados.get("fonte", "Cadastro manual"),
-            dados.get("data_publicacao"),
-            dados.get("data_encerramento"),
-            dados.get("valor_texto"),
-            dados.get("valor_numerico"),
-            dados.get("territorio"),
-            dados.get("publico"),
-            dados.get("requisitos"),
-            dados.get("tipo", "OUTRO"),
-            dados.get("status", "ENCONTRADO"),
-            dados.get("texto_resumo"),
-            situacao,
-            dados.get("origem_descoberta", "MANUAL"),
-            dados.get("coletado_em", agora),
-            agora,
-            agora,
-        ),
-    )
+    valores = {
+        "titulo": dados["titulo"],
+        "organizacao_promotora": dados.get("organizacao_promotora"),
+        "descricao": dados.get("descricao"),
+        "url": dados.get("url"),
+        "url_inscricao": dados.get("url_inscricao"),
+        "fonte": dados.get("fonte", "Cadastro manual"),
+        "data_publicacao": dados.get("data_publicacao"),
+        "data_abertura": dados.get("data_abertura"),
+        "data_encerramento": dados.get("data_encerramento"),
+        "valor_texto": dados.get("valor_texto"),
+        "valor_numerico": dados.get("valor_numerico"),
+        "territorio": dados.get("territorio"),
+        "publico": dados.get("publico"),
+        "area_tematica": dados.get("area_tematica"),
+        "requisitos": dados.get("requisitos"),
+        "tipo": dados.get("tipo", "OUTRO"),
+        "status": dados.get("status", "ENCONTRADO"),
+        "texto_resumo": dados.get("texto_resumo"),
+        "situacao_inscricao": situacao,
+        "origem_descoberta": dados.get("origem_descoberta", "MANUAL"),
+        "coletado_em": dados.get("coletado_em", agora),
+        "criado_em": agora,
+        "atualizado_em": agora,
+    }
+    colunas = ", ".join(valores)
+    marcadores = ", ".join("?" for _ in valores)
+    cursor = conexao.execute(f"INSERT INTO editais ({colunas}) VALUES ({marcadores})", tuple(valores.values()))
     conexao.commit()
     return cursor.lastrowid
-
 
 def atualizar_status(conexao: sqlite3.Connection, edital_id: int, status: str) -> None:
     if status not in STATUS_VALIDOS:

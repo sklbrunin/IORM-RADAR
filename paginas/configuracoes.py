@@ -8,7 +8,7 @@ import os
 import pandas as pd
 import streamlit as st
 
-from processamento import busca_providers, mecanismos
+from processamento import busca_providers, contact_providers, mecanismos
 from paginas import _shared
 
 
@@ -128,6 +128,29 @@ def _aba_busca() -> None:
         "provedor no futuro (Brave, Tavily etc.) é só implementar uma nova classe, sem reescrever o "
         "resto do sistema. Provider ativo agora: **" + provider.nome + "**."
     )
+
+    _shared.secao("Provedores de contatos (ContactProvider)", "🔌",
+                  "Cada provedor devolve contatos que passam pelo mesmo funil: normalizar → validar → banco → evidência.")
+    conexao = _shared.conectar()
+    provedores = [
+        contact_providers.ReceitaFederalContactProvider(),
+        contact_providers.WebSearchContactProvider(conexao),
+        contact_providers.HunterContactProvider(),
+    ]
+    linhas = [{
+        "Provedor": p.nome,
+        "Custo": {"GRATUITO": "Gratuito", "CAMADA_GRATUITA": "Camada gratuita limitada", "PAGO": "Pago"}.get(p.custo, p.custo),
+        "Credencial exigida (variável de ambiente)": p.credencial_env or "Nenhuma",
+        "Situação": "✅ Disponível" if p.disponivel() else "⛔ Sem credencial configurada",
+    } for p in provedores]
+    st.dataframe(
+        pd.DataFrame(linhas), hide_index=True, use_container_width=True,
+        column_config={"Provedor": st.column_config.TextColumn(width=260), "Custo": st.column_config.TextColumn(width=180),
+                       "Credencial exigida (variável de ambiente)": st.column_config.TextColumn(width=300),
+                       "Situação": st.column_config.TextColumn(width=240)},
+    )
+    st.caption("Só o nome da variável aparece aqui — os valores ficam no arquivo `.env` (fora do Git). "
+               "Avaliação completa dos provedores em `docs/decisoes.md`.")
 
 
 def _aba_mecanismos() -> None:

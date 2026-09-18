@@ -23,7 +23,9 @@ if str(RAIZ_PROJETO) not in sys.path:
 load_dotenv(RAIZ_PROJETO / ".env")  # carrega SERPAPI_API_KEY etc., se existir — nunca obrigatório
 
 from paginas import _shared  # noqa: E402
-from paginas import cerebro_osc, configuracoes, contatos, crm, dashboard, oportunidades, radar_editais, radar_empresas  # noqa: E402
+from paginas import (  # noqa: E402
+    cerebro_osc, configuracoes, contatos, crm, dashboard, oportunidades, radar_editais, radar_empresas, rotina_diaria,
+)
 
 st.set_page_config(page_title="IORM Radar", page_icon="🎯", layout="wide")
 _shared.injetar_css()
@@ -54,6 +56,7 @@ pagina = st.navigation(
             st.Page(oportunidades.render, title="Oportunidades", icon="⭐", url_path="oportunidades"),
         ],
         "Sistema": [
+            st.Page(rotina_diaria.render, title="Rotina diária", icon="🔁", url_path="rotina-diaria"),
             st.Page(configuracoes.render, title="Configurações", icon="⚙️", url_path="configuracoes"),
         ],
     }

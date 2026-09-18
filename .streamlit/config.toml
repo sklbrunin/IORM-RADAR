@@ -1,0 +1,3 @@
+[server]
+# Alinhado ao limite do repositorio de documentos (processamento/documentos.py)
+maxUploadSize = 25

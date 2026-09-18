@@ -13,6 +13,8 @@ from __future__ import annotations
 import sqlite3
 from datetime import datetime, timezone
 
+from processamento import geografia
+
 ORIGENS = {"FONTE_EXTERNA", "MANUAL"}
 
 
@@ -358,6 +360,10 @@ def carregar_perfil_completo(conexao: sqlite3.Connection, osc_id: int) -> dict:
     territorios = [dict(r) for r in conexao.execute(
         "SELECT tipo, valor, prioritario FROM osc_territorios WHERE osc_id = ?", (osc_id,)
     ).fetchall()]
+    # Região dos polos (IBGE + ajustes manuais) entra como 'regiao_proxima'; cidade já cadastrada
+    # manualmente em outra camada não é duplicada.
+    ja_cadastradas = {t["valor"].strip().lower() for t in territorios}
+    territorios += [t for t in geografia.territorios_derivados(conexao) if t["valor"].strip().lower() not in ja_cadastradas]
     temas = [r["tema"] for r in conexao.execute(
         "SELECT tema FROM osc_areas_atuacao WHERE osc_id = ?", (osc_id,)
     ).fetchall()]

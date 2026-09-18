@@ -47,28 +47,43 @@ _TIPO_TERRITORIO_PARA_CAMADA = {
 }
 
 
+def normalizar_cidade(nome: str | None) -> str:
+    """Minúsculo, sem acento, sem espaços extras — o SALIC às vezes traz
+    "SAO JOAQUIM DA BARRA" e o IBGE "São Joaquim da Barra"; são a mesma cidade."""
+    import unicodedata
+
+    texto = unicodedata.normalize("NFD", (nome or "").strip().lower())
+    return " ".join("".join(c for c in texto if unicodedata.category(c) != "Mn").split())
+
+
 def _agrupar_territorios_por_camada(territorios: list[dict]) -> dict[str, set[str]]:
     grupos: dict[str, set[str]] = {camada: set() for camada in _TIPO_TERRITORIO_PARA_CAMADA.values()}
     for t in territorios or []:
         camada = _TIPO_TERRITORIO_PARA_CAMADA.get(t.get("tipo"))
         if camada and t.get("valor"):
-            grupos[camada].add(t["valor"].strip().lower())
+            grupos[camada].add(normalizar_cidade(t["valor"]))
     return grupos
+
+
+def mapa_cidade_camada(territorios: list[dict]) -> dict[str, str]:
+    """cidade normalizada -> camada. Calculado uma vez e reaproveitado
+    para classificar milhares de empresas sem reagrupar a cada linha.
+    Se a mesma cidade estiver em duas camadas, vale a mais forte."""
+    grupos = _agrupar_territorios_por_camada(territorios)
+    mapa: dict[str, str] = {}
+    for camada in ["INTERESSE_ESTRATEGICO", "REGIAO_PROXIMA", "CIDADE_ATUACAO"]:  # a última sobrescreve
+        for cidade in grupos[camada]:
+            mapa[cidade] = camada
+    return mapa
 
 
 def classificar_cidade(cidade: str | None, territorios: list[dict]) -> str:
     """Devolve a camada (uma de CAMADAS) para uma cidade, comparando
-    contra o território cadastrado no Cérebro da OSC. Nunca inventa
-    proximidade geográfica por conta própria — só usa o que já foi
-    cadastrado explicitamente."""
+    contra o território cadastrado (Cérebro da OSC + região dos polos via
+    IBGE). Nunca inventa proximidade geográfica por conta própria."""
     if not cidade:
         return "FORA_DA_REGIAO"
-    cidade_norm = cidade.strip().lower()
-    grupos = _agrupar_territorios_por_camada(territorios)
-    for camada in ["CIDADE_ATUACAO", "REGIAO_PROXIMA", "INTERESSE_ESTRATEGICO"]:
-        if cidade_norm in grupos[camada]:
-            return camada
-    return "FORA_DA_REGIAO"
+    return mapa_cidade_camada(territorios).get(normalizar_cidade(cidade), "FORA_DA_REGIAO")
 
 
 def pontos(camada: str) -> int:
@@ -89,7 +104,7 @@ def cidades_por_camada(territorios: list[dict]) -> dict[str, list[str]]:
     for t in territorios or []:
         camada = _TIPO_TERRITORIO_PARA_CAMADA.get(t.get("tipo"))
         valor = (t.get("valor") or "").strip()
-        if camada and valor and valor.lower() not in vistos[camada]:
-            vistos[camada].add(valor.lower())
+        if camada and valor and normalizar_cidade(valor) not in vistos[camada]:
+            vistos[camada].add(normalizar_cidade(valor))
             originais[camada].append(valor)
     return {camada: sorted(lista) for camada, lista in originais.items()}

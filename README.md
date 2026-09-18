@@ -51,6 +51,48 @@ Federal/BrasilAPI para CNAE/situação cadastral) estão cadastradas como
 mecanismos "ainda não disponíveis" na aba Mecanismos de Incentivo de
 Configurações — ver `processamento/mecanismos.py`.
 
+## Novidades da v6
+
+- **Radar de Empresas** tem quatro abas: Radar de Prospecção, **Linha Cruzada** (empresas que já têm relacionamento
+  com o IORM — não aparecem como prospect), Buscar qualquer empresa e Histórico.
+- **Oportunidades → Radar por Região**: polo → cidades da região → empresas → ficha completa. A região de cada polo
+  vem do IBGE e é editável em Cérebro da OSC → Território.
+- **Radar de Editais**: botões VER EDITAL / INSCREVER-SE só com link verificado; senão "Link direto de inscrição não
+  localizado".
+- **Cérebro da OSC → Documentos**: upload (PDF, DOCX, TXT, XLSX, XLS), texto extraído, busca por conteúdo.
+- **Contatos**: abas "Canais da empresa" e "Pessoas identificadas", com área e prioridade.
+- **Sistema → Rotina diária**: enriquecimento de até 30 empresas por dia, com log e fila.
+
+### Rotina diária de enriquecimento (30 empresas/dia)
+
+Rodar agora, uma vez (não gasta a cota da SerpApi com `--sem-web`):
+
+```bash
+python coleta/enriquecimento_diario.py --meta 30 --sem-web
+```
+
+Agendar no Windows (uma vez; roda todo dia às 07:30 com o seu usuário, sem administrador):
+
+```bash
+powershell -ExecutionPolicy Bypass -File coleta\agendar_enriquecimento_windows.ps1
+```
+
+Conferir se está agendada e quando foi a última execução:
+
+```bash
+powershell -ExecutionPolicy Bypass -File coleta\agendar_enriquecimento_windows.ps1 -Status
+```
+
+Remover o agendamento:
+
+```bash
+powershell -ExecutionPolicy Bypass -File coleta\agendar_enriquecimento_windows.ps1 -Remover
+```
+
+Logs: `dados/logs/enriquecimento_diario.log` e `dados/logs/agendado.out.log`. A página **Rotina diária** mostra última
+execução, próxima, processadas hoje, sucesso/parcial/falha e a fila. Limite real da busca web: ver
+`docs/decisoes.md`, item 8.7.
+
 ## Como instalar
 
 Pré-requisito: Python 3.10 ou mais recente instalado.

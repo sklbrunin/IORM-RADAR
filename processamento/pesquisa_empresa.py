@@ -53,7 +53,16 @@ _CONSULTAS_POR_CATEGORIA: list[tuple[str, str, str | None]] = [
         '(marketing OR comunicação OR "relações institucionais" OR sustentabilidade OR ESG)',
         "pessoa", None,
     ),
+    (
+        'site:linkedin.com/in/ (gerente OR coordenador OR analista OR diretor OR contador) '
+        '(fiscal OR tributário OR contabilidade OR controladoria OR jurídico OR "recursos humanos")',
+        "pessoa", None,
+    ),
 ]
+
+# Modo econômico (rotina diária): as 3 consultas de maior retorno para "quem procurar e como" —
+# site/contato, redes oficiais e pessoas de comunicação/ESG. Economiza cota da SerpApi.
+CONSULTAS_ECONOMICAS = [_CONSULTAS_POR_CATEGORIA[0], _CONSULTAS_POR_CATEGORIA[1], _CONSULTAS_POR_CATEGORIA[6]]
 
 _TERMOS_RELEVANTES = [
     "esg", "sustentabilidade", "responsabilidade social", "instituto", "fundação", "fundacao",
@@ -124,7 +133,8 @@ def _extrair_pessoa_cargo_linkedin(titulo: str, url: str) -> tuple[str, str] | N
 
 def pesquisar_empresa(conexao, empresa_id: int, nome: str, cidade: str | None = None,
                        estado: str | None = None,
-                       provider: busca_providers.SearchProvider | None = None) -> dict:
+                       provider: busca_providers.SearchProvider | None = None,
+                       consultas: list | None = None, registrar_historico: bool = True) -> dict:
     """Executa a pesquisa (se houver provider real) e grava os
     resultados. Devolve um resumo — nunca lança exceção para a UI. Se
     alguma consulta falhar (chave inválida, limite, timeout), o motivo
@@ -152,9 +162,11 @@ def pesquisar_empresa(conexao, empresa_id: int, nome: str, cidade: str | None = 
     fontes_usadas: set[str] = set()
     erros: list[str] = []
 
-    for sufixo_consulta, tipo_busca, categoria in _CONSULTAS_POR_CATEGORIA:
+    consultas_executadas = 0
+    for sufixo_consulta, tipo_busca, categoria in (consultas or _CONSULTAS_POR_CATEGORIA):
         consulta = f'"{nome}"{localizacao} {sufixo_consulta}'
         resultados = provider.buscar(consulta, num_resultados=5)
+        consultas_executadas += 1
         if provider.ultimo_erro:
             erros.append(provider.ultimo_erro)
             continue
@@ -174,7 +186,7 @@ def pesquisar_empresa(conexao, empresa_id: int, nome: str, cidade: str | None = 
                 _, criado = banco.inserir_ou_atualizar_contato(
                     conexao,
                     {
-                        "empresa_id": empresa_id, "nome": None, "cargo": None, "departamento": None,
+                        "empresa_id": empresa_id, "nome": None, "cargo": None, "departamento": enriquecimento.area_do_email(email),
                         "tipo_contato": "EMAIL_CONTATO", "valor": email, "prioridade": None,
                         "fonte": fonte, "url_fonte": url, "coletado_em": agora, "nivel_confianca": "MEDIO",
                     },
@@ -220,7 +232,7 @@ def pesquisar_empresa(conexao, empresa_id: int, nome: str, cidade: str | None = 
                         conexao,
                         {
                             "empresa_id": empresa_id, "nome": enriquecimento.normalizar_nome_pessoa(nome_pessoa),
-                            "cargo": cargo, "departamento": None, "tipo_contato": "PESSOA_CARGO", "valor": url,
+                            "cargo": cargo, "departamento": enriquecimento.classificar_area(cargo), "tipo_contato": "PESSOA_CARGO", "valor": url,
                             "prioridade": prioridade, "fonte": fonte, "url_fonte": url,
                             "coletado_em": agora, "nivel_confianca": "BAIXO",
                         },
@@ -248,23 +260,24 @@ def pesquisar_empresa(conexao, empresa_id: int, nome: str, cidade: str | None = 
         status = "FALHA"
     else:
         status = "PARCIAL"
-    banco.registrar_pesquisa(
-        conexao,
-        {
-            "empresa_id": empresa_id,
-            "executado_em": agora,
-            "quantidade_fontes": len(fontes_usadas),
-            "quantidade_contatos": contatos_gravados,
-            "quantidade_redes": presenca_gravada,
-            "quantidade_evidencias": evidencias_gravadas,
-            "status": status,
-            "observacoes": (
-                f"Pesquisa automática via {provider.nome}. Resultados gravados com confiança "
-                "MEDIO/BAIXO — recomenda-se revisão humana antes de usar em abordagem."
-                + (f" Falhas: {'; '.join(erros)}" if erros else "")
-            ),
-        },
-    )
+    if registrar_historico:
+        banco.registrar_pesquisa(
+            conexao,
+            {
+                "empresa_id": empresa_id,
+                "executado_em": agora,
+                "quantidade_fontes": len(fontes_usadas),
+                "quantidade_contatos": contatos_gravados,
+                "quantidade_redes": presenca_gravada,
+                "quantidade_evidencias": evidencias_gravadas,
+                "status": status,
+                "observacoes": (
+                    f"Pesquisa automática via {provider.nome}. Resultados gravados com confiança "
+                    "MEDIO/BAIXO — recomenda-se revisão humana antes de usar em abordagem."
+                    + (f" Falhas: {'; '.join(erros)}" if erros else "")
+                ),
+            },
+        )
     conexao.commit()
 
     return {
@@ -274,4 +287,5 @@ def pesquisar_empresa(conexao, empresa_id: int, nome: str, cidade: str | None = 
         "evidencias": evidencias_gravadas,
         "contatos": contatos_gravados,
         "erros": erros,
+        "consultas_executadas": consultas_executadas,
     }

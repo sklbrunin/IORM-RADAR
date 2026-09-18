@@ -22,7 +22,7 @@ from __future__ import annotations
 import re
 from datetime import datetime, timezone
 
-from processamento import busca_providers, editais
+from processamento import busca_providers, editais, links_editais
 
 _TERMOS_OPORTUNIDADE = '("edital" OR "chamada pública" OR "chamada de projetos" OR "seleção pública")'
 
@@ -108,12 +108,18 @@ def buscar_editais(perfil_osc: dict, provider: busca_providers.SearchProvider | 
             data_encontrada = _extrair_data(texto)
             situacao = editais.classificar_situacao_inscricao(None, data_encontrada)
 
+            generico, motivo_generico = links_editais.eh_portal_generico(url)
             candidatos.append(
                 {
                     "titulo": resultado.titulo,
                     "descricao": resultado.trecho or None,
                     "texto_resumo": resultado.trecho or None,
                     "url": url,
+                    # Só vira link de inscrição se a própria URL indica inscrição — nunca o mesmo link
+                    # do edital "por padrão" e nunca um portal genérico.
+                    "url_inscricao": url if links_editais.classificar_url_inscricao(url) else None,
+                    "link_generico_provavel": generico,
+                    "link_generico_motivo": motivo_generico if generico else None,
                     "fonte": f"Busca automática ({provider.nome}) — {url.split('/')[2] if '://' in url else url}",
                     "data_encerramento": data_encontrada,
                     "territorio": ", ".join(perfil_osc.get("cidades", [])[:4]) or None,
@@ -129,4 +135,6 @@ def buscar_editais(perfil_osc: dict, provider: busca_providers.SearchProvider | 
                 }
             )
 
+    # Páginas específicas primeiro; portais genéricos (provável lista/página inicial) por último.
+    candidatos.sort(key=lambda c: c["link_generico_provavel"])
     return {"status": "OK", "provider": provider.nome, "candidatos": candidatos, "erros": erros}

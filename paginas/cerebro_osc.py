@@ -4,10 +4,12 @@ já verificados (site oficial, achados do módulo de enriquecimento e o
 próprio cadastro CNPJ interno) — tudo marcado com sua origem."""
 from __future__ import annotations
 
+from pathlib import Path
+
 import pandas as pd
 import streamlit as st
 
-from processamento import osc, regiao
+from processamento import documentos, geografia, osc, regiao
 from paginas import _shared
 
 TIPOS_TERRITORIO = ["cidade", "regiao_proxima", "interesse_estrategico", "estado"]
@@ -18,7 +20,6 @@ _ROTULOS_TIPO_TERRITORIO = {
     "estado": "Estado",
 }
 TIPOS_LINK = ["site", "instagram", "linkedin", "facebook", "youtube", "transparencia", "outro"]
-TIPOS_DOCUMENTO = ["estatuto", "certificado", "relatorio", "apresentacao", "projeto", "outro"]
 
 
 def _secao_identidade(conexao, perfil) -> None:
@@ -65,8 +66,18 @@ def _secao_territorios(conexao, osc_id: int) -> None:
     )
     territorios = conexao.execute("SELECT * FROM osc_territorios WHERE osc_id = ? ORDER BY tipo, valor", (osc_id,)).fetchall()
     territorios_dict = [dict(t) for t in territorios]
+    # Mesma regra de osc.carregar_perfil_completo: a região dos polos (IBGE + ajustes) entra como
+    # 'regiao_proxima' sem duplicar cidade já cadastrada à mão — assim a tela mostra o que o score usa.
+    ja_cadastradas = {t["valor"].strip().lower() for t in territorios_dict}
+    derivados: list[dict] = []
+    for t in geografia.territorios_derivados(conexao):  # um município pode estar na região de dois polos
+        chave = t["valor"].strip().lower()
+        if chave not in ja_cadastradas:
+            ja_cadastradas.add(chave)
+            derivados.append(t)
+    territorios_dict += derivados
 
-    if not territorios:
+    if not territorios_dict:
         _shared.estado_vazio("Nenhum território cadastrado ainda.")
     else:
         grupos = regiao.cidades_por_camada(territorios_dict)
@@ -81,6 +92,11 @@ def _secao_territorios(conexao, osc_id: int) -> None:
                 st.markdown(", ".join(cidades_camada))
             else:
                 st.caption("Nenhuma cidade cadastrada nesta camada ainda.")
+        if derivados:
+            st.caption(
+                f"A Região próxima inclui {len(derivados)} município(s) vindos da Região dos polos "
+                "(IBGE + ajustes) — veja e edite na seção “Região dos polos” abaixo."
+            )
         estados = [t for t in territorios_dict if t["tipo"] == "estado"]
         if estados:
             st.markdown(f"**Estado(s) de referência:** {', '.join(t['valor'] for t in estados)}")
@@ -102,6 +118,72 @@ def _secao_territorios(conexao, osc_id: int) -> None:
         st.success(f"'{valor}' adicionado como {_ROTULOS_TIPO_TERRITORIO[tipo].lower()}.")
         _shared.limpar_cache()
         st.rerun()
+
+
+def _secao_regiao_polos(conexao, polos: list[str]) -> None:
+    _shared.secao(
+        "Região dos polos", "🗺️",
+        "As cidades da região de cada polo vêm do IBGE (Região Geográfica Imediata) e podem ser ajustadas à mão.",
+    )
+    with st.expander("Metodologia — como a “região” de um polo é definida"):
+        st.markdown(
+            "- **Fonte:** IBGE, API de Localidades (`servicodados.ibge.gov.br`), divisão em **Regiões Geográficas "
+            "Imediatas** (2017): municípios agrupados em torno de um centro urbano, pelos fluxos do dia a dia "
+            "(trabalho, comércio, serviços).\n"
+            "- **Regra:** a região de um polo = todos os municípios da mesma Região Geográfica Imediata dele. "
+            "Nenhuma cidade é escolhida manualmente pelo sistema.\n"
+            "- **Ajuste manual:** você pode desativar um município do IBGE ou adicionar outro a um polo — o "
+            "registro guarda a origem (IBGE ou Manual) e a sincronização nunca desfaz uma decisão sua.\n"
+            "- **Efeito:** essas cidades entram como *Região próxima* no IORM Score, nos filtros e no Radar por Região."
+        )
+    if not polos:
+        st.info("Cadastre primeiro as cidades de atuação (polos) acima.")
+        return
+
+    uf = st.selectbox("UF dos polos", list(geografia.CODIGO_UF), key="regiao_uf")
+    if st.button("🔄 Sincronizar região com o IBGE", key="sync_ibge"):
+        with st.spinner("Consultando o IBGE..."):
+            resumo = geografia.sincronizar_ibge(conexao, polos, uf)
+        if resumo["erros"]:
+            st.error("Alguns polos não puderam ser sincronizados: " + "; ".join(resumo["erros"]))
+        st.success(f"{resumo['novos']} município(s) novo(s), {resumo['ja_existentes']} já existente(s).")
+        _shared.limpar_cache()
+
+    registros = geografia.listar(conexao, apenas_ativos=False)
+    if not registros:
+        _shared.estado_vazio("Região ainda não sincronizada. Clique em “Sincronizar região com o IBGE”.", "🗺️")
+    else:
+        df = pd.DataFrame(registros)[["id", "polo", "municipio", "uf", "regiao_imediata", "origem", "ativo", "fonte"]]
+        df["ativo"] = df["ativo"].astype(bool)
+        editado = st.data_editor(
+            df.rename(columns={"polo": "Polo", "municipio": "Município", "uf": "UF", "regiao_imediata": "Região imediata",
+                               "origem": "Origem", "ativo": "Ativo", "fonte": "Fonte"}),
+            hide_index=True, use_container_width=True, key="editor_regiao",
+            disabled=["id", "Polo", "Município", "UF", "Região imediata", "Origem", "Fonte"],
+            column_config={"id": None, "Município": st.column_config.TextColumn(width=190),
+                           "Região imediata": st.column_config.TextColumn(width=240),
+                           "Fonte": st.column_config.TextColumn(width=420),
+                           "Ativo": st.column_config.CheckboxColumn(width=80)},
+        )
+        mudou = False
+        for antes, depois in zip(df.itertuples(), editado.itertuples()):
+            if bool(antes.ativo) != bool(depois.Ativo):
+                geografia.definir_ativo(conexao, int(antes.id), bool(depois.Ativo))
+                mudou = True
+        if mudou:
+            _shared.limpar_cache()
+            st.rerun()
+
+    with st.form("form_regiao_manual", clear_on_submit=True):
+        c1, c2, c3 = st.columns([1.2, 1.5, 0.6])
+        polo = c1.selectbox("Polo", polos)
+        municipio = c2.text_input("Município a adicionar")
+        uf_manual = c3.text_input("UF", value="SP", max_chars=2)
+        motivo = st.text_input("Motivo (obrigatório)", placeholder="Ex: atendemos alunos dessa cidade desde 2023")
+        if st.form_submit_button("➕ Adicionar município à região") and municipio and motivo.strip():
+            geografia.adicionar_manual(conexao, polo, municipio, uf_manual, motivo.strip())
+            _shared.limpar_cache()
+            st.rerun()
 
 
 def _secao_temas(conexao, osc_id: int) -> None:
@@ -231,36 +313,101 @@ def _secao_links(conexao, osc_id: int) -> None:
         st.rerun()
 
 
-def _secao_documentos(conexao, osc_id: int) -> None:
-    st.markdown("#### Documentos")
-    st.caption(
-        "Estrutura pronta para o futuro — ainda sem upload de arquivo nem leitura automática de "
-        "conteúdo. Por enquanto, registre nome/descrição e uma referência (link ou caminho)."
-    )
-    documentos = conexao.execute("SELECT * FROM osc_documentos WHERE osc_id = ? ORDER BY criado_em DESC", (osc_id,)).fetchall()
-    if not documentos:
-        _shared.estado_vazio("Nenhum documento registrado ainda.")
-    else:
-        df_docs = pd.DataFrame([dict(d) for d in documentos]).fillna("—")
-        st.dataframe(
-            df_docs[["tipo", "nome", "descricao", "referencia", "origem"]].rename(
-                columns={"tipo": "Tipo", "nome": "Nome", "descricao": "Descrição", "referencia": "Referência", "origem": "Origem"}
-            ),
-            use_container_width=True, hide_index=True,
-        )
+def _caminho_relativo(caminho: str) -> str:
+    """Mostra o caminho a partir da pasta do projeto (não expõe a árvore de pastas do usuário)."""
+    try:
+        return str(Path(caminho).resolve().relative_to(_shared.RAIZ_PROJETO.resolve()))
+    except (ValueError, OSError):
+        return Path(caminho).name
 
-    with st.form("form_documento", clear_on_submit=True):
-        col_a, col_b = st.columns(2)
-        tipo = col_a.selectbox("Tipo", TIPOS_DOCUMENTO)
-        nome = col_b.text_input("Nome do documento")
-        descricao = st.text_input("Descrição (opcional)")
-        referencia = st.text_input("Referência (link ou caminho, opcional)")
-        enviar = st.form_submit_button("➕ Registrar documento")
-    if enviar and nome:
-        osc.adicionar_documento(conexao, osc_id, tipo, nome, descricao or None, referencia or None, origem="MANUAL")
-        st.success(f"Documento '{nome}' registrado.")
+
+def _tamanho_legivel(bytes_: int | None) -> str:
+    if not bytes_:
+        return "—"
+    if bytes_ < 1024:
+        return f"{bytes_} bytes"
+    if bytes_ < 1024 * 1024:
+        return f"{bytes_ / 1024:,.1f} KB".replace(",", "X").replace(".", ",").replace("X", ".")
+    return f"{bytes_ / (1024 * 1024):,.1f} MB".replace(",", "X").replace(".", ",").replace("X", ".")
+
+
+def _secao_documentos(conexao, osc_id: int) -> None:
+    st.markdown("#### Documentos da OSC")
+    st.caption(
+        "Repositório documental: o arquivo original é guardado sem alteração e o texto é extraído para "
+        "busca. Nada é interpretado por IA — tudo que aparece aqui é trecho literal do documento."
+    )
+
+    with st.form("form_upload_documento", clear_on_submit=True):
+        arquivos = st.file_uploader(
+            "Enviar documentos (PDF, DOCX, TXT, XLSX, XLS — até 25 MB cada)",
+            type=["pdf", "docx", "txt", "xlsx", "xls"], accept_multiple_files=True,
+        )
+        col_a, col_b = st.columns([1, 2])
+        categoria = col_a.selectbox("Categoria", documentos.CATEGORIAS)
+        descricao = col_b.text_input("Descrição (opcional)")
+        enviar = st.form_submit_button("⬆ Enviar e processar")
+    if enviar:
+        if not arquivos:
+            st.warning("Selecione pelo menos um arquivo.")
+        for arquivo in arquivos or []:
+            try:
+                resultado = documentos.adicionar(
+                    conexao, osc_id, arquivo.name, arquivo.getvalue(), _shared.PASTA_DOCUMENTOS_OSC,
+                    categoria, descricao or None,
+                )
+            except ValueError as erro:
+                st.error(f"{arquivo.name}: {erro}")
+                continue
+            if resultado["duplicado"]:
+                st.info(f"{arquivo.name}: este arquivo já estava cadastrado (mesmo conteúdo) — nada foi duplicado.")
+            else:
+                st.success(f"{arquivo.name}: {documentos.ROTULOS_STATUS.get(resultado['status'], resultado['status'])}.")
         _shared.limpar_cache()
-        st.rerun()
+
+    lista = documentos.listar(conexao, osc_id)
+    if not lista:
+        _shared.estado_vazio("Nenhum documento enviado ainda.", "📄")
+        return
+
+    _shared.secao(f"Documentos cadastrados ({len(lista)})", "📄")
+    for doc in lista:
+        rotulo_status = documentos.ROTULOS_STATUS.get(doc["status_processamento"], "Registro sem arquivo (cadastro antigo)")
+        titulo = doc["nome_arquivo"] or doc["nome"]
+        with st.expander(f"{titulo}  ·  {doc['categoria'] or doc['tipo'] or 'Sem categoria'}"):
+            c1, c2, c3, c4 = st.columns(4)
+            c1.metric("Tipo", (doc["extensao"] or "—").upper().lstrip("."))
+            c2.metric("Tamanho", _tamanho_legivel(doc["tamanho_bytes"]))
+            c3.metric("Enviado em", _shared.formatar_data(doc["enviado_em"] or doc["criado_em"]))
+            c4.metric("Texto extraído", f"{doc['caracteres']:,} caracteres".replace(",", ".") if doc["caracteres"] else "Nenhum")
+            st.markdown(f"**Status de processamento:** {rotulo_status}")
+            if doc["detalhe_processamento"]:
+                st.caption(f"Detalhe técnico: {doc['detalhe_processamento']}")
+            if doc["descricao"]:
+                st.markdown(f"**Descrição:** {doc['descricao']}")
+            if doc["referencia"] and doc["referencia"] != doc["caminho_arquivo"]:
+                st.markdown(f"**Referência:** {doc['referencia']}")
+            if doc["caminho_arquivo"]:
+                st.caption(f"Arquivo original preservado em: {_caminho_relativo(doc['caminho_arquivo'])}")
+            if doc["caracteres"]:
+                with st.expander("Ver texto extraído"):
+                    st.text_area("Texto", value=documentos.obter_texto(conexao, doc["id"]) or "", height=260,
+                                 key=f"texto_doc_{doc['id']}", label_visibility="collapsed")
+            if st.button("🗑 Excluir documento", key=f"excluir_doc_{doc['id']}"):
+                documentos.excluir(conexao, doc["id"])
+                _shared.limpar_cache()
+                st.rerun()
+
+    _shared.secao("Buscar no conteúdo dos documentos", "🔎")
+    termo = st.text_input("Palavra ou expressão", key="busca_documentos", placeholder="Ex: territorial, crianças, Guaíra")
+    if termo:
+        achados = documentos.buscar(conexao, osc_id, termo)
+        if not achados:
+            st.info(f"Nenhum documento contém “{termo}”.")
+        for achado in achados:
+            st.markdown(f"**Fonte: documento {achado['documento']}** ({achado['categoria'] or 'sem categoria'}) — {achado['ocorrencias']} ocorrência(s)")
+            for trecho in achado["trechos"]:
+                st.markdown(f"> …{trecho}…")
 
 
 def render() -> None:
@@ -276,6 +423,7 @@ def render() -> None:
         _secao_identidade(conexao, perfil)
     with abas[1]:
         _secao_territorios(conexao, perfil["id"])
+        _secao_regiao_polos(conexao, osc.carregar_perfil_completo(conexao, perfil["id"])["cidades"])
     with abas[2]:
         _secao_programas(conexao, perfil["id"])
     with abas[3]:
