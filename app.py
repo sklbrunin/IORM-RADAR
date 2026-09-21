@@ -40,25 +40,25 @@ if not _shared.CAMINHO_DB.exists():
 
 _shared.garantir_tabelas_novas()
 
+paginas_app = {
+    "dashboard": st.Page(dashboard.render, title="Dashboard", icon="🏠", default=True, url_path="dashboard"),
+    "cerebro_osc": st.Page(cerebro_osc.render, title="Cérebro da OSC", icon="🧠", url_path="cerebro-osc"),
+    "radar_empresas": st.Page(radar_empresas.render, title="Radar de Empresas", icon="🎯", url_path="radar-empresas"),
+    "radar_editais": st.Page(radar_editais.render, title="Radar de Editais", icon="📋", url_path="radar-editais"),
+    "contatos": st.Page(contatos.render, title="Contatos", icon="📇", url_path="contatos"),
+    "pipeline": st.Page(crm.render, title="Pipeline", icon="🤝", url_path="pipeline"),
+    "oportunidades": st.Page(oportunidades.render, title="Oportunidades", icon="⭐", url_path="oportunidades"),
+    "rotina_diaria": st.Page(rotina_diaria.render, title="Rotina diária", icon="🔁", url_path="rotina-diaria"),
+    "configuracoes": st.Page(configuracoes.render, title="Configurações", icon="⚙️", url_path="configuracoes"),
+}
+st.session_state["_paginas"] = paginas_app  # permite _shared.ir_para_pagina(nome)
+
 pagina = st.navigation(
     {
-        "Visão Geral": [
-            st.Page(dashboard.render, title="Dashboard", icon="🏠", default=True, url_path="dashboard"),
-        ],
-        "Inteligência": [
-            st.Page(cerebro_osc.render, title="Cérebro da OSC", icon="🧠", url_path="cerebro-osc"),
-            st.Page(radar_empresas.render, title="Radar de Empresas", icon="🎯", url_path="radar-empresas"),
-            st.Page(radar_editais.render, title="Radar de Editais", icon="📋", url_path="radar-editais"),
-            st.Page(contatos.render, title="Contatos", icon="📇", url_path="contatos"),
-        ],
-        "Captação": [
-            st.Page(crm.render, title="Pipeline", icon="🤝", url_path="pipeline"),
-            st.Page(oportunidades.render, title="Oportunidades", icon="⭐", url_path="oportunidades"),
-        ],
-        "Sistema": [
-            st.Page(rotina_diaria.render, title="Rotina diária", icon="🔁", url_path="rotina-diaria"),
-            st.Page(configuracoes.render, title="Configurações", icon="⚙️", url_path="configuracoes"),
-        ],
+        "Visão Geral": [paginas_app["dashboard"]],
+        "Inteligência": [paginas_app[n] for n in ("cerebro_osc", "radar_empresas", "radar_editais", "contatos")],
+        "Captação": [paginas_app["pipeline"], paginas_app["oportunidades"]],
+        "Sistema": [paginas_app["rotina_diaria"], paginas_app["configuracoes"]],
     }
 )
 pagina.run()

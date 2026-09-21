@@ -326,3 +326,72 @@ administrador, `StartWhenAvailable`). Testado: instalar → Start-ScheduledTask 
 fica instalada por padrão porque é uma configuração persistente na máquina e consome cota de API.
 Para nuvem: o mesmo comando (`python coleta/enriquecimento_diario.py --agendada`) roda em cron/GitHub Actions/
 Streamlit Cloud + agendador externo; o SQLite local precisaria ser trocado por banco compartilhado.
+
+## 9. Rodada v7 — números separados, editais abertos, fontes configuráveis, documentos, Pipeline e mecanismos
+
+### 9.1 Cinco números, cada um com um significado (`metricas.contadores_empresas`)
+Empresas na base (todas; nada é apagado) · Prospects (`eh_prospect`) · Linha Cruzada (`linha_cruzada`) ·
+Prospects pesquisados · Prospects não pesquisados. Mostrados no Dashboard e no topo do Radar de Empresas, calculados
+na hora (hoje: 8.311 / 8.302 / 9). Só há sobreposição quando a equipe reabre a prospecção de uma empresa da Linha
+Cruzada com justificativa — o Dashboard avisa quando isso acontece. Listas de prioridade e "melhores prospects" do
+Dashboard usam só prospects.
+
+### 9.2 Editais: só é "aberto" o que dá para provar
+`editais.situacao_efetiva` (calculada na leitura, não gravada — uma data que passa depois não fica "aberta" para sempre)
+devolve ABERTO / ENCERRADO / NÃO CONFIRMADO. ABERTO exige, ao mesmo tempo: data de encerramento real e futura + link da
+fonte + nenhum sinal contrário (página que diz "encerradas", status interno "Encerrado", abertura em data futura,
+registro de teste). Sem data ou sem link → NÃO CONFIRMADO, nunca "aberto". Encerrados e registros de teste ficam numa
+aba de histórico (guardados). A página de Editais tem abas Abertos / Não confirmados / Encerrados e histórico / Buscar
+e cadastrar; o Dashboard só mostra cartões de editais ABERTOS com aderência ≥ 7,0 calculada com ≥ 3 dos 6 critérios,
+e o clique abre a ficha (`st.session_state["edital_em_foco"]` + `st.switch_page`).
+**Prazo sugerido × confirmado:** a página verificada (ou o trecho da busca) pode mencionar "inscrições até dd/mm/aaaa"
+(`links_editais.extrair_prazo`). Isso vira apenas uma SUGESTÃO com o trecho literal; a equipe confirma com um clique
+(`editais.confirmar_prazo`, origem gravada como CONFIRMADO_PELA_EQUIPE) — só então o edital passa a "Aberto". Motivo:
+o Prosas (principal agregador) entrega uma página montada por JavaScript, sem prazo legível por requisição simples.
+**Erro corrigido:** a busca automática preenchia o território de cada edital com as cidades da própria OSC, o que
+fabricava 10/10 em aderência territorial. Agora fica vazio ("Não identificado na fonte"). O edital #2 do banco real
+teve esse campo limpo (backup `iorm_radar_20260918_*_pre_v7.db` guarda o valor anterior). Também: uma data solta no
+trecho da busca deixou de ser tratada como "encerramento" (podia ser data de publicação).
+**Aderência:** cada critério mostra nota + explicação exata; sem dado → "Não identificado na fonte"; a ficha diz com
+quantos dos 6 critérios a nota foi calculada (uma nota 10 baseada em 1 critério não é "alta aderência").
+
+### 9.3 Central de Fontes de Dados (`processamento/fontes_dados.py`)
+Tabela `fontes_dados` (nome, tipo, URL, categoria, descrição, ativo, frequência, método de acesso detectado, última/
+próxima consulta, último resultado, observações, datas). Fluxo: FONTE → `avaliar_acesso` (olha a resposta real: FEED,
+API_JSON, PÁGINA_PÚBLICA ou INACESSÍVEL) → só FEED (RSS/Atom) de tipo Editais é coletado automaticamente → filtro de
+relevância por palavras inteiras (edital, chamamento, fomento…) → `editais` como NÃO CONFIRMADO, com fonte e data.
+API/HTML ficam apenas registradas (consulta manual ou integração dedicada futura): não há raspagem frágil. Parser de
+feed recusa XML com entidades. Linha de comando: `python coleta/consultar_fontes.py [--todas]`. Seis fontes reais já
+usadas pelo sistema foram cadastradas (SALIC, IBGE, Mapa das OSC, Prosas, Dados Abertos SP, BrasilAPI), cada uma com
+o método de acesso medido em 21/09/2026.
+
+### 9.4 Documentos
+Exclusão só depois de confirmação (janela "Excluir documento?"); remove registro, texto e arquivo. Botão para baixar
+o original. O caminho é guardado RELATIVO à pasta do projeto (`dados/documentos_osc/...`), então funciona igual local
+e na nuvem. **Streamlit Cloud:** o disco é temporário — arquivos enviados pela tela se perdem quando o app reinicia/
+faz novo deploy (o texto extraído, que está no banco, também segue o banco). Para persistência real na nuvem seria
+preciso um armazenamento externo (bucket) — não implementado; documentado como limitação.
+
+### 9.5 Pipeline: remover = arquivar
+`crm.remover_oportunidade` marca `removida_em`/`motivo_remocao` (a oportunidade e as interações continuam no banco; a
+empresa nunca é tocada) e há "Restaurar". A remoção passa por janela de confirmação; oportunidade removida não conta em
+valor potencial, follow-ups, atividade recente nem em "relacionamento" (Fechado — ganho removido não marca a empresa).
+
+### 9.6 Mecanismos de incentivo: provedores (`processamento/incentivos_providers.py`)
+`IncentivoProvider → RegistroIncentivo (normalizado) → ingerir() → empresas + incentivos`, com coluna nova
+`incentivos.mecanismo` (backfill idempotente: 8.516 linhas = LEI_ROUANET). Investigação de fontes em 18/09/2026:
+- **Lei Rouanet (SALIC)** — integrada e testada ao vivo (empresa, CNPJ, UF, município, valor, projeto, data).
+- **LPIE-SP** — dataset com 1 PDF de PROJETOS em execução; não lista incentivadores.
+- **Lei de Incentivo ao Esporte (federal)** — dados.gov.br responde 401 (exige token); painel oficial é interativo.
+  Se a equipe obtiver um token, dá para reavaliar.
+- **ProAC ICMS (SP)** — portais de consulta, sem arquivo/API de empresas localizado; dataset FOMENTOS sem URL de arquivo.
+- **PRONON/PRONAS-PCD** — lista projetos aprovados (DOU/Transferegov), não doadores.
+- **FIA / Fundo do Idoso** — doações declaradas à Receita por cada fundo; sem base pública por empresa.
+Onde não há fonte confiável, o provedor existe só para registrar o motivo e levanta `IntegracaoIndisponivel`
+("Integração ainda não disponível"). CLI: `python coleta/coleta_incentivos.py --listar | --mecanismo LEI_ROUANET --uf MG`.
+
+### 9.7 Streamlit Cloud e ambiente
+Sem caminhos absolutos nem chaves no código; `SERPAPI_API_KEY` vem de variável de ambiente (Secrets do Streamlit Cloud
+viram variáveis de ambiente). `.streamlit/config.toml` limita o upload a 25 MB. `IORM_RADAR_DB` (opcional) aponta o app
+para outro arquivo de banco — usado só para validar a interface numa cópia. As abas das páginas usam `key` para não
+voltar à primeira aba a cada ação. Só rodam localmente: o agendador do Windows e o `.env`.

@@ -35,10 +35,10 @@ def _secao_identidade(conexao, perfil) -> None:
         cnpj = col_a.text_input("CNPJ", value=perfil["cnpj"] or "")
         ano_fundacao = col_b.number_input("Ano de fundação", min_value=1900, max_value=2100, value=perfil["ano_fundacao"] or 2000, step=1)
         natureza_juridica = st.text_input("Natureza jurídica", value=perfil["natureza_juridica"] or "", placeholder="Não preenchido")
-        missao = st.text_area("Missão", value=perfil["missao"] or "")
-        visao = st.text_area("Visão", value=perfil["visao"] or "", placeholder="Não preenchido")
-        valores = st.text_area("Valores", value=perfil["valores"] or "", placeholder="Não preenchido")
-        descricao = st.text_area("Descrição institucional", value=perfil["descricao"] or "")
+        missao = st.text_area("Missão", value=perfil["missao"] or "", height="content")
+        visao = st.text_area("Visão", value=perfil["visao"] or "", placeholder="Não preenchido", height="content")
+        valores = st.text_area("Valores", value=perfil["valores"] or "", placeholder="Não preenchido", height="content")
+        descricao = st.text_area("Descrição institucional", value=perfil["descricao"] or "", height="content")
         salvar = st.form_submit_button("💾 Salvar identidade")
 
     if salvar:
@@ -331,6 +331,26 @@ def _tamanho_legivel(bytes_: int | None) -> str:
     return f"{bytes_ / (1024 * 1024):,.1f} MB".replace(",", "X").replace(".", ",").replace("X", ".")
 
 
+@st.dialog("Excluir documento?")
+def _confirmar_exclusao_documento(doc_id: int, titulo: str, tem_arquivo: bool) -> None:
+    """Confirmação obrigatória — nada é excluído em silêncio."""
+    st.markdown(f"**{titulo}**")
+    st.caption(
+        "Isto remove o registro, o texto extraído e o arquivo guardado. Não dá para desfazer."
+        if tem_arquivo else "Isto remove o registro e o texto extraído. Não dá para desfazer."
+    )
+    col_cancelar, col_excluir = st.columns(2)
+    if col_cancelar.button("Cancelar", key=f"cancelar_excl_doc_{doc_id}", use_container_width=True):
+        st.rerun()
+    if col_excluir.button("Excluir", type="primary", key=f"confirmar_excl_doc_{doc_id}", use_container_width=True):
+        conexao = _shared.conectar()
+        removido = documentos.excluir(conexao, doc_id)
+        conexao.close()
+        _shared.limpar_cache()
+        st.toast("Documento excluído." if removido else "Esse documento já não existia.", icon="🗑")
+        st.rerun()
+
+
 def _secao_documentos(conexao, osc_id: int) -> None:
     st.markdown("#### Documentos da OSC")
     st.caption(
@@ -387,16 +407,23 @@ def _secao_documentos(conexao, osc_id: int) -> None:
                 st.markdown(f"**Descrição:** {doc['descricao']}")
             if doc["referencia"] and doc["referencia"] != doc["caminho_arquivo"]:
                 st.markdown(f"**Referência:** {doc['referencia']}")
+            st.markdown(f"**Origem:** {'Upload na plataforma' if doc['caminho_arquivo'] else 'Cadastro manual (sem arquivo anexado)'}")
+            arquivo = documentos.ler_arquivo(conexao, doc["id"]) if doc["caminho_arquivo"] else None
             if doc["caminho_arquivo"]:
                 st.caption(f"Arquivo original preservado em: {_caminho_relativo(doc['caminho_arquivo'])}")
+                if arquivo is None:
+                    st.warning("O arquivo original não está disponível neste ambiente (por exemplo, o servidor foi reiniciado). "
+                               "O texto extraído continua guardado e pesquisável.")
             if doc["caracteres"]:
                 with st.expander("Ver texto extraído"):
                     st.text_area("Texto", value=documentos.obter_texto(conexao, doc["id"]) or "", height=260,
                                  key=f"texto_doc_{doc['id']}", label_visibility="collapsed")
-            if st.button("🗑 Excluir documento", key=f"excluir_doc_{doc['id']}"):
-                documentos.excluir(conexao, doc["id"])
-                _shared.limpar_cache()
-                st.rerun()
+            col_baixar, col_excluir = st.columns(2)
+            if arquivo is not None:
+                col_baixar.download_button("⬇ Abrir / baixar o arquivo original", data=arquivo[1], file_name=arquivo[0],
+                                           key=f"baixar_doc_{doc['id']}", use_container_width=True)
+            if col_excluir.button("🗑 Excluir…", key=f"excluir_doc_{doc['id']}", use_container_width=True):
+                _confirmar_exclusao_documento(doc["id"], titulo, bool(doc["caminho_arquivo"]))
 
     _shared.secao("Buscar no conteúdo dos documentos", "🔎")
     termo = st.text_input("Palavra ou expressão", key="busca_documentos", placeholder="Ex: territorial, crianças, Guaíra")
@@ -418,7 +445,7 @@ def render() -> None:
 
     abas = st.tabs([
         "Identidade", "Território", "Programas", "Temas", "Mecanismos", "Links", "Documentos", "Palavras-chave",
-    ])
+    ], key="aba_cerebro")
     with abas[0]:
         _secao_identidade(conexao, perfil)
     with abas[1]:

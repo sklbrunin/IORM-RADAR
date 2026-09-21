@@ -49,7 +49,9 @@ def criar_tabelas(conexao: sqlite3.Connection) -> None:
             proxima_acao_prioridade TEXT,
             programa_relacionado TEXT,
             criado_em TEXT NOT NULL,
-            atualizado_em TEXT NOT NULL
+            atualizado_em TEXT NOT NULL,
+            removida_em TEXT,
+            motivo_remocao TEXT
         );
 
         CREATE TABLE IF NOT EXISTS crm_interacoes (
@@ -75,7 +77,12 @@ def migrar_colunas_novas(conexao: sqlite3.Connection) -> None:
     colunas_atuais = {linha["name"] for linha in conexao.execute("PRAGMA table_info(crm_oportunidades)")}
     if "programa_relacionado" not in colunas_atuais:
         conexao.execute("ALTER TABLE crm_oportunidades ADD COLUMN programa_relacionado TEXT")
-        conexao.commit()
+    # Remoção do Pipeline = arquivamento (a oportunidade e suas interações continuam no banco).
+    if "removida_em" not in colunas_atuais:
+        conexao.execute("ALTER TABLE crm_oportunidades ADD COLUMN removida_em TEXT")
+    if "motivo_remocao" not in colunas_atuais:
+        conexao.execute("ALTER TABLE crm_oportunidades ADD COLUMN motivo_remocao TEXT")
+    conexao.commit()
 
 
 def criar_oportunidade(conexao: sqlite3.Connection, dados: dict) -> int:
@@ -110,10 +117,41 @@ def criar_oportunidade(conexao: sqlite3.Connection, dados: dict) -> int:
     return cursor.lastrowid
 
 
+def remover_oportunidade(conexao: sqlite3.Connection, oportunidade_id: int, motivo: str | None = None) -> bool:
+    """Tira a oportunidade do Pipeline SEM apagar nada: marca `removida_em`. A empresa, os
+    contatos, as interações e o histórico permanecem intactos, e dá para restaurar.
+    Devolve False se a oportunidade não existe ou já estava removida."""
+    cursor = conexao.execute(
+        """UPDATE crm_oportunidades SET removida_em = ?, motivo_remocao = ?, atualizado_em = ?
+           WHERE id = ? AND removida_em IS NULL""",
+        (_agora(), (motivo or "").strip() or None, _agora(), oportunidade_id),
+    )
+    conexao.commit()
+    return cursor.rowcount > 0
+
+
+def restaurar_oportunidade(conexao: sqlite3.Connection, oportunidade_id: int) -> bool:
+    cursor = conexao.execute(
+        """UPDATE crm_oportunidades SET removida_em = NULL, motivo_remocao = NULL, atualizado_em = ?
+           WHERE id = ? AND removida_em IS NOT NULL""",
+        (_agora(), oportunidade_id),
+    )
+    conexao.commit()
+    return cursor.rowcount > 0
+
+
+def listar_removidas(conexao: sqlite3.Connection) -> list[sqlite3.Row]:
+    return conexao.execute(
+        """SELECT o.*, e.razao_social AS empresa_nome
+           FROM crm_oportunidades o LEFT JOIN empresas e ON e.id = o.empresa_id
+           WHERE o.removida_em IS NOT NULL ORDER BY o.removida_em DESC"""
+    ).fetchall()
+
+
 def empresa_ja_tem_oportunidade_aberta(conexao: sqlite3.Connection, empresa_id: int) -> bool:
     marcadores = ",".join("?" for _ in ESTAGIOS_ABERTOS)
     linha = conexao.execute(
-        f"SELECT COUNT(*) FROM crm_oportunidades WHERE empresa_id = ? AND estagio IN ({marcadores})",
+        f"SELECT COUNT(*) FROM crm_oportunidades WHERE empresa_id = ? AND removida_em IS NULL AND estagio IN ({marcadores})",
         (empresa_id, *ESTAGIOS_ABERTOS),
     ).fetchone()
     return linha[0] > 0
@@ -164,6 +202,7 @@ def listar_oportunidades(conexao: sqlite3.Connection) -> list[sqlite3.Row]:
     return conexao.execute(
         """SELECT o.*, e.razao_social AS empresa_nome, e.cidade AS empresa_cidade
            FROM crm_oportunidades o LEFT JOIN empresas e ON e.id = o.empresa_id
+           WHERE o.removida_em IS NULL
            ORDER BY o.atualizado_em DESC"""
     ).fetchall()
 
@@ -181,6 +220,7 @@ def listar_interacoes_recentes(conexao: sqlite3.Connection, limite: int = 5) -> 
     return conexao.execute(
         """SELECT i.data, i.tipo, i.descricao, o.titulo AS oportunidade_titulo
            FROM crm_interacoes i JOIN crm_oportunidades o ON o.id = i.oportunidade_id
+           WHERE o.removida_em IS NULL
            ORDER BY i.data DESC, i.id DESC LIMIT ?""",
         (limite,),
     ).fetchall()

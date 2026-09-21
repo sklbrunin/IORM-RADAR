@@ -4,11 +4,12 @@ pesquisa pendente e catálogo de fontes de dados."""
 from __future__ import annotations
 
 import os
+from datetime import datetime
 
 import pandas as pd
 import streamlit as st
 
-from processamento import busca_providers, contact_providers, mecanismos
+from processamento import busca_providers, contact_providers, fontes_dados, incentivos_providers, mecanismos
 from paginas import _shared
 
 
@@ -78,7 +79,10 @@ def _aba_scores() -> None:
         Seis critérios (área, território, público, elegibilidade, valor, prazo), cada um de 0 a 10.
         A nota final é a média ponderada só dos critérios com dado disponível — nunca inventamos
         nota para um critério sem informação. Pesos: área 25%, território 20%, público 15%,
-        elegibilidade 15%, valor 10%, prazo 15%.
+        elegibilidade 15%, valor 10%, prazo 15%. Critério sem dado aparece como “Não identificado na
+        fonte” e a ficha informa com quantos dos 6 critérios a nota foi calculada. No Dashboard, “alta
+        aderência” exige nota ≥ 7,0 com pelo menos 3 critérios avaliados e edital ABERTO (prazo real futuro
+        confirmado, com link da fonte).
         """
     )
 
@@ -162,6 +166,32 @@ def _aba_mecanismos() -> None:
     c3.metric("🔵 Manuais", contagem["MANUAL"])
     c4.metric("🔴 Indisponíveis", contagem["INDISPONIVEL"])
 
+    conexao = _shared.conectar()
+    resumo = incentivos_providers.resumo_por_mecanismo(conexao)
+    conexao.close()
+    _shared.secao("Incentivos já coletados, por mecanismo", "🧮")
+    if not resumo:
+        st.info("Nenhum incentivo coletado ainda.")
+    else:
+        tabela = pd.DataFrame([{
+            "Mecanismo": incentivos_providers.ROTULOS_MECANISMO.get(r["mecanismo"], "Não classificado"),
+            "Registros": _shared.formatar_numero(r["registros"]), "Empresas": _shared.formatar_numero(r["empresas"]),
+            "Valor total": _shared.formatar_moeda(r["valor_total"]), "UFs": r["ufs"] or "—",
+        } for r in resumo])
+        st.dataframe(tabela, use_container_width=True, hide_index=True, column_config={
+            "Mecanismo": st.column_config.TextColumn(width=320), "Valor total": st.column_config.TextColumn(width=240)})
+    _shared.secao("Como cada mecanismo é (ou não) coletado", "🔌",
+                  "Provedores em processamento/incentivos_providers.py. Só há coleta onde existe fonte pública estruturada e verificada.")
+    for provider in incentivos_providers.provedores_padrao().values():
+        integrado = provider.status == incentivos_providers.STATUS_INTEGRADO
+        rotulo_estado = "🟢 Integrado" if integrado else "🔴 Integração ainda não disponível"
+        with st.expander(f"{rotulo_estado} — {provider.nome}"):
+            st.markdown(f"**Esfera:** {provider.esfera}  \n**Fonte:** {provider.fonte_nome}")
+            if provider.fonte_url:
+                st.markdown(f"[Abrir fonte]({provider.fonte_url})")
+            st.markdown(f"**O que foi verificado (18/09/2026):** {provider.investigacao}")
+
+    _shared.secao("Registro geral de mecanismos", "⚖️")
     for mecanismo in mecanismos.listar_mecanismos():
         with st.expander(f"{mecanismo['nome']} — {mecanismo['esfera']}"):
             st.markdown(_shared.badge_status_integracao(mecanismo["status"]), unsafe_allow_html=True)
@@ -188,24 +218,135 @@ def _aba_fila() -> None:
         _shared.estado_vazio("Fila vazia no momento.", "✅")
 
 
+def _fmt_dt(texto) -> str:
+    if not texto:
+        return "—"
+    try:
+        return datetime.fromisoformat(texto).astimezone().strftime("%d/%m/%Y %H:%M")
+    except ValueError:
+        return _shared.formatar_data(texto)
+
+
+def _cartao_fonte(conexao, f) -> None:
+    ativa = bool(f["ativo"])
+    titulo = f"{'🟢' if ativa else '⚪'} {f['nome']}  ·  {f['tipo']}" + ("" if ativa else "  ·  inativa")
+    with st.expander(titulo):
+        st.markdown(
+            f"**Como consultar:** {fontes_dados.ROTULOS_ACESSO.get(f['metodo_acesso'], f['metodo_acesso'])}"
+            + (f" — {f['acesso_detalhe']}" if f["acesso_detalhe"] else "")
+        )
+        st.markdown(f"**URL:** {f['url']}")
+        c1, c2, c3 = st.columns(3)
+        c1.metric("Frequência", fontes_dados.ROTULOS_FREQUENCIA.get(f["frequencia"], f["frequencia"]))
+        c2.metric("Última consulta", _fmt_dt(f["ultima_consulta"]))
+        c3.metric("Próxima consulta", _fmt_dt(f["proxima_consulta"]) if ativa else "Fonte inativa")
+        if f["ultimo_resultado"]:
+            st.caption(f"Último resultado: {f['ultimo_resultado']}")
+        st.caption(f"Cadastrada em {_shared.formatar_data(f['criado_em'])}")
+
+        with st.form(f"form_fonte_{f['id']}"):
+            col_a, col_b = st.columns(2)
+            nome = col_a.text_input("Nome", value=f["nome"])
+            tipo = col_b.selectbox("Tipo", fontes_dados.TIPOS, index=fontes_dados.TIPOS.index(f["tipo"]) if f["tipo"] in fontes_dados.TIPOS else 0)
+            url = st.text_input("URL", value=f["url"])
+            col_c, col_d = st.columns(2)
+            categoria = col_c.text_input("Categoria", value=f["categoria"] or "")
+            freq_chaves = list(fontes_dados.FREQUENCIAS)
+            frequencia = col_d.selectbox("Frequência de consulta", freq_chaves, index=freq_chaves.index(f["frequencia"]),
+                                         format_func=lambda x: fontes_dados.ROTULOS_FREQUENCIA[x])
+            descricao = st.text_area("Descrição", value=f["descricao"] or "")
+            observacoes = st.text_area("Observações", value=f["observacoes"] or "")
+            ativo = st.checkbox("Fonte ativa", value=ativa)
+            salvar = st.form_submit_button("Salvar alterações")
+        if salvar:
+            try:
+                fontes_dados.atualizar(conexao, f["id"], {"nome": nome, "tipo": tipo, "url": url, "categoria": categoria,
+                                                          "frequencia": frequencia, "descricao": descricao, "observacoes": observacoes})
+                fontes_dados.definir_ativo(conexao, f["id"], ativo)
+                _shared.limpar_cache()
+                st.rerun()
+            except ValueError as erro:
+                st.error(str(erro))
+
+        col_x, col_y = st.columns(2)
+        if col_x.button("🔎 Avaliar como consultar", key=f"avaliar_fonte_{f['id']}", use_container_width=True):
+            with st.spinner("Acessando a fonte..."):
+                fontes_dados.registrar_avaliacao(conexao, f["id"], fontes_dados.avaliar_acesso(f["url"]))
+            st.rerun()
+        if col_y.button("🔄 Consultar agora", key=f"consultar_fonte_{f['id']}", use_container_width=True):
+            with st.spinner("Consultando a fonte..."):
+                resultado = fontes_dados.coletar_fonte(conexao, f["id"])
+            _shared.limpar_cache()
+            st.session_state[f"resultado_fonte_{f['id']}"] = resultado["mensagem"]
+            st.rerun()
+        if st.session_state.get(f"resultado_fonte_{f['id']}"):
+            st.info(st.session_state[f"resultado_fonte_{f['id']}"])
+
+
 def _aba_fontes() -> None:
+    conexao = _shared.conectar()
+    _shared.secao(
+        "Central de Fontes de Dados", "🗂️",
+        "Achou um portal de editais, uma base de incentivos ou um feed útil? Cadastre aqui. O sistema avalia COMO a fonte pode ser "
+        "consultada (feed, API, página pública ou só manual) — sem inventar coleta. Fontes de Editais com feed RSS/Atom alimentam "
+        "o Radar de Editais; as demais ficam registradas para consulta manual ou integração futura.",
+    )
+    with st.expander("➕ Cadastrar nova fonte", expanded=False):
+        with st.form("form_nova_fonte", clear_on_submit=True):
+            col_a, col_b = st.columns(2)
+            nome = col_a.text_input("Nome da fonte *", placeholder="Ex: Portal de Editais XYZ")
+            tipo = col_b.selectbox("Tipo *", fontes_dados.TIPOS)
+            url = st.text_input("URL *", placeholder="https://...")
+            col_c, col_d = st.columns(2)
+            categoria = col_c.text_input("Categoria", placeholder="Ex: Cultura, Esporte, Infância")
+            frequencia = col_d.selectbox("Frequência de consulta", list(fontes_dados.FREQUENCIAS),
+                                         format_func=lambda x: fontes_dados.ROTULOS_FREQUENCIA[x])
+            descricao = st.text_area("Descrição")
+            observacoes = st.text_area("Observações")
+            ativo = st.checkbox("Fonte ativa", value=True)
+            enviar = st.form_submit_button("Cadastrar fonte")
+        if enviar:
+            try:
+                fonte_id = fontes_dados.cadastrar(conexao, {"nome": nome, "tipo": tipo, "url": url, "categoria": categoria,
+                                                            "frequencia": frequencia, "descricao": descricao,
+                                                            "observacoes": observacoes, "ativo": ativo})
+                with st.spinner("Avaliando como a fonte pode ser consultada..."):
+                    fontes_dados.registrar_avaliacao(conexao, fonte_id, fontes_dados.avaliar_acesso(url))
+                st.success("Fonte cadastrada e avaliada.")
+                _shared.limpar_cache()
+                st.rerun()
+            except ValueError as erro:
+                st.error(str(erro))
+
+    cadastradas = fontes_dados.listar(conexao)
+    if not cadastradas:
+        _shared.estado_vazio("Nenhuma fonte cadastrada pela equipe ainda.", "🗂️")
+    else:
+        ativas = sum(1 for f in cadastradas if f["ativo"])
+        st.caption(f"{len(cadastradas)} fonte(s) cadastrada(s) — {ativas} ativa(s).")
+        for f in cadastradas:
+            _cartao_fonte(conexao, f)
+    conexao.close()
+
     dados = _shared.carregar_dados_salic(str(_shared.CAMINHO_DB))
     df_fontes = dados["df_fontes"]
-    _shared.secao("Fontes de Dados já integradas", "📚")
+    _shared.secao("Fontes já integradas ao sistema", "📚", "Bases oficiais que o sistema já consulta por conta própria.")
     if df_fontes.empty:
         st.info("Nenhuma fonte registrada ainda.")
     else:
         st.dataframe(
             df_fontes.rename(columns={"nome": "Nome", "url": "URL", "tipo": "Finalidade", "coletado_em": "Última coleta"}),
             use_container_width=True, hide_index=True,
+            column_config={"Nome": st.column_config.TextColumn(width=520), "URL": st.column_config.TextColumn(width=520),
+                           "Finalidade": st.column_config.TextColumn(width=520), "Última coleta": st.column_config.TextColumn(width=220)},
         )
-
 
 def render() -> None:
     _shared.cabecalho("Configurações", "Como o sistema funciona, os scores, as fontes e a fila de pesquisa.")
 
     aba_sobre, aba_scores, aba_busca, aba_mecanismos, aba_fila, aba_fontes = st.tabs(
-        ["Sobre", "Scores", "Inteligência de Contatos", "Mecanismos de Incentivo", "Fila de Pesquisa", "Fontes de Dados"]
+        ["Sobre", "Scores", "Inteligência de Contatos", "Mecanismos de Incentivo", "Fila de Pesquisa", "Fontes de Dados"],
+        key="aba_configuracoes",
     )
     with aba_sobre:
         _aba_sobre()

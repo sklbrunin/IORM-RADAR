@@ -544,12 +544,22 @@ def render() -> None:
     df_prospects = df_mesclado[df_mesclado["eh_prospect"]]
     df_linha_cruzada = df_mesclado[df_mesclado["linha_cruzada"]]
 
+    contadores = metricas.contadores_empresas(df_mesclado)
+    k1, k2, k3, k4, k5 = st.columns(5)
+    k1.metric("Empresas na base", _shared.formatar_numero(contadores["total"]), help="Todos os registros. Nada é apagado.")
+    k2.metric("Prospects", _shared.formatar_numero(contadores["prospects"]), help="Elegíveis para prospecção nova.")
+    k3.metric("Linha Cruzada", _shared.formatar_numero(contadores["linha_cruzada"]), help="Com relacionamento comprovado com o IORM.")
+    k4.metric("Prospects pesquisados", _shared.formatar_numero(contadores["pesquisadas"]),
+              help="Prospects que já passaram por enriquecimento.")
+    k5.metric("Prospects não pesquisados", _shared.formatar_numero(contadores["nao_pesquisadas"]),
+              help="Prospects ainda sem enriquecimento — a rotina diária trabalha nessa fila.")
+
     aba_prospeccao, aba_cruzada, aba_busca, aba_historico = st.tabs([
         f"🎯 Radar de Prospecção ({len(df_prospects):,})".replace(",", "."),
         f"🎗️ Linha Cruzada — com relacionamento ({len(df_linha_cruzada)})",
         "🔎 Buscar qualquer empresa",
-        "📜 Histórico de Incentivos (Lei Rouanet)",
-    ])
+        "📜 Histórico de Incentivos",
+    ], key="aba_radar_empresas")
 
     with aba_prospeccao:
         df_filtrado = _renderizar_filtros(df_prospects)
@@ -614,4 +624,4 @@ def render() -> None:
             )
             st.markdown("#### Valor por empresa")
             por_empresa = df_danca.groupby("empresa")["valor"].sum().sort_values(ascending=False)
-            _shared.grafico_barras(por_empresa, "Valor (R$)")
+            _shared.grafico_barras(por_empresa, "Valor (R$)", moeda=True)

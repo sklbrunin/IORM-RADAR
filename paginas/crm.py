@@ -87,6 +87,59 @@ def _formulario_nova_oportunidade(conexao, df_empresas: pd.DataFrame, programas_
                 st.rerun()
 
 
+@st.dialog("Remover oportunidade do Pipeline?")
+def _confirmar_remocao(op: dict) -> None:
+    """Confirmação obrigatória: nada sai do Pipeline sem o usuário clicar em Remover."""
+    st.markdown(f"**#{op['id']} — {op['titulo']}**")
+    st.markdown(f"Empresa: {op.get('empresa_nome') or 'Sem empresa vinculada'} · Estágio: {op['estagio']}")
+    st.caption(
+        "A oportunidade sai do Pipeline. A empresa, os contatos e o histórico de interações continuam guardados, "
+        "e você pode restaurá-la depois em “Removidas”."
+    )
+    motivo = st.text_input("Motivo (opcional)", key=f"motivo_remocao_{op['id']}")
+    col_cancelar, col_remover = st.columns(2)
+    if col_cancelar.button("Cancelar", key=f"cancelar_remocao_{op['id']}", use_container_width=True):
+        st.rerun()
+    if col_remover.button("Remover", type="primary", key=f"confirmar_remocao_{op['id']}", use_container_width=True):
+        conexao = _shared.conectar()
+        crm.remover_oportunidade(conexao, op["id"], motivo)
+        conexao.close()
+        _shared.limpar_cache()
+        st.toast(f"Oportunidade #{op['id']} removida do Pipeline.", icon="🗑")
+        st.rerun()
+
+
+def _secao_remover(oportunidades: list[dict]) -> None:
+    """Remoção logo abaixo do quadro: escolhe a oportunidade e abre a janela de confirmação."""
+    if not oportunidades:
+        return
+    opcoes = {f"#{op['id']} — {op['titulo']} ({op['estagio']})": op for op in oportunidades}
+    col_sel, col_btn = st.columns([4, 1])
+    escolha = col_sel.selectbox("Remover uma oportunidade do Pipeline", list(opcoes.keys()), index=None,
+                                placeholder="Escolha a oportunidade a remover", key="remover_escolha")
+    col_btn.write("")
+    if col_btn.button("🗑 Remover…", key="remover_abrir", disabled=escolha is None, use_container_width=True):
+        _confirmar_remocao(opcoes[escolha])
+
+
+def _secao_removidas(conexao) -> None:
+    removidas = crm.listar_removidas(conexao)
+    if not removidas:
+        return
+    with st.expander(f"🗂 Removidas do Pipeline ({len(removidas)}) — restaurar"):
+        for r in removidas:
+            col_txt, col_btn = st.columns([4, 1])
+            motivo = f" · motivo: {r['motivo_remocao']}" if r["motivo_remocao"] else ""
+            col_txt.markdown(
+                f"**#{r['id']} — {r['titulo']}** · {r['empresa_nome'] or 'Sem empresa'} · {r['estagio']} · "
+                f"removida em {_shared.formatar_data(r['removida_em'])}{motivo}"
+            )
+            if col_btn.button("Restaurar", key=f"restaurar_{r['id']}", use_container_width=True):
+                crm.restaurar_oportunidade(conexao, r["id"])
+                _shared.limpar_cache()
+                st.rerun()
+
+
 def _kanban(conexao, oportunidades: list[dict]) -> None:
     _shared.secao(
         "Pipeline de Captação", "🔀",
@@ -149,6 +202,9 @@ def _secao_detalhe(conexao, oportunidades: list[dict]) -> None:
     st.markdown(f"**Programa/projeto do IORM relacionado:** {op.get('programa_relacionado') or 'Não disponível'}")
     st.markdown(f"**Mecanismo:** {op['mecanismo'] or 'Não disponível'}")
     st.markdown(f"**Responsável:** {op['responsavel'] or 'Não disponível'}")
+
+    if st.button("🗑 Remover esta oportunidade do Pipeline…", key=f"remover_detalhe_{op_id}"):
+        _confirmar_remocao(op)
 
     novo_estagio = st.selectbox("Mover para estágio", crm.ESTAGIOS, index=crm.ESTAGIOS.index(op["estagio"]), key=f"estagio_{op_id}")
     if novo_estagio != op["estagio"] and st.button("Mover estágio", key=f"mover_{op_id}"):
@@ -243,6 +299,7 @@ def render() -> None:
 
     if oportunidades:
         _kanban(conexao, oportunidades)
+        _secao_remover(oportunidades)
     else:
         _shared.estado_vazio(
             "Nenhuma oportunidade no Pipeline ainda. Crie uma acima ou use 'Adicionar ao CRM' na ficha "
@@ -250,5 +307,6 @@ def render() -> None:
         )
 
     _secao_detalhe(conexao, oportunidades)
+    _secao_removidas(conexao)
 
     conexao.close()

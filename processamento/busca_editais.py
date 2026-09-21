@@ -5,10 +5,9 @@ apontado para fontes de financiamento em vez de canais de empresa.
 Princípios (iguais aos do resto do sistema):
   - Nunca inventa um edital: cada candidato vem literalmente de um
     resultado de busca real (título/URL/trecho), nunca de texto gerado.
-  - Nunca afirma "aberto" sem confirmação: todo candidato nasce com
-    situacao_inscricao NAO_CONFIRMADO (ver editais.classificar_situacao_inscricao)
-    a menos que uma data real tenha sido encontrada no próprio texto do
-    resultado.
+  - Nunca afirma "aberto" sem confirmação: todo candidato nasce NAO_CONFIRMADO.
+    Se o trecho traz um prazo explícito ("inscrições até dd/mm/aaaa"), ele vira uma
+    SUGESTÃO (com o trecho literal) para a equipe confirmar.
   - Prioriza fontes públicas/oficiais: as consultas usam `site:` para
     focar em governo (.gov.br) e nos dois catálogos de editais para OSCs
     já pesquisados nesta base (Mapa das OSC/IPEA e Prosas — ver
@@ -105,8 +104,11 @@ def buscar_editais(perfil_osc: dict, provider: busca_providers.SearchProvider | 
             urls_vistas.add(url)
 
             texto = f"{resultado.titulo}. {resultado.trecho or ''}"
-            data_encontrada = _extrair_data(texto)
-            situacao = editais.classificar_situacao_inscricao(None, data_encontrada)
+            # Data solta no trecho NÃO é prazo (pode ser data de publicação). Só uma data que vem logo
+            # depois de "inscrições até"/"prazo"/"encerra" é guardada — como SUGESTÃO com o trecho
+            # literal; o edital só vira "aberto" quando a equipe confirma (editais.confirmar_prazo).
+            prazo = links_editais.extrair_prazo(texto)
+            situacao = "NAO_CONFIRMADO"
 
             generico, motivo_generico = links_editais.eh_portal_generico(url)
             candidatos.append(
@@ -121,8 +123,12 @@ def buscar_editais(perfil_osc: dict, provider: busca_providers.SearchProvider | 
                     "link_generico_provavel": generico,
                     "link_generico_motivo": motivo_generico if generico else None,
                     "fonte": f"Busca automática ({provider.nome}) — {url.split('/')[2] if '://' in url else url}",
-                    "data_encerramento": data_encontrada,
-                    "territorio": ", ".join(perfil_osc.get("cidades", [])[:4]) or None,
+                    "data_encerramento": None,
+                    "prazo_sugerido": prazo[0] if prazo else None,
+                    "prazo_sugerido_trecho": prazo[1] if prazo else None,
+                    # A busca não sabe o território do edital: deixar vazio ("Não identificado na fonte"). Copiar as
+                    # cidades da OSC aqui fabricaria uma compatibilidade territorial que ninguém verificou.
+                    "territorio": None,
                     "publico": None,
                     "requisitos": None,
                     "valor_texto": None,

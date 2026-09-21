@@ -140,6 +140,50 @@ def extrair_link_inscricao(html: str, url_base: str) -> str | None:
     return None
 
 
+_MESES = {"janeiro": 1, "fevereiro": 2, "marco": 3, "abril": 4, "maio": 5, "junho": 6, "julho": 7, "agosto": 8,
+          "setembro": 9, "outubro": 10, "novembro": 11, "dezembro": 12}
+_GATILHO_PRAZO = re.compile(
+    r"(inscri(c|ç)(o|õ)es|inscri(c|ç)(a|ã)o|prazo|encerr\w+|data[- ]limite|at(e|é) o dia|at(e|é))\b", re.I)
+_DATA_NUMERICA = re.compile(r"\b(\d{1,2})/(\d{1,2})/(\d{4})\b")
+_DATA_EXTENSO = re.compile(r"\b(\d{1,2})\s+de\s+([a-zçã]+)\s+de\s+(\d{4})\b", re.I)
+
+
+def _datas_no_texto(trecho: str) -> list:
+    achadas = []
+    for d, m, a in _DATA_NUMERICA.findall(trecho):
+        achadas.append((int(a), int(m), int(d)))
+    for d, mes, a in _DATA_EXTENSO.findall(trecho):
+        numero = _MESES.get(_sem_acento(mes))
+        if numero:
+            achadas.append((int(a), numero, int(d)))
+    validas = []
+    for a, m, d in achadas:
+        try:
+            validas.append(datetime(a, m, d).date())
+        except ValueError:
+            continue
+    return validas
+
+
+def extrair_prazo(texto: str) -> tuple[str, str] | None:
+    """Procura no texto da página uma data logo depois de expressões como "inscrições até", "prazo",
+    "encerra em". Devolve (data ISO, trecho literal) ou None. É só uma SUGESTÃO com a evidência
+    literal: quem confirma é a equipe — o sistema nunca marca edital como aberto por conta própria."""
+    texto = " ".join((texto or "").split())
+    fortes, fracos = [], []
+    for gatilho in _GATILHO_PRAZO.finditer(texto):
+        janela = texto[gatilho.start(): gatilho.end() + 90]
+        janela = re.split(r"\.\s", janela, maxsplit=1)[0]  # não passa do fim da frase
+        datas = _datas_no_texto(janela)
+        if not datas:
+            continue
+        trecho = texto[max(0, gatilho.start() - 20): gatilho.start() + len(janela) + 1].strip()
+        achado = (max(datas).isoformat(), trecho)  # "de 25/03 a 28/03/2026": vale a data final
+        (fracos if _sem_acento(gatilho.group(1)).startswith("ate") else fortes).append(achado)
+    # gatilhos sobre inscrição/prazo/encerramento valem mais que um "até" solto; vale a primeira ocorrência
+    escolhido = (fortes or fracos or [None])[0]
+    return escolhido
+
 def _palavras_significativas(titulo: str) -> list[str]:
     ignorar = {"edital", "chamada", "publica", "publico", "para", "com", "dos", "das", "de", "do", "da", "em",
                "no", "na", "por", "ao", "aos", "seu", "sua", "que", "uma", "num"}
@@ -175,6 +219,7 @@ def verificar_link(url: str | None, titulo: str,
     resultado = {
         "status": STATUS_NAO_VERIFICADO, "http_status": None, "url_final": None, "correspondencia": None,
         "motivo": "", "url_inscricao_encontrada": None, "indicio_encerrado": False, "verificado_em": _agora(),
+        "prazo_sugerido": None, "prazo_sugerido_trecho": None,
     }
     if not url:
         resultado["status"], resultado["motivo"] = STATUS_NAO_RESPONDE, "Edital sem URL cadastrada."
@@ -200,6 +245,8 @@ def verificar_link(url: str | None, titulo: str,
     resultado["correspondencia"] = round(correspondencia_titulo(titulo, extrator.titulo, texto), 2)
     resultado["indicio_encerrado"] = bool(_FRASES_ENCERRADO.search(texto))
     resultado["url_inscricao_encontrada"] = extrair_link_inscricao(html, url_final or url)
+    prazo = extrair_prazo(texto) if resultado["correspondencia"] >= 0.5 else None  # só de página que é mesmo do edital
+    resultado["prazo_sugerido"], resultado["prazo_sugerido_trecho"] = prazo if prazo else (None, None)
 
     if generico:
         resultado["status"], resultado["motivo"] = STATUS_GENERICO, motivo_generico

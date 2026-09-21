@@ -125,6 +125,9 @@ _COLUNAS_MIGRACAO = {
     "inscricao_verificada": "INTEGER NOT NULL DEFAULT 0",
     "inscricao_origem": "TEXT",
     "inscricao_motivo": "TEXT",
+    "prazo_sugerido": "TEXT",
+    "prazo_sugerido_trecho": "TEXT",
+    "prazo_origem": "TEXT",
 }
 
 
@@ -157,12 +160,32 @@ def registrar_verificacao(conexao: sqlite3.Connection, edital_id: int, verificac
     if inscricao is not None:
         campos["inscricao_verificada"] = int(inscricao["ok"])
         campos["inscricao_motivo"] = inscricao["motivo"]
+    if verificacao.get("prazo_sugerido"):  # a página verificada vale mais que o trecho da busca; sem data nova, mantém
+        campos["prazo_sugerido"] = verificacao["prazo_sugerido"]
+        campos["prazo_sugerido_trecho"] = verificacao.get("prazo_sugerido_trecho")
     if verificacao.get("indicio_encerrado"):
         campos["situacao_inscricao"] = "ENCERRADO"
     campos["atualizado_em"] = _agora()
     atribuicoes = ", ".join(f"{k} = ?" for k in campos)
     conexao.execute(f"UPDATE editais SET {atribuicoes} WHERE id = ?", (*campos.values(), edital_id))
     conexao.commit()
+
+
+def confirmar_prazo(conexao: sqlite3.Connection, edital_id: int, data_iso: str | None = None) -> str:
+    """A EQUIPE confirma o prazo (o sugerido pela página, ou uma data digitada). Só depois disso o
+    edital pode ser considerado aberto. Guarda a origem para rastreio. Devolve a data gravada."""
+    linha = conexao.execute("SELECT prazo_sugerido FROM editais WHERE id = ?", (edital_id,)).fetchone()
+    if linha is None:
+        raise ValueError(f"Edital {edital_id} não existe.")
+    data_iso = data_iso or linha["prazo_sugerido"]
+    if not data_iso or _data(data_iso) is None:
+        raise ValueError("Não há uma data válida para confirmar.")
+    conexao.execute(
+        "UPDATE editais SET data_encerramento = ?, prazo_origem = ?, atualizado_em = ? WHERE id = ?",
+        (str(_data(data_iso)), "CONFIRMADO_PELA_EQUIPE", _agora(), edital_id),
+    )
+    conexao.commit()
+    return str(_data(data_iso))
 
 
 def verificar_e_registrar(conexao: sqlite3.Connection, edital_id: int, buscador=None) -> dict:
@@ -200,6 +223,101 @@ def classificar_situacao_inscricao(data_publicacao: str | None, data_encerrament
     return "ABERTO"
 
 
+# Situação EFETIVA (a que a interface usa): só três valores, calculada na hora da leitura.
+# A coluna `situacao_inscricao` guarda o que se sabia quando o edital foi cadastrado/verificado;
+# uma data que passou depois não pode continuar "aberta" só porque foi gravada assim.
+SITUACAO_ABERTO = "ABERTO"
+SITUACAO_ENCERRADO = "ENCERRADO"
+SITUACAO_NAO_CONFIRMADO = "NAO_CONFIRMADO"
+ROTULOS_SITUACAO_EFETIVA = {
+    SITUACAO_ABERTO: "Aberto",
+    SITUACAO_ENCERRADO: "Encerrado",
+    SITUACAO_NAO_CONFIRMADO: "Não confirmado",
+}
+ORIGEM_TESTE = "TESTE_NAO_REAL"
+
+
+def _valor(edital, chave, padrao=None):
+    try:
+        valor = edital[chave]
+    except (KeyError, IndexError):
+        return padrao
+    return padrao if valor is None else valor
+
+
+def _data(texto) -> date | None:
+    try:
+        return datetime.fromisoformat(str(texto)[:10]).date()
+    except (TypeError, ValueError):
+        return None
+
+
+def situacao_efetiva(edital, hoje: date | None = None) -> tuple[str, str]:
+    """Devolve (situação, motivo) — situação ∈ ABERTO / ENCERRADO / NAO_CONFIRMADO.
+
+    ABERTO exige, ao mesmo tempo: uma data de encerramento real que ainda não passou, um link
+    (URL) da fonte para conferir, e nenhum sinal contrário (página que diz que encerrou, status
+    interno "Encerrado", inscrições que ainda não abriram, registro de teste).
+    Edital sem data, ou sem link, nunca é tratado como aberto."""
+    hoje = hoje or datetime.now(timezone.utc).date()
+    if _valor(edital, "origem_descoberta") == ORIGEM_TESTE:
+        return SITUACAO_NAO_CONFIRMADO, "Registro de teste (não é um edital real)."
+
+    encerramento = _data(_valor(edital, "data_encerramento"))
+    if encerramento is not None and encerramento < hoje:
+        return SITUACAO_ENCERRADO, f"Data de encerramento ({encerramento.strftime('%d/%m/%Y')}) já passou."
+    if _valor(edital, "situacao_inscricao") == "ENCERRADO":
+        return SITUACAO_ENCERRADO, "A página oficial indica que as inscrições foram encerradas."
+    if _valor(edital, "status") == "ENCERRADO":
+        return SITUACAO_ENCERRADO, "Marcado como encerrado pela equipe."
+
+    if encerramento is None:
+        return SITUACAO_NAO_CONFIRMADO, "A fonte não informa data de encerramento — não dá para afirmar que está aberto."
+    abertura = _data(_valor(edital, "data_abertura")) or _data(_valor(edital, "data_publicacao"))
+    if abertura is not None and abertura > hoje:
+        return SITUACAO_NAO_CONFIRMADO, f"Inscrições só abrem em {abertura.strftime('%d/%m/%Y')}."
+    if not _valor(edital, "url"):
+        return SITUACAO_NAO_CONFIRMADO, "Tem prazo futuro, mas não há link da fonte para conferir."
+    return SITUACAO_ABERTO, f"Prazo até {encerramento.strftime('%d/%m/%Y')} (informado pela fonte)."
+
+
+def agrupar_por_situacao(lista, hoje: date | None = None) -> dict[str, list]:
+    """{'abertos', 'nao_confirmados', 'encerrados', 'testes'} — registros de teste ficam à parte
+    e nunca aparecem como oportunidade."""
+    grupos = {"abertos": [], "nao_confirmados": [], "encerrados": [], "testes": []}
+    for edital in lista:
+        if _valor(edital, "origem_descoberta") == ORIGEM_TESTE:
+            grupos["testes"].append(edital)
+            continue
+        situacao, _ = situacao_efetiva(edital, hoje)
+        chave = {SITUACAO_ABERTO: "abertos", SITUACAO_ENCERRADO: "encerrados"}.get(situacao, "nao_confirmados")
+        grupos[chave].append(edital)
+    return grupos
+
+
+def contar_por_situacao(lista, hoje: date | None = None) -> dict[str, int]:
+    return {chave: len(itens) for chave, itens in agrupar_por_situacao(lista, hoje).items()}
+
+
+def abertos_com_aderencia(lista, perfil_osc: dict, nota_minima: float = 0.0, hoje: date | None = None,
+                          criterios_minimos: int = 0) -> list[dict]:
+    """Editais ABERTOS com a aderência calculada contra o perfil atual da OSC, do mais para o menos
+    aderente. Sem nota calculável (faltam dados) o edital fica de fora quando `nota_minima` > 0.
+    `criterios_minimos`: exige que a nota tenha sido calculada com pelo menos esse número de critérios
+    (uma nota 10 baseada em 1 só critério não é "alta aderência" confiável)."""
+    itens = []
+    for edital in agrupar_por_situacao(lista, hoje)["abertos"]:
+        dados = dict(edital)
+        resultado = calcular_aderencia(dados, perfil_osc, hoje)
+        nota = resultado["nota_final"]
+        if nota_minima and (nota is None or nota < nota_minima):
+            continue
+        if resultado["criterios_avaliados"] < criterios_minimos:
+            continue
+        itens.append({**dados, "nota_final": nota, "aderencia": resultado})
+    return sorted(itens, key=lambda e: (e["nota_final"] is not None, e["nota_final"] or 0), reverse=True)
+
+
 def criar_edital(conexao: sqlite3.Connection, dados: dict) -> int:
     agora = _agora()
     situacao = dados.get("situacao_inscricao") or classificar_situacao_inscricao(
@@ -220,6 +338,8 @@ def criar_edital(conexao: sqlite3.Connection, dados: dict) -> int:
         "territorio": dados.get("territorio"),
         "publico": dados.get("publico"),
         "area_tematica": dados.get("area_tematica"),
+        "prazo_sugerido": dados.get("prazo_sugerido"),
+        "prazo_sugerido_trecho": dados.get("prazo_sugerido_trecho"),
         "requisitos": dados.get("requisitos"),
         "tipo": dados.get("tipo", "OUTRO"),
         "status": dados.get("status", "ENCONTRADO"),
@@ -405,6 +525,15 @@ def calcular_aderencia(edital: dict, perfil_osc: dict, hoje: date | None = None)
         "nota_final": nota_final,
         "motivos_recomendacao": motivos,
         "pontos_atencao": pontos_atencao + faltando,
+        # a nota final usa só os critérios que a fonte permite avaliar; este número diz quantos foram
+        "criterios_avaliados": len(disponiveis),
+        "criterios_total": len(criterios),
+        # todos os critérios, na mesma ordem, com nota (None = "Não identificado na fonte") e a
+        # explicação exata usada no cálculo — nada aqui é texto inventado para justificar a nota
+        "detalhes": [
+            {"criterio": chave, "nota": nota, "motivo": motivo, "peso": PESOS_CRITERIOS[chave]}
+            for chave, (nota, motivo) in criterios.items()
+        ],
     }
 
 

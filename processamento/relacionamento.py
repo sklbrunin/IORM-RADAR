@@ -88,7 +88,7 @@ def sincronizar(conexao: sqlite3.Connection) -> dict:
             """SELECT DISTINCT o.empresa_id FROM crm_oportunidades o
                JOIN empresas e ON e.id = o.empresa_id
                WHERE o.estagio = 'Fechado — ganho' AND o.empresa_id IS NOT NULL
-                 AND e.relacionamento_iorm = 0"""
+                 AND o.removida_em IS NULL AND e.relacionamento_iorm = 0"""
         ).fetchall()
     except sqlite3.OperationalError:  # tabela do CRM ainda não existe (ex: banco de teste)
         ganhas = []

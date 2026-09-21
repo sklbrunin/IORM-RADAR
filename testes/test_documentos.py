@@ -192,3 +192,61 @@ def test_migracao_preserva_documento_antigo_sem_arquivo(conexao, osc_id):
     documentos.migrar(conexao)  # idempotente
     docs = documentos.listar(conexao, osc_id)
     assert docs[0]["nome"] == "Estatuto antigo" and docs[0]["caminho_arquivo"] is None
+
+# ------------------------------------------------------------------ v7: exclusão, leitura do original, caminho relativo
+def test_excluir_remove_registro_arquivo_e_busca_sem_deixar_referencia(conexao, osc_id, tmp_path):
+    r = documentos.adicionar(conexao, osc_id, "estatuto.txt", "Texto único zebracadabra".encode(), tmp_path, "Estatuto")
+    caminho = documentos.resolver_caminho(documentos.listar(conexao, osc_id)[0]["caminho_arquivo"])
+    assert caminho.exists() and documentos.buscar(conexao, osc_id, "zebracadabra")
+    assert documentos.excluir(conexao, r["id"]) is True
+    assert not caminho.exists()  # arquivo original some do disco
+    assert documentos.listar(conexao, osc_id) == []
+    assert documentos.buscar(conexao, osc_id, "zebracadabra") == []  # o conteúdo deixa de ser encontrado
+    assert conexao.execute("SELECT COUNT(*) FROM osc_documentos").fetchone()[0] == 0
+
+
+def test_excluir_documento_inexistente_nao_quebra(conexao, osc_id):
+    assert documentos.excluir(conexao, 9999) is False
+    assert documentos.ler_arquivo(conexao, 9999) is None
+    assert documentos.obter_texto(conexao, 9999) is None
+
+
+def test_excluir_um_nao_afeta_os_outros(conexao, osc_id, tmp_path):
+    a = documentos.adicionar(conexao, osc_id, "a.txt", b"conteudo A", tmp_path)
+    b = documentos.adicionar(conexao, osc_id, "b.txt", b"conteudo B", tmp_path)
+    documentos.excluir(conexao, a["id"])
+    restantes = documentos.listar(conexao, osc_id)
+    assert [d["id"] for d in restantes] == [b["id"]]
+    assert documentos.ler_arquivo(conexao, b["id"]) == ("b.txt", b"conteudo B")
+
+
+def test_ler_arquivo_devolve_os_bytes_originais_e_avisa_quando_sumiu(conexao, osc_id, tmp_path):
+    conteudo = _docx_com_texto(["Plano de trabalho 2026"])
+    r = documentos.adicionar(conexao, osc_id, "Plano.docx", conteudo, tmp_path, "Plano de trabalho")
+    assert documentos.ler_arquivo(conexao, r["id"]) == ("Plano.docx", conteudo)  # idêntico ao enviado
+    documentos.resolver_caminho(documentos.listar(conexao, osc_id)[0]["caminho_arquivo"]).unlink()
+    assert documentos.ler_arquivo(conexao, r["id"]) is None  # ambiente novo: sem arquivo, mas o texto continua
+    assert documentos.buscar(conexao, osc_id, "Plano de trabalho")
+
+
+def test_caminho_dentro_do_projeto_e_guardado_relativo(conexao, osc_id):
+    pasta = documentos.RAIZ_PROJETO / "dados" / "_teste_documentos_tmp"
+    try:
+        documentos.adicionar(conexao, osc_id, "x.txt", b"abc", pasta)
+        guardado = documentos.listar(conexao, osc_id)[0]["caminho_arquivo"]
+        assert not guardado.startswith(("/", "C:", "c:")) and guardado.startswith("dados/_teste_documentos_tmp/")
+        assert documentos.resolver_caminho(guardado).exists()
+    finally:
+        import shutil
+        shutil.rmtree(pasta, ignore_errors=True)
+
+
+def test_todos_os_formatos_pedidos_sao_processados(conexao, osc_id, tmp_path):
+    arquivos = {
+        "a.pdf": _pdf_com_texto("Texto do PDF"), "b.docx": _docx_com_texto(["Texto do DOCX"]), "c.txt": b"Texto do TXT",
+        "d.xlsx": _xlsx_com_linhas([["Texto do XLSX", 1]]),
+    }
+    for nome, conteudo in arquivos.items():
+        assert documentos.adicionar(conexao, osc_id, nome, conteudo, tmp_path)["status"] == documentos.STATUS_PROCESSADO
+    for termo in ("PDF", "DOCX", "TXT", "XLSX"):
+        assert documentos.buscar(conexao, osc_id, f"Texto do {termo}")[0]["documento"].lower().endswith(termo.lower())

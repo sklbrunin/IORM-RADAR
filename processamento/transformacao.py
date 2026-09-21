@@ -38,6 +38,7 @@ def transformar_registro(bruto: dict, fonte_nome: str) -> dict | None:
 
     incentivo = {
         "fonte": fonte_nome,
+        "mecanismo": "LEI_ROUANET",
         "tipo_incentivo": "Lei Rouanet (incentivo federal à cultura)",
         "projeto": None,  # este endpoint só traz total agregado, não por projeto (ver README)
         "ano": None,  # mesmo motivo acima
@@ -76,6 +77,7 @@ def transformar_doacao(bruto: dict, url_doacoes_empresa: str, fonte_nome: str) -
 
     return {
         "fonte": fonte_nome,
+        "mecanismo": "LEI_ROUANET",
         "tipo_incentivo": "Lei Rouanet (incentivo federal à cultura) - detalhado por projeto",
         "projeto": (bruto.get("nome_projeto") or "").strip() or None,
         "ano": ano,

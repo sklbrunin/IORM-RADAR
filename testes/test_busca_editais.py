@@ -82,13 +82,22 @@ def test_buscar_editais_deduplica_por_url():
     assert len(resultado["candidatos"]) == 1
 
 
-def test_buscar_editais_com_data_no_texto_classifica_situacao():
+def test_prazo_no_texto_vira_sugestao_com_trecho_e_nunca_abre_o_edital_sozinho():
     provider = ProviderFalso(
         [busca_providers.ResultadoBusca(titulo="Edital Y", url="https://gov.br/y", trecho="Inscrições até 31/12/2099.")]
     )
-    resultado = busca_editais.buscar_editais(PERFIL, provider=provider)
-    assert resultado["candidatos"][0]["situacao_inscricao"] == "ABERTO"
+    candidato = busca_editais.buscar_editais(PERFIL, provider=provider)["candidatos"][0]
+    assert candidato["situacao_inscricao"] == "NAO_CONFIRMADO"
+    assert candidato["data_encerramento"] is None  # só a equipe confirma o prazo
+    assert candidato["prazo_sugerido"] == "2099-12-31" and "31/12/2099" in candidato["prazo_sugerido_trecho"]
 
+
+def test_data_solta_no_trecho_nao_e_tratada_como_prazo():
+    provider = ProviderFalso(
+        [busca_providers.ResultadoBusca(titulo="Edital Z", url="https://gov.br/z", trecho="Publicado em 10/01/2026 pela secretaria.")]
+    )
+    candidato = busca_editais.buscar_editais(PERFIL, provider=provider)["candidatos"][0]
+    assert candidato["prazo_sugerido"] is None and candidato["data_encerramento"] is None
 
 def test_buscar_editais_registra_erro_do_provider():
     class ProviderComErro(busca_providers.SearchProvider):
@@ -105,3 +114,12 @@ def test_buscar_editais_registra_erro_do_provider():
     assert resultado["status"] == "OK"
     assert len(resultado["erros"]) == 3
     assert resultado["candidatos"] == []
+
+def test_territorio_do_candidato_nao_e_copiado_do_perfil_da_osc():
+    """Regressão: a busca preenchia o território do edital com as cidades da própria OSC, fabricando 10/10 de aderência territorial."""
+    provider = ProviderFalso([busca_providers.ResultadoBusca(titulo="Edital W", url="https://gov.br/w", trecho="Apoio a projetos.")])
+    candidato = busca_editais.buscar_editais(PERFIL, provider=provider)["candidatos"][0]
+    assert candidato["territorio"] is None
+    from processamento import editais
+    r = editais.calcular_aderencia(candidato, {"temas": ["cultura"], "palavras_chave": [], "cidades": ["Guaíra"], "estados": ["SP"], "programas": []})
+    assert r["nota_territorio"] is None  # "Não identificado na fonte", não 10/10

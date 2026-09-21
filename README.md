@@ -43,13 +43,26 @@ Fontes de dados integradas hoje:
    empresa. Ver `.env.example`.
 3. **Radar de Editais** — cadastro estruturado de editais/chamadas/
    prêmios/patrocínios com um motor de aderência (0–10) explicável
-   contra o perfil do IORM. **Sem fonte automática conectada ainda** —
-   ver "Limitações conhecidas" abaixo.
+   contra o perfil do IORM. A busca automática usa a SerpApi (com chave) e as
+   fontes cadastradas em Configurações → Fontes de Dados; só editais com prazo
+   confirmado aparecem como "abertos" — ver `docs/decisoes.md`, item 9.2.
 
 Outras fontes (Lei de Incentivo ao Esporte, FIA municipal, Receita
 Federal/BrasilAPI para CNAE/situação cadastral) estão cadastradas como
 mecanismos "ainda não disponíveis" na aba Mecanismos de Incentivo de
 Configurações — ver `processamento/mecanismos.py`.
+
+## Novidades da v7
+
+- **Dashboard** separa cinco números (empresas na base, prospects, Linha Cruzada, pesquisados, não pesquisados) e traz
+  cartões clicáveis de **editais abertos com alta aderência** que abrem a ficha completa.
+- **Radar de Editais** mostra por padrão só os editais **abertos**; "Não confirmados" e "Encerrados e histórico" ficam em
+  abas próprias. Prazo sugerido pela página é confirmado pela equipe com um clique.
+- **Configurações → Fontes de Dados:** cadastre portais/feeds/bases; o sistema avalia como cada um pode ser consultado.
+  `python coleta/consultar_fontes.py` consulta as fontes vencidas.
+- **Documentos:** excluir com confirmação e baixar o arquivo original. **Pipeline:** remover (arquivar) com confirmação e restaurar.
+- **Incentivos por mecanismo:** `python coleta/coleta_incentivos.py --listar`. Só a Lei Rouanet tem fonte pública
+  estruturada; os demais estão documentados como "integração ainda não disponível" (ver `docs/decisoes.md`, item 9.6).
 
 ## Novidades da v6
 
@@ -169,8 +182,10 @@ streamlit run app.py --server.port 8502
 pytest
 ```
 
-147 testes cobrindo validação de dados, banco, filtros, scores, motor de
-aderência de editais, provedores de busca, CRM/Pipeline e formatação.
+Mais de 400 testes cobrindo validação de dados, banco, filtros, scores, motor de
+aderência e situação de editais, fontes de dados, provedores de contato e de
+incentivo, documentos, CRM/Pipeline, Linha Cruzada, formatação brasileira e
+renderização de todas as páginas (teste de fumaça com o Streamlit AppTest).
 
 ---
 

@@ -69,3 +69,25 @@ def formatar_cnpj(cnpj) -> str:
     if len(cnpj) != 14 or not cnpj.isdigit():
         return "Não disponível"
     return f"{cnpj[0:2]}.{cnpj[2:5]}.{cnpj[5:8]}/{cnpj[8:12]}-{cnpj[12:14]}"
+
+def formatar_nota(nota, casas: int = 1) -> str:
+    """Nota 0–10 no padrão brasileiro: 8,7/10. Sem nota calculável mostra o motivo, não um zero."""
+    if nota is None:
+        return "Não calculável"
+    try:
+        valor = float(nota)
+    except (TypeError, ValueError):
+        return "Não calculável"
+    if valor != valor:
+        return "Não calculável"
+    return f"{valor:.{casas}f}".replace(".", ",") + "/10"
+
+
+def resumir_texto(texto, limite: int = 260) -> str:
+    """Trecho para cartões: corta na última palavra inteira antes do limite e AVISA que é um trecho
+    (o texto completo fica na ficha). Textos curtos voltam inteiros."""
+    texto = " ".join(str(texto or "").split())
+    if len(texto) <= limite:
+        return texto
+    corte = texto[:limite].rsplit(" ", 1)[0].rstrip(",;:—-")
+    return f"{corte} (trecho — texto completo na ficha)"

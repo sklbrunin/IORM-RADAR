@@ -52,7 +52,8 @@ def criar_tabelas(conexao: sqlite3.Connection) -> None:
             cidade TEXT,
             url_fonte TEXT NOT NULL UNIQUE,
             coletado_em TEXT NOT NULL,
-            nivel_confianca TEXT NOT NULL
+            nivel_confianca TEXT NOT NULL,
+            mecanismo TEXT
         );
 
         CREATE TABLE IF NOT EXISTS fontes (
@@ -150,8 +151,9 @@ def inserir_ou_atualizar_incentivo(conexao: sqlite3.Connection, dados: dict) -> 
 
     cursor = conexao.execute(
         """INSERT INTO incentivos
-           (empresa_id, fonte, tipo_incentivo, projeto, ano, valor, uf, cidade, url_fonte, coletado_em, nivel_confianca)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+           (empresa_id, fonte, tipo_incentivo, projeto, ano, valor, uf, cidade, url_fonte, coletado_em, nivel_confianca,
+            mecanismo)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
         (
             dados["empresa_id"],
             dados["fonte"],
@@ -164,6 +166,7 @@ def inserir_ou_atualizar_incentivo(conexao: sqlite3.Connection, dados: dict) -> 
             dados["url_fonte"],
             dados["coletado_em"],
             dados["nivel_confianca"],
+            dados.get("mecanismo"),
         ),
     )
     return cursor.lastrowid, True

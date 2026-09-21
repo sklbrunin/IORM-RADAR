@@ -6,6 +6,7 @@ acontece em ações explícitas dentro de cada página, nunca no carregamento)."
 from __future__ import annotations
 
 import json
+import os
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -18,10 +19,12 @@ if str(RAIZ_PROJETO) not in sys.path:
     sys.path.insert(0, str(RAIZ_PROJETO))
 
 from processamento import (  # noqa: E402
-    banco, crm, documentos, editais, enriquecimento, filtros, formatacao, geografia, metricas, osc, relacionamento,
+    banco, crm, documentos, editais, enriquecimento, filtros, fontes_dados, formatacao, geografia, incentivos_providers,
+    metricas, osc, relacionamento,
 )
 
-CAMINHO_DB = RAIZ_PROJETO / "dados" / "iorm_radar.db"
+# IORM_RADAR_DB permite apontar para OUTRO banco (cópia para testes/validação); sem ela, usa o banco do projeto.
+CAMINHO_DB = Path(os.environ.get("IORM_RADAR_DB") or RAIZ_PROJETO / "dados" / "iorm_radar.db")
 CAMINHO_FILA_PESQUISA = RAIZ_PROJETO / "dados" / "fila_pesquisa.json"
 PASTA_DOCUMENTOS_OSC = RAIZ_PROJETO / "dados" / "documentos_osc"
 CAMINHO_LOGO = RAIZ_PROJETO / "assets" / "logo-iorm.png.jpeg"
@@ -31,11 +34,21 @@ CAMINHO_LOGO = RAIZ_PROJETO / "assets" / "logo-iorm.png.jpeg"
 # JPEG com fundo branco apareceria como uma caixa branca feia.
 CAMINHO_LOGO_TRANSPARENTE = RAIZ_PROJETO / "assets" / "logo-iorm-transparente.png"
 
+def ir_para_pagina(nome: str) -> None:
+    """Leva o usuário a outra página do app (nome curto, ex.: "radar_editais"). O app.py guarda as
+    páginas em session_state a cada execução; se não estiverem lá (ex.: teste isolado), não faz nada."""
+    pagina = (st.session_state.get("_paginas") or {}).get(nome)
+    if pagina is not None:
+        st.switch_page(pagina)
+
+
 formatar_moeda = formatacao.formatar_moeda_br
 formatar_numero = formatacao.formatar_numero_br
 formatar_cnpj = formatacao.formatar_cnpj
 formatar_percentual = formatacao.formatar_percentual
 formatar_data = formatacao.formatar_data_br
+formatar_nota = formatacao.formatar_nota
+resumir_texto = formatacao.resumir_texto
 
 CONFIG_COLUNA_EMPRESA = {"Empresa": st.column_config.TextColumn("Empresa", width="large")}
 
@@ -307,6 +320,18 @@ def injetar_css() -> None:
         .iorm-cartao, .iorm-proxima-acao-texto, .iorm-kanban-cartao { overflow-wrap: anywhere; }
         .iorm-cartao { min-height: 118px; }
 
+        /* aderência explicada: um critério por linha, badge + explicação sempre completos */
+        .iorm-crit { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.35rem 0.8rem; margin: 0.28rem 0; }
+        .iorm-crit-texto { color: var(--iorm-cinza); font-size: 0.86rem; line-height: 1.4; flex: 1 1 260px; min-width: 0; }
+        /* cartão de edital do Dashboard */
+        .iorm-edital-linha { color: var(--iorm-cinza); font-size: 0.84rem; line-height: 1.45; margin: 0.12rem 0; overflow-wrap: anywhere; }
+        .iorm-edital-linha b { color: var(--iorm-navy); }
+        .iorm-edital-resumo { color: var(--iorm-navy); font-size: 0.86rem; line-height: 1.45; margin-top: 0.4rem; overflow-wrap: anywhere; }
+        [data-testid="stVerticalBlockBorderWrapper"] .stButton > button[kind="tertiary"] {
+            text-align: left; justify-content: flex-start; font-weight: 800; color: var(--iorm-azul-escuro);
+            padding-left: 0; font-size: 1rem;
+        }
+
         /* ---------- expander (usado como "cartão clicável" em editais etc.) ---------- */
         [data-testid="stExpander"] {
             border: 1px solid var(--iorm-borda) !important; border-radius: var(--iorm-raio) !important;
@@ -421,19 +446,27 @@ def estado_vazio(mensagem: str, icone: str = "🗂️") -> None:
     )
 
 
-def grafico_barras(serie: pd.Series, rotulo_valor: str = "Quantidade", cor: str = "#1F5F8B") -> None:
+def grafico_barras(serie: pd.Series, rotulo_valor: str = "Quantidade", cor: str = "#1F5F8B", moeda: bool = False) -> None:
     """Barras horizontais com o texto COMPLETO de cada categoria (st.bar_chart corta rótulos
-    longos com "…"). Mantém a ordem recebida; a altura cresce com o número de barras."""
+    longos com "…"). Mantém a ordem recebida; a altura cresce com o número de barras.
+    `moeda=True`: eixo e dica em reais no padrão brasileiro (R$ 1.000.000,00)."""
     import altair as alt
 
     dados = serie.rename(rotulo_valor).rename_axis("Categoria").reset_index()
+    if moeda:
+        dados["Valor"] = dados[rotulo_valor].apply(formatar_moeda)
+        eixo_x = alt.Axis(labelExpr="'R$ ' + replace(format(datum.value, ',.0f'), regexp(',', 'g'), '.')")
+        dica = ["Categoria", alt.Tooltip("Valor:N", title=rotulo_valor)]
+    else:
+        eixo_x = alt.Axis(tickMinStep=1, format="d")
+        dica = ["Categoria", rotulo_valor]
     grafico = (
         alt.Chart(dados)
         .mark_bar(color=cor)
         .encode(
             y=alt.Y("Categoria:N", sort=None, title=None, axis=alt.Axis(labelLimit=0)),
-            x=alt.X(f"{rotulo_valor}:Q", title=rotulo_valor, axis=alt.Axis(tickMinStep=1, format="d")),
-            tooltip=["Categoria", rotulo_valor],
+            x=alt.X(f"{rotulo_valor}:Q", title=rotulo_valor, axis=eixo_x),
+            tooltip=dica,
         )
         .properties(height=max(120, 30 * len(dados)))
     )
@@ -528,6 +561,8 @@ def garantir_tabelas_novas() -> None:
     geografia.criar_tabelas(conexao)
     editais.criar_tabelas(conexao)
     editais.migrar_colunas_novas(conexao)
+    fontes_dados.criar_tabelas(conexao)
+    incentivos_providers.migrar(conexao)
     crm.criar_tabelas(conexao)
     crm.migrar_colunas_novas(conexao)
     osc.semear_organizacao_padrao(conexao)

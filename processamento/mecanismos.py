@@ -27,7 +27,10 @@ MECANISMOS = [
         "metodo_coleta": "API pública oficial (JSON), sem necessidade de chave",
         "campos_disponiveis": "incentivador, proponente, projeto, valor, ano (via /doacoes), UF/cidade",
         "ultima_verificacao": "2026-09-15",
-        "observacao": "8.211 empresas de SP coletadas; 27 delas (4 cidades do IORM) com detalhamento por projeto/ano.",
+        "observacao": (
+            "Provedor integrado (processamento/incentivos_providers.py; coleta por UF com --uf). SP completo e parte de MG "
+            "já estão na base; as empresas das 4 cidades do IORM têm detalhamento por projeto/ano."
+        ),
     },
     {
         "nome": "Lei Paulista de Incentivo ao Esporte (LPIE)",
@@ -38,8 +41,27 @@ MECANISMOS = [
         "status": "PARCIAL",
         "metodo_coleta": "Planilha/PDF para download — sem API REST nem CSV estruturado encontrado",
         "campos_disponiveis": "projetos em execução (formato não estruturado, requer parser dedicado)",
-        "ultima_verificacao": "2026-09-16",
-        "observacao": "Fonte oficial real e gratuita, mas em PDF — integração automática não implementada nesta etapa (fica como próximo passo).",
+        "ultima_verificacao": "2026-09-18",
+        "observacao": (
+            "Verificado em 18/09/2026: o dataset traz um único PDF de PROJETOS em execução, sem os incentivadores "
+            "(empresas). Por isso não alimenta a base de empresas — integração não disponível com esta fonte."
+        ),
+    },
+    {
+        "nome": "ProAC ICMS (incentivo estadual à cultura — SP)",
+        "esfera": "Estadual (SP)",
+        "orgao": "Secretaria da Cultura, Economia e Indústria Criativas do Estado de SP",
+        "fonte": "Portais de consulta de projetos (fomentocultsp / vitrine de projetos)",
+        "url": "https://www.cultura.sp.gov.br/sec_cultura/Fomento/ProAC_ICMS",
+        "status": "INDISPONIVEL",
+        "metodo_coleta": "Nenhum arquivo/API com empresas incentivadoras localizado",
+        "campos_disponiveis": "—",
+        "ultima_verificacao": "2026-09-18",
+        "observacao": (
+            "Verificado em 18/09/2026: a página do programa só remete a portais de consulta; o dataset FOMENTOS do Dados "
+            "Abertos SP não tem URL de arquivo; a lista mensal de empresas habilitadas não foi encontrada em formato "
+            "estruturado. Relevante para captação cultural do IORM em SP — reavaliar se a Secretaria publicar a base."
+        ),
     },
     {
         "nome": "Lei de Incentivo ao Esporte (federal)",
@@ -50,8 +72,12 @@ MECANISMOS = [
         "status": "INDISPONIVEL",
         "metodo_coleta": "Nenhuma API oficial encontrada até agora",
         "campos_disponiveis": "—",
-        "ultima_verificacao": "2026-09-14",
-        "observacao": "Verificado na etapa anterior do projeto — sem fonte primária estruturada identificada.",
+        "ultima_verificacao": "2026-09-18",
+        "observacao": (
+            "Reverificado em 18/09/2026: o catálogo dados.gov.br respondeu HTTP 401 (exige token) e o painel oficial de "
+            "transparência é interativo. O painel com patrocinadores é do Prosas (terceiro, não oficial). Se a equipe "
+            "obtiver um token do dados.gov.br, dá para reavaliar."
+        ),
     },
     {
         "nome": "Fundos Municipais da Infância e Adolescência (FIA)",
@@ -62,8 +88,11 @@ MECANISMOS = [
         "status": "INDISPONIVEL",
         "metodo_coleta": "Não há fonte única — precisaria mapear conselho por conselho",
         "campos_disponiveis": "—",
-        "ultima_verificacao": "2026-09-14",
-        "observacao": "Relevante para captação infantil/juvenil do IORM, mas sem dado estruturado disponível.",
+        "ultima_verificacao": "2026-09-18",
+        "observacao": (
+            "Relevante para captação infantil/juvenil do IORM. Verificado em 18/09/2026: as doações são declaradas à "
+            "Receita (DBF) por cada fundo/conselho; não existe base pública nacional de doadores por empresa."
+        ),
     },
     {
         "nome": "Editais e chamadas para OSCs (agregadores)",
@@ -93,29 +122,28 @@ MECANISMOS = [
         "nome": "PRONON (Programa Nacional de Apoio à Atenção Oncológica)",
         "esfera": "Federal",
         "orgao": "Ministério da Saúde",
-        "fonte": "Não pesquisado nesta sessão",
-        "url": None,
+        "fonte": "Listas de projetos aprovados (DOU / Transferegov)",
+        "url": "https://www.gov.br/saude/pt-br/se/pronon-e-pronas-pcd",
         "status": "INDISPONIVEL",
-        "metodo_coleta": "Nenhuma fonte pesquisada ainda",
+        "metodo_coleta": "Sem base pública de doadores (a página de doações exige autenticação)",
         "campos_disponiveis": "—",
-        "ultima_verificacao": None,
+        "ultima_verificacao": "2026-09-18",
         "observacao": (
-            "Mecanismo federal real (renúncia fiscal para ações de prevenção/combate ao câncer), mas fora do "
-            "escopo de atuação atual do IORM — cadastrado só para deixar a arquitetura pronta caso o IORM "
-            "venha a ter um projeto elegível. Nenhuma fonte de dados foi pesquisada para ele ainda."
+            "Mecanismo federal real (saúde/oncologia), fora do escopo de atuação atual do IORM. Verificado em "
+            "18/09/2026: o Ministério publica projetos aprovados, não os doadores (empresas) — não alimenta a base."
         ),
     },
     {
         "nome": "PRONAS/PCD (Programa Nacional de Apoio à Atenção da Pessoa com Deficiência)",
         "esfera": "Federal",
         "orgao": "Ministério da Saúde",
-        "fonte": "Não pesquisado nesta sessão",
-        "url": None,
+        "fonte": "Listas de projetos aprovados (DOU / Transferegov)",
+        "url": "https://www.gov.br/saude/pt-br/se/pronon-e-pronas-pcd",
         "status": "INDISPONIVEL",
-        "metodo_coleta": "Nenhuma fonte pesquisada ainda",
+        "metodo_coleta": "Sem base pública de doadores (a página de doações exige autenticação)",
         "campos_disponiveis": "—",
-        "ultima_verificacao": None,
-        "observacao": "Mesmo caso do PRONON: mecanismo federal real, cadastrado para completar a arquitetura, sem pesquisa de fonte de dados feita ainda.",
+        "ultima_verificacao": "2026-09-18",
+        "observacao": "Mesmo caso do PRONON (mesmo programa do Ministério da Saúde): só há lista de projetos aprovados, não de doadores.",
     },
     {
         "nome": "Fundos Municipais do Idoso",

@@ -68,3 +68,99 @@ def test_canais_da_empresa_aceita_email_ausente():
     assert tabela.loc["A", "Área do e-mail"] == "—"
     assert tabela.loc["A", "E-mail institucional"] == "Não disponível"
     assert tabela.loc["B", "Área do e-mail"] != "—"
+
+# ------------------------------------------------------------------ v7: edital aberto no Dashboard → ficha no Radar de Editais
+@pytest.fixture
+def banco_com_edital_aberto(tmp_path):
+    """Cópia do banco real + um edital ABERTO (prazo futuro relativo a hoje). Nunca toca o banco real."""
+    import sqlite3
+    from datetime import date, timedelta
+
+    destino = tmp_path / "iorm_radar.db"
+    shutil.copy(BANCO, destino)
+    conn = sqlite3.connect(destino)
+    conn.row_factory = sqlite3.Row
+    from processamento import editais
+
+    editais.criar_tabelas(conn)
+    eid = editais.criar_edital(conn, {
+        "titulo": "Chamada de Fomento à Cultura e Dança em Guaíra", "organizacao_promotora": "Secretaria X (teste)",
+        "url": "https://prefeitura.exemplo/chamada", "fonte": "teste automatizado", "territorio": "Guaíra, Ipuã (SP)",
+        "data_encerramento": (date.today() + timedelta(days=45)).isoformat(), "area_tematica": "Cultura e dança",
+        "valor_numerico": 1573345.5, "publico": "crianças e adolescentes", "requisitos": "Aberto a OSC sem fins lucrativos",
+        "descricao": "Apoio a projetos de cultura, música e dança.",
+    })
+    conn.commit()
+    conn.close()
+    return destino, eid
+
+
+def _rodar_pagina_com_estado(modulo: str, banco: Path, estado: dict | None = None):
+    from streamlit.testing.v1 import AppTest
+
+    script = textwrap.dedent(f"""
+        import sys
+        sys.path.insert(0, r"{RAIZ}")
+        from pathlib import Path
+        from paginas import _shared
+        _shared.CAMINHO_DB = Path(r"{banco}")
+        _shared.garantir_tabelas_novas()
+        from paginas import {modulo}
+        {modulo}.render()
+    """)
+    at = AppTest.from_string(script, default_timeout=120)
+    for chave, valor in (estado or {}).items():
+        at.session_state[chave] = valor
+    return at.run()
+
+
+def test_dashboard_mostra_cartao_de_edital_aberto_com_valor_em_real(banco_com_edital_aberto):
+    banco, eid = banco_com_edital_aberto
+    app = _rodar_pagina_com_estado("dashboard", banco)
+    assert not app.exception, [e.value for e in app.exception]
+    rotulos = [b.label for b in app.button]
+    assert "Chamada de Fomento à Cultura e Dança em Guaíra" in rotulos  # título completo, clicável
+    assert "Abrir ficha completa →" in rotulos
+    texto = " ".join(m.value for m in app.markdown)
+    assert "R$ 1.573.345,50" in texto and "Secretaria X (teste)" in texto
+
+
+def test_dashboard_contadores_da_base_batem_com_o_banco(banco_com_edital_aberto):
+    banco, _ = banco_com_edital_aberto
+    app = _rodar_pagina_com_estado("dashboard", banco)
+    metricas_tela = {m.label: m.value for m in app.metric}
+    import sqlite3
+
+    total = sqlite3.connect(banco).execute("SELECT COUNT(*) FROM empresas").fetchone()[0]
+    assert metricas_tela["Empresas na base"] == f"{total:,}".replace(",", ".")
+    prospects = int(metricas_tela["Prospects"].replace(".", ""))
+    cruzada = int(metricas_tela["Linha Cruzada"].replace(".", ""))
+    assert prospects + cruzada >= total and prospects <= total  # só passa de `total` com prospecção reaberta
+
+
+def test_editais_com_foco_abre_a_ficha_do_edital_pedido(banco_com_edital_aberto):
+    banco, eid = banco_com_edital_aberto
+    app = _rodar_pagina_com_estado("radar_editais", banco, {"edital_em_foco": eid})
+    assert not app.exception, [e.value for e in app.exception]
+    abertos = [e for e in app.expander if e.label.startswith("Chamada de Fomento à Cultura e Dança em Guaíra")]
+    assert abertos, [e.label for e in app.expander]
+    assert "Aderência" in abertos[0].label and "até" in abertos[0].label  # título + nota + prazo, sem cortes
+    corpo = " ".join(m.value for m in app.markdown)
+    assert "Link direto de inscrição não localizado" in corpo  # sem link falso de inscrição
+
+
+def test_editais_padrao_lista_so_abertos_e_registro_de_teste_fica_no_historico(banco_com_edital_aberto):
+    banco, _ = banco_com_edital_aberto
+    app = _rodar_pagina_com_estado("radar_editais", banco)
+    assert not app.exception, [e.value for e in app.exception]
+    metricas_tela = {m.label: m.value for m in app.metric}
+    assert int(metricas_tela["Abertos"]) >= 1
+    assert app.expander[0].label.startswith("Chamada de Fomento à Cultura e Dança em Guaíra")  # a aba padrão mostra o aberto primeiro
+    import sqlite3
+
+    tem_teste = sqlite3.connect(banco).execute(
+        "SELECT COUNT(*) FROM editais WHERE origem_descoberta = 'TESTE_NAO_REAL'").fetchone()[0]
+    rotulos = " | ".join(e.label for e in app.expander)
+    if tem_teste:  # registro de teste continua guardado, mas só na aba de histórico — nunca entre os abertos
+        assert "Edital Municipal de Cultura e Dança 2026" in rotulos
+        assert int(metricas_tela["Encerrados e histórico"]) >= tem_teste

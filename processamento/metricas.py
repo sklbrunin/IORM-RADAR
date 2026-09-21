@@ -193,6 +193,31 @@ def carregar_empresas(
     return df
 
 
+def contadores_empresas(df: pd.DataFrame) -> dict:
+    """Os cinco números da base, cada um com UM significado (a interface nunca deve misturá-los):
+
+      total            — todos os registros de empresas (nada é apagado)
+      prospects        — elegíveis para prospecção (fora da Linha Cruzada, ou com prospecção reaberta)
+      linha_cruzada    — com relacionamento comprovado com o IORM (ver processamento/relacionamento.py)
+      pesquisadas      — PROSPECTS que já passaram por enriquecimento
+      nao_pesquisadas  — PROSPECTS ainda sem enriquecimento
+
+    Empresa com prospecção reaberta (justificativa registrada) conta nas duas colunas —
+    `total` ≠ `prospects` + `linha_cruzada` só nesse caso, e o campo `reabertas` explica a diferença."""
+    if df is None or df.empty:
+        return {"total": 0, "prospects": 0, "linha_cruzada": 0, "reabertas": 0, "pesquisadas": 0, "nao_pesquisadas": 0}
+    prospects = df["eh_prospect"]
+    pesquisado = df["pesquisado"] if "pesquisado" in df.columns else pd.Series(False, index=df.index)
+    return {
+        "total": int(len(df)),
+        "prospects": int(prospects.sum()),
+        "linha_cruzada": int(df["linha_cruzada"].sum()),
+        "reabertas": int((df["linha_cruzada"] & prospects).sum()),
+        "pesquisadas": int((prospects & pesquisado).sum()),
+        "nao_pesquisadas": int((prospects & ~pesquisado).sum()),
+    }
+
+
 def doacoes_usina_da_danca(conexao: sqlite3.Connection) -> pd.DataFrame:
     linhas = conexao.execute(
         """

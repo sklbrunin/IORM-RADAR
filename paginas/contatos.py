@@ -121,7 +121,7 @@ def render() -> None:
         )
         return
 
-    aba_empresas, aba_pessoas = st.tabs(["🏢 Canais da empresa", "👤 Pessoas identificadas"])
+    aba_empresas, aba_pessoas = st.tabs(["🏢 Canais da empresa", "👤 Pessoas identificadas"], key="aba_contatos")
 
     with aba_empresas:
         _shared.secao("Canais institucionais", "🏢", "Site, e-mail, telefone e redes oficiais da empresa — não pessoas.")

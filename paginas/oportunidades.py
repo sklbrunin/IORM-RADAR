@@ -201,7 +201,7 @@ def render() -> None:
 
     _shared.cabecalho("Oportunidades", "Prospects prioritários, radar por região e empresas com relacionamento.")
 
-    aba_oportunidades, aba_regiao, aba_cruzada = st.tabs(["⭐ Oportunidades", "🗺️ Radar por Região", "🎗️ Linha Cruzada"])
+    aba_oportunidades, aba_regiao, aba_cruzada = st.tabs(["⭐ Oportunidades", "🗺️ Radar por Região", "🎗️ Linha Cruzada"], key="aba_oportunidades")
     with aba_oportunidades:
         _aba_oportunidades(df_mesclado)
     with aba_regiao:

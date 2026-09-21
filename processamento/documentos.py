@@ -72,6 +72,38 @@ def migrar(conexao: sqlite3.Connection) -> None:
     conexao.commit()
 
 
+RAIZ_PROJETO = Path(__file__).resolve().parent.parent
+
+
+def _caminho_para_banco(caminho: Path) -> str:
+    """Dentro da pasta do projeto guarda o caminho RELATIVO (funciona igual no computador local e no
+    Streamlit Cloud); fora dela (ex.: pasta temporária de teste) guarda o absoluto."""
+    try:
+        return caminho.resolve().relative_to(RAIZ_PROJETO.resolve()).as_posix()
+    except ValueError:
+        return str(caminho)
+
+
+def resolver_caminho(caminho_guardado: str | None) -> Path | None:
+    if not caminho_guardado:
+        return None
+    caminho = Path(caminho_guardado)
+    return caminho if caminho.is_absolute() else RAIZ_PROJETO / caminho
+
+
+def ler_arquivo(conexao: sqlite3.Connection, documento_id: int) -> tuple[str, bytes] | None:
+    """(nome do arquivo, bytes ORIGINAIS) para visualizar/baixar; None se o registro não existe ou o
+    arquivo não está mais no disco (ex.: ambiente novo) — quem chama avisa o usuário."""
+    migrar(conexao)
+    linha = conexao.execute(
+        "SELECT nome_arquivo, nome, caminho_arquivo FROM osc_documentos WHERE id = ?", (documento_id,)
+    ).fetchone()
+    caminho = resolver_caminho(linha["caminho_arquivo"]) if linha else None
+    if caminho is None or not caminho.exists():
+        return None
+    return (linha["nome_arquivo"] or linha["nome"] or caminho.name), caminho.read_bytes()
+
+
 def _nome_seguro(nome: str) -> str:
     base = Path(nome).name
     base = unicodedata.normalize("NFKD", base).encode("ascii", "ignore").decode()
@@ -175,8 +207,8 @@ def adicionar(conexao: sqlite3.Connection, osc_id: int, nome_arquivo: str, conte
             categoria, caminho_arquivo, sha256, status_processamento, detalhe_processamento, texto_extraido,
             paginas, enviado_em)
            VALUES (?, ?, ?, ?, ?, 'MANUAL', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-        (osc_id, categoria, nome_arquivo, descricao, str(caminho), agora, nome_arquivo, extensao, len(conteudo),
-         categoria, str(caminho), sha, status, detalhe, texto or None, paginas, agora),
+        (osc_id, categoria, nome_arquivo, descricao, _caminho_para_banco(caminho), agora, nome_arquivo, extensao, len(conteudo),
+         categoria, _caminho_para_banco(caminho), sha, status, detalhe, texto or None, paginas, agora),
     )
     conexao.commit()
     return {"id": cursor.lastrowid, "duplicado": False, "status": status, "caracteres": len(texto)}
@@ -194,20 +226,22 @@ def listar(conexao: sqlite3.Connection, osc_id: int) -> list[dict]:
 
 
 def obter_texto(conexao: sqlite3.Connection, documento_id: int) -> str | None:
+    migrar(conexao)
     linha = conexao.execute("SELECT texto_extraido FROM osc_documentos WHERE id = ?", (documento_id,)).fetchone()
     return linha["texto_extraido"] if linha else None
 
 
 def excluir(conexao: sqlite3.Connection, documento_id: int, apagar_arquivo: bool = True) -> bool:
     """Exclui o registro (e o arquivo guardado). Ação explícita do usuário."""
+    migrar(conexao)
     linha = conexao.execute("SELECT caminho_arquivo FROM osc_documentos WHERE id = ?", (documento_id,)).fetchone()
     if linha is None:
         return False
     conexao.execute("DELETE FROM osc_documentos WHERE id = ?", (documento_id,))
     conexao.commit()
     if apagar_arquivo and linha["caminho_arquivo"]:
-        caminho = Path(linha["caminho_arquivo"])
-        if caminho.exists():
+        caminho = resolver_caminho(linha["caminho_arquivo"])
+        if caminho is not None and caminho.exists():
             caminho.unlink()
     return True
 
