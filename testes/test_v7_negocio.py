@@ -3,7 +3,7 @@ formatação brasileira. (Fontes, incentivos e documentos têm arquivos próprio
 from __future__ import annotations
 
 import sqlite3
-from datetime import date
+from datetime import date, timedelta
 
 import pandas as pd
 import pytest
@@ -300,3 +300,44 @@ def test_link_direto_de_inscricao_nunca_e_inventado_a_partir_do_link_do_edital()
     r = links_editais.verificar_link("https://prefeitura.exemplo/edital-fomento-danca", "Edital Fomento Dança 2026",
                                      lambda u: (200, u, ok))
     assert r["url_inscricao_encontrada"] == "https://forms.gle/abc"
+
+# ------------------------------------------------------------------ v8: remover no Pipeline atualiza o quadro na hora
+def test_quadro_do_pipeline_muda_de_chave_quando_uma_oportunidade_e_removida(crm_base):
+    """O Kanban é um componente que guarda estado no navegador. Chave fixa = cartão removido continuava na tela até dar F5."""
+    from paginas import crm as pagina_crm
+
+    conn, eid = crm_base
+    a = crm.criar_oportunidade(conn, {"empresa_id": eid, "titulo": "Patrocínio A", "valor_potencial": 1000})
+    b = crm.criar_oportunidade(conn, {"empresa_id": eid, "titulo": "Patrocínio B"})
+    antes = [dict(o) for o in crm.listar_oportunidades(conn)]
+    assinatura_antes = pagina_crm.assinatura_do_quadro(antes)
+    assert assinatura_antes == pagina_crm.assinatura_do_quadro(list(reversed(antes)))  # estável (não depende da ordem)
+    crm.remover_oportunidade(conn, a, "duplicada")
+    depois = [dict(o) for o in crm.listar_oportunidades(conn)]
+    assert [o["id"] for o in depois] == [b]  # sumiu da lista que alimenta o quadro
+    assert pagina_crm.assinatura_do_quadro(depois) != assinatura_antes  # → o componente é remontado
+    crm.restaurar_oportunidade(conn, a)
+    restaurada = [dict(o) for o in crm.listar_oportunidades(conn)]
+    assert pagina_crm.assinatura_do_quadro(restaurada) == assinatura_antes  # e volta ao mesmo quadro
+
+
+def test_mover_de_coluna_tambem_remonta_o_quadro(crm_base):
+    from paginas import crm as pagina_crm
+
+    conn, eid = crm_base
+    op = crm.criar_oportunidade(conn, {"empresa_id": eid, "titulo": "X"})
+    antes = pagina_crm.assinatura_do_quadro([dict(o) for o in crm.listar_oportunidades(conn)])
+    crm.mover_estagio(conn, op, "Em conversa")
+    assert pagina_crm.assinatura_do_quadro([dict(o) for o in crm.listar_oportunidades(conn)]) != antes
+
+def test_edital_com_mais_criterios_avaliados_vem_antes_de_nota_alta_com_poucos_dados():
+    perfil = {"temas": ["cultura"], "palavras_chave": [], "cidades": ["Guaíra"], "estados": ["SP"], "programas": []}
+    hoje = editais.hoje_brasil()
+    poucos = {"titulo": "Cultura", "url": "https://x.gov.br/a", "descricao": "cultura", "data_encerramento": (hoje + timedelta(days=60)).isoformat(),
+              "origem_descoberta": "AUTOMATICA"}
+    completo = {"titulo": "Cultura em Guaíra", "url": "https://x.gov.br/b", "descricao": "cultura", "territorio": "Acre",
+                "requisitos": "OSC", "valor_numerico": 1000, "data_encerramento": (hoje + timedelta(days=5)).isoformat(),
+                "origem_descoberta": "AUTOMATICA"}
+    itens = editais.abertos_com_aderencia([poucos, completo], perfil)
+    assert itens[0]["url"] == "https://x.gov.br/b" and itens[0]["aderencia"]["criterios_avaliados"] >= 3
+    assert itens[1]["aderencia"]["criterios_avaliados"] < 3

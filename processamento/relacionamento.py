@@ -20,7 +20,7 @@ from __future__ import annotations
 import sqlite3
 from datetime import datetime, timezone
 
-from processamento import metricas
+from processamento import metricas, programas_iorm
 
 TIPO_DOACAO = "DOACAO_PROJETO_IORM"
 TIPO_CRM = "CRM_GANHO"
@@ -63,15 +63,14 @@ def sincronizar(conexao: sqlite3.Connection) -> dict:
         )
         marcadas["propria_osc"] += cursor.rowcount
 
-    condicoes = " OR ".join("LOWER(i.projeto) LIKE ?" for _ in metricas.PROGRAMAS_IORM)
-    parametros = [f"%{p}%" for p in metricas.PROGRAMAS_IORM]
+    programas_iorm.registrar(conexao)  # termos atuais: lista-base + programas do Cérebro da OSC + sigla da OSC
     linhas = conexao.execute(
-        f"""SELECT e.id, MIN(i.ano) AS primeiro, MAX(i.ano) AS ultimo, COUNT(*) AS n,
+        """SELECT e.id, MIN(i.ano) AS primeiro, MAX(i.ano) AS ultimo, COUNT(*) AS n,
                    GROUP_CONCAT(DISTINCT i.projeto) AS projetos
             FROM empresas e JOIN incentivos i ON i.empresa_id = e.id
-            WHERE ({condicoes}) AND COALESCE(e.relacionamento_tipo, '') NOT IN (?, ?)
+            WHERE eh_projeto_iorm(i.projeto) AND COALESCE(e.relacionamento_tipo, '') NOT IN (?, ?)
             GROUP BY e.id""",
-        (*parametros, TIPO_MANUAL, TIPO_PROPRIA_OSC),
+        (TIPO_MANUAL, TIPO_PROPRIA_OSC),
     ).fetchall()
     for linha in linhas:
         fonte = f"SALIC: {linha['n']} doação(ões) a projeto do IORM ({linha['projetos']}), anos {linha['primeiro']}–{linha['ultimo']}"
@@ -103,6 +102,27 @@ def sincronizar(conexao: sqlite3.Connection) -> dict:
 
     conexao.commit()
     return marcadas
+
+
+def reconciliar_relacionamentos(conexao: sqlite3.Connection) -> dict:
+    """Reconcilia a classificação persistida com os dados ATUAIS e devolve o que mudou.
+
+    Chame sempre que entrarem incentivos novos, quando os programas do Cérebro da OSC mudarem e antes de
+    relatórios. Idempotente; preserva classificação MANUAL e a reabertura explícita de prospecção; não
+    apaga nada. Só passa empresa de "prospect" para "relacionamento" quando há evidência nos dados."""
+    antes = {l["id"]: l["relacionamento_iorm"] for l in conexao.execute("SELECT id, relacionamento_iorm FROM empresas")}
+    contagens = sincronizar(conexao)
+    mudaram = []
+    for l in conexao.execute(
+        "SELECT id, razao_social, cidade, relacionamento_iorm, relacionamento_tipo, relacionamento_fonte FROM empresas WHERE relacionamento_iorm = 1"
+    ):
+        if not antes.get(l["id"]):
+            mudaram.append({"id": l["id"], "empresa": l["razao_social"], "cidade": l["cidade"],
+                            "tipo": l["relacionamento_tipo"], "evidencia": l["relacionamento_fonte"]})
+    total = conexao.execute("SELECT COUNT(*) FROM empresas").fetchone()[0]
+    rel = conexao.execute("SELECT COUNT(*) FROM empresas WHERE relacionamento_iorm = 1").fetchone()[0]
+    return {"marcadas": contagens, "novas_no_relacionamento": mudaram, "empresas": total,
+            "relacionamento_antes": sum(1 for v in antes.values() if v), "relacionamento_depois": rel}
 
 
 def marcar_manual(conexao: sqlite3.Connection, empresa_id: int, relacionada: bool, justificativa: str) -> None:

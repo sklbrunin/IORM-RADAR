@@ -30,7 +30,7 @@ RAIZ_PROJETO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(RAIZ_PROJETO))
 
 from coleta import coleta_salic  # noqa: E402
-from processamento import banco, transformacao  # noqa: E402
+from processamento import banco, relacionamento, transformacao  # noqa: E402
 
 CAMINHO_ESTADO = RAIZ_PROJETO / "dados" / "estado_coleta_diaria.json"
 CAMINHO_LOG = RAIZ_PROJETO / "dados" / "logs" / "coleta_diaria.log"
@@ -154,6 +154,8 @@ def executar(meta_empresas_novas: int = META_PADRAO_EMPRESAS_NOVAS,
         resumo_execucao["registros_descartados_total"] = sum(u["descartados"] for u in resumo_execucao["ufs_processadas"])
 
     _salvar_estado(estado, caminho_estado)
+    relacionamento.reconciliar_relacionamentos(conexao)  # incentivos novos podem tornar empresas Linha Cruzada
+    conexao.commit()
     conexao.close()
 
     resumo_execucao["finalizado_em"] = datetime.now(timezone.utc).isoformat()

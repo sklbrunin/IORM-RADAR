@@ -184,6 +184,109 @@ def extrair_prazo(texto: str) -> tuple[str, str] | None:
     escolhido = (fortes or fracos or [None])[0]
     return escolhido
 
+# ---------------------------------------------------------------- dados estruturados embutidos na página (Prosas)
+def _objeto_a_partir_de(texto: str, inicio: int) -> dict | None:
+    """Lê o objeto JSON que começa em `texto[inicio]` (respeitando aspas/escapes) ou None."""
+    import json
+
+    profundidade, dentro_de_texto, escape = 0, False, False
+    for indice in range(inicio, min(len(texto), inicio + 400_000)):
+        c = texto[indice]
+        if dentro_de_texto:
+            if escape:
+                escape = False
+            elif c == "\\":
+                escape = True
+            elif c == '"':
+                dentro_de_texto = False
+            continue
+        if c == '"':
+            dentro_de_texto = True
+        elif c == "{":
+            profundidade += 1
+        elif c == "}":
+            profundidade -= 1
+            if profundidade == 0:
+                try:
+                    return json.loads(texto[inicio: indice + 1], strict=False)
+                except ValueError:
+                    return None
+    return None
+
+
+def _objeto_json_em_torno(texto: str, marcador: str) -> dict | None:
+    """O objeto `{"id": ...}` que CONTÉM a chave `marcador` (objetos aninhados que também começam com "id"
+    são pulados: vale o primeiro, de dentro para fora, que realmente traz a chave)."""
+    posicao = texto.find(marcador)
+    if posicao < 0:
+        return None
+    inicio = posicao
+    for _ in range(40):
+        inicio = texto.rfind('{"id"', 0, inicio)
+        if inicio < 0:
+            return None
+        objeto = _objeto_a_partir_de(texto, inicio)
+        if objeto and marcador.strip('"') in objeto:
+            return objeto
+    return None
+
+def _data_do_iso(valor) -> str | None:
+    try:
+        return datetime.fromisoformat(str(valor)[:19]).date().isoformat()
+    except (TypeError, ValueError):
+        return None
+
+
+def extrair_dados_estruturados(html_pagina: str, url: str | None = None) -> dict | None:
+    """Páginas de edital do Prosas trazem, dentro do HTML, o objeto JSON da oportunidade (o navegador o usa
+    para montar a tela). Ler esse objeto é bem mais confiável que adivinhar datas no texto: devolve nome,
+    início/encerramento das inscrições, indicadores de situação, áreas (culturas), público-alvo, valor total
+    e a frase de elegibilidade — SÓ o que estiver na página. Sem o objeto (outro site, layout novo): None."""
+    import html as _html
+
+    if "encerramento_das_inscricoes" not in (html_pagina or ""):
+        return None
+    texto = _html.unescape(html_pagina)
+    oportunidade = _objeto_json_em_torno(texto, '"encerramento_das_inscricoes"')
+    if not oportunidade:
+        return None
+    descricao_html = oportunidade.get("descricao") or ""
+    descricao = " ".join(re.sub(r"<[^>]+>", " ", _html.unescape(descricao_html)).split())
+    valor = re.search(r"valor\s+total\s+(?:deste|do)\s+edital[^0-9]{0,40}(?:R\$\s*)?(\d{1,3}(?:\.\d{3})*,\d{2})", descricao, re.I)
+    elegibilidade = re.search(r"(Para se inscrever neste Edital[^.]{0,400}\.)", descricao)
+    return {
+        "nome": (oportunidade.get("nome") or "").strip() or None,
+        "descricao": descricao or None,
+        "inicio": _data_do_iso(oportunidade.get("inicio_inscricoes")),
+        "encerramento": _data_do_iso(oportunidade.get("encerramento_das_inscricoes")),
+        "em_andamento": bool(oportunidade.get("subscription_in_progress")),
+        "nao_iniciada": bool(oportunidade.get("subscription_not_started")),
+        "encerrada": bool(oportunidade.get("subscription_closed")),
+        "prorrogada": bool(oportunidade.get("prorrogacao_ok")),
+        "areas": [c.get("nome") for c in (oportunidade.get("culturas") or []) if c.get("nome")],
+        "publicos": [p.get("nome") for p in (oportunidade.get("publico_alvos") or []) if p.get("nome")],
+        "valor_total_texto": valor.group(1) if valor else None,
+        "elegibilidade": elegibilidade.group(1) if elegibilidade else None,
+        "instituicao": (oportunidade.get("nome_empresa") or "").strip() or None,
+    }
+
+
+def titulo_da_pagina(html_pagina: str) -> str | None:
+    """Título do edital lido da página: og:title (mais limpo) ou <title>. None se a página não traz nenhum."""
+    import html as _html
+
+    for padrao in (
+        r"""<meta[^>]+property=["']og:title["'][^>]+content=["']([^"']+)["']""",
+        r"<title[^>]*>(.*?)</title>",
+    ):
+        m = re.search(padrao, html_pagina or "", flags=re.I | re.S)
+        if m:
+            titulo = " ".join(_html.unescape(m.group(1)).split())
+            if titulo:
+                return titulo
+    return None
+
+
 def _palavras_significativas(titulo: str) -> list[str]:
     ignorar = {"edital", "chamada", "publica", "publico", "para", "com", "dos", "das", "de", "do", "da", "em",
                "no", "na", "por", "ao", "aos", "seu", "sua", "que", "uma", "num"}
@@ -202,7 +305,16 @@ def correspondencia_titulo(titulo: str, titulo_pagina: str, texto_pagina: str) -
 
 def _buscar_pagina(url: str) -> tuple[int, str, str]:
     resposta = requests.get(url, timeout=15, headers={"User-Agent": USER_AGENT}, allow_redirects=True, stream=True)
-    conteudo = next(resposta.iter_content(LIMITE_BYTES), b"")
+    # iter_content devolve o que chegou da rede (blocos pequenos): é preciso ler em laço até o limite,
+    # senão só o começo da página era analisado (título/dados ficavam de fora).
+    partes, lidos = [], 0
+    for bloco in resposta.iter_content(65536):
+        partes.append(bloco)
+        lidos += len(bloco)
+        if lidos >= LIMITE_BYTES:
+            break
+    resposta.close()
+    conteudo = b"".join(partes)[:LIMITE_BYTES]
     codificacao = resposta.encoding or resposta.apparent_encoding or "utf-8"
     try:
         html = conteudo.decode(codificacao, errors="replace")
@@ -219,7 +331,7 @@ def verificar_link(url: str | None, titulo: str,
     resultado = {
         "status": STATUS_NAO_VERIFICADO, "http_status": None, "url_final": None, "correspondencia": None,
         "motivo": "", "url_inscricao_encontrada": None, "indicio_encerrado": False, "verificado_em": _agora(),
-        "prazo_sugerido": None, "prazo_sugerido_trecho": None,
+        "prazo_sugerido": None, "prazo_sugerido_trecho": None, "dados_estruturados": None,
     }
     if not url:
         resultado["status"], resultado["motivo"] = STATUS_NAO_RESPONDE, "Edital sem URL cadastrada."
@@ -247,6 +359,7 @@ def verificar_link(url: str | None, titulo: str,
     resultado["url_inscricao_encontrada"] = extrair_link_inscricao(html, url_final or url)
     prazo = extrair_prazo(texto) if resultado["correspondencia"] >= 0.5 else None  # só de página que é mesmo do edital
     resultado["prazo_sugerido"], resultado["prazo_sugerido_trecho"] = prazo if prazo else (None, None)
+    resultado["dados_estruturados"] = extrair_dados_estruturados(html, url_final or url)
 
     if generico:
         resultado["status"], resultado["motivo"] = STATUS_GENERICO, motivo_generico

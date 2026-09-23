@@ -166,3 +166,52 @@ def test_buscar_sucesso_limpa_ultimo_erro_de_tentativa_anterior(mock_get):
 
     assert len(resultados) == 2
     assert provider.ultimo_erro is None
+
+def test_consulta_sem_resultados_nao_e_erro_da_serpapi(monkeypatch):
+    """Regressão real (23/09/2026): a SerpApi responde HTTP 200 com error="Google hasn't returned any results for this
+    query." quando não há resultados. Isso derrubava a busca inteira."""
+    from processamento import busca_providers
+
+    class Resposta:
+        status_code = 200
+
+        def raise_for_status(self):
+            pass
+
+        def json(self):
+            return {"error": "Google hasn't returned any results for this query."}
+
+    monkeypatch.setattr(busca_providers.requests, "get", lambda *a, **k: Resposta())
+    provider = busca_providers.SerpApiProvider(api_key="x")
+    assert provider.buscar("site:exemplo.com nada") == []
+    assert provider.ultimo_erro is None
+
+    class RespostaErro(Resposta):
+        def json(self):
+            return {"error": "Invalid API key"}
+
+    monkeypatch.setattr(busca_providers.requests, "get", lambda *a, **k: RespostaErro())
+    assert provider.buscar("x") == [] and "Invalid API key" in provider.ultimo_erro  # erro de verdade continua sendo erro
+
+
+def test_parametros_de_paginacao_e_recencia_vao_para_a_serpapi(monkeypatch):
+    from processamento import busca_providers
+
+    capturado = {}
+
+    class Resposta:
+        status_code = 200
+
+        def raise_for_status(self):
+            pass
+
+        def json(self):
+            return {"organic_results": [{"title": "T", "link": "https://x.gov.br/e", "snippet": "s"}]}
+
+    def falso(url, params=None, timeout=None):
+        capturado.update(params)
+        return Resposta()
+
+    monkeypatch.setattr(busca_providers.requests, "get", falso)
+    r = busca_providers.SerpApiProvider(api_key="x").buscar("q", num_resultados=10, inicio=20, recencia="y")
+    assert capturado["start"] == 20 and capturado["tbs"] == "qdr:y" and capturado["num"] == 10 and len(r) == 1

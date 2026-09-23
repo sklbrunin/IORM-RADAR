@@ -203,6 +203,13 @@ def ingerir(conexao: sqlite3.Connection, provider: IncentivoProvider, uf: str, m
         _, novo = banco.inserir_ou_atualizar_incentivo(conexao, dados)
         resumo["incentivos_novos" if novo else "incentivos_atualizados"] += 1
     conexao.commit()
+    # Incentivo novo pode tornar uma empresa "apoiadora do IORM": reconcilia a Linha Cruzada com os dados atuais.
+    from processamento import relacionamento
+
+    try:
+        resumo["relacionamento"] = len(relacionamento.reconciliar_relacionamentos(conexao)["novas_no_relacionamento"])
+    except sqlite3.OperationalError:  # banco sem as colunas de relacionamento (ex.: teste isolado)
+        resumo["relacionamento"] = 0
     return resumo
 
 

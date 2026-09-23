@@ -347,7 +347,7 @@ e o clique abre a ficha (`st.session_state["edital_em_foco"]` + `st.switch_page`
 **Prazo sugerido × confirmado:** a página verificada (ou o trecho da busca) pode mencionar "inscrições até dd/mm/aaaa"
 (`links_editais.extrair_prazo`). Isso vira apenas uma SUGESTÃO com o trecho literal; a equipe confirma com um clique
 (`editais.confirmar_prazo`, origem gravada como CONFIRMADO_PELA_EQUIPE) — só então o edital passa a "Aberto". Motivo:
-o Prosas (principal agregador) entrega uma página montada por JavaScript, sem prazo legível por requisição simples.
+(CORRIGIDO na v8: a conclusão original de que o Prosas seria "uma página montada por JavaScript, sem prazo legível" estava errada — era um bug de leitura que analisava só o primeiro pedaço da página. Ver item 10.2.)
 **Erro corrigido:** a busca automática preenchia o território de cada edital com as cidades da própria OSC, o que
 fabricava 10/10 em aderência territorial. Agora fica vazio ("Não identificado na fonte"). O edital #2 do banco real
 teve esse campo limpo (backup `iorm_radar_20260918_*_pre_v7.db` guarda o valor anterior). Também: uma data solta no
@@ -395,3 +395,71 @@ Sem caminhos absolutos nem chaves no código; `SERPAPI_API_KEY` vem de variável
 viram variáveis de ambiente). `.streamlit/config.toml` limita o upload a 25 MB. `IORM_RADAR_DB` (opcional) aponta o app
 para outro arquivo de banco — usado só para validar a interface numa cópia. As abas das páginas usam `key` para não
 voltar à primeira aba a cada ação. Só rodam localmente: o agendador do Windows e o `.env`.
+
+## 10. Rodada v8 — busca de editais persistente, Linha Cruzada reconciliada, Pipeline, tema claro/escuro
+
+### 10.1 Busca de editais: o que estava errado e como funciona agora
+Auditoria do fluxo antigo (`busca_editais.buscar_editais` + `radar_editais`): 3 consultas × 5 resultados = **no máximo 15
+resultados**, sem paginação; o resultado ficava só em `st.session_state` (trocar de aba perdia a lista) e cada clique refazia
+as 3 chamadas à SerpApi; importar era manual, um a um. Agora (`busca_editais.executar_busca`):
+`plano de consultas → cache persistente → normalização → filtros → deduplicação por URL canônica → persistência em editais
+→ verificação da página → situação efetiva`.
+- **Plano** (`montar_plano_de_busca`): por município do Cérebro da OSC × Prosas (`site:prosas.com.br/editais <município> <ano>`) e ×
+  gov.br; uma consulta geral por fonte (Prosas, gov.br, Mapa das OSC) com temas + estado; e as fontes cadastradas em
+  Configurações. Teto `BUSCA_EDITAIS_MAX_CONSULTAS` (12). Sem nenhum município fixo no código.
+- **Cache** (`busca_editais_cache`): cada (consulta, página, parâmetros) guarda resultados por `BUSCA_EDITAIS_CACHE_DIAS` (7) dias. "Buscar
+  editais" só chama a API para consultas SEM resultado válido salvo; **só "Atualizar busca" força novas chamadas**. Cada chamada real
+  é registrada em `uso_api` (limite `SERPAPI_LIMITE_MENSAL`; a reserva manual não é descontada porque a ação é manual) e cada execução
+  em `busca_editais_execucoes` (relatório mostrado na tela: consultas, chamadas, cache, brutos, únicos, novos, descartados por motivo,
+  por município/fonte/situação).
+- **Paginação/recência:** `SerpApiProvider.buscar(inicio=, recencia=)` → `start` e `tbs=qdr:y` (só resultados do último ano).
+- **Filtros de qualidade:** portal/lista genérica, perfil de outra OSC (Mapa das OSC), domínio de outro estado (`guaira.pr.gov.br`),
+  concurso/licitação/seleção de alunos, universidades. O que passa é salvo; **encerrados são salvos** (histórico), não descartados.
+- **Consulta sem resultado não é erro:** a SerpApi responde `error: "Google hasn't returned any results…"`; isso derrubava a busca inteira.
+- **Cadastro pelo link** (`cadastrar_por_url`): a equipe cola o endereço; o sistema abre a página, lê título/prazo/valor e salva. É o caminho
+  para editais recebidos por e-mail/WhatsApp ou muito recentes.
+
+### 10.2 Caso Miguelópolis (Prosas 19173): o que a busca NÃO acha e por quê
+A consulta `site:prosas.com.br/editais Miguelópolis 2026` devolveu **0 resultados** na SerpApi em 23/09/2026 (a página é do dia; o Google
+ainda não a indexara). Nenhum ajuste de consulta resolve isso — por isso existe o cadastro pelo link, que abre a página diretamente.
+**Bug de leitura corrigido:** `links_editais._buscar_pagina` (e `fontes_dados.buscar_http`) liam só o PRIMEIRO bloco recebido da rede
+(`next(iter_content(N))`), ~2 KB de uma página de ~160 KB. Daí a conclusão errada, nas rodadas v6/v7, de que o Prosas "é montado por
+JavaScript". Na verdade a página traz o objeto JSON da oportunidade dentro do HTML (`&quot;encerramento_das_inscricoes&quot;…`):
+`links_editais.extrair_dados_estruturados` lê nome, início/fim das inscrições (23/09 e 09/10/2026), indicadores de situação,
+áreas, público-alvo, "valor total do edital" (R$ 90.000,00) e a frase de elegibilidade ("Pessoas Físicas… residentes no município…").
+Esses dados entram como `prazo_origem = FONTE_ESTRUTURADA` (prazo prorrogado vira só sugestão). Observação: a página informa início em
+23/09, não 21/09 como no aviso recebido; vale a página.
+Elegibilidade a conferir pela equipe: o edital pede **Pessoas Físicas** residentes; o IORM é pessoa jurídica.
+
+### 10.3 Situação dos editais (`editais.situacao_efetiva`) — mudanças
+Data de hoje vem de `editais.hoje_brasil()` (São Paulo; sem valor fixo). Edital **sem prazo mas com ano anterior no título/URL**
+(ex.: "Edital 001/2025") → ENCERRADO com o motivo explícito (inferência declarada; a equipe pode confirmar um prazo e reverter).
+Prazo confirmado pela equipe prevalece sobre a marca "encerrado" da página. Lista de abertos ordena primeiro os avaliados com ≥ 3 critérios.
+
+### 10.4 Linha Cruzada: a causa real do doador que continuava prospect
+`metricas.PROGRAMAS_IORM` era uma constante fixa e **não continha o projeto "IORM CULTURAL 2026"** (apoiado em 2025 e 2026). Empresas
+como "Produtos Alimentícios Orlândia S/A" (doação em 2026) e "ORLASOLDA…" (2025) apareciam como prospects (a primeira, inclusive, entre
+os "prospects prioritários" do Dashboard). Agora a fonte única é `processamento/programas_iorm.py`: lista-base + programas do Cérebro da OSC
+(exceto nomes genéricos como "Artes e Cultura") + sigla/nome da OSC, com comparação por palavra inteira. `reconciliar_relacionamentos()` é
+chamada após cada ingestão de incentivos (provedores e scripts de coleta) e ao adicionar programa no Cérebro; além disso `carregar_empresas`
+usa os termos atuais, então a tela não depende de marca antiga. Reconciliação no banco real: 9 → 11 empresas em relacionamento (prospects
+8.302 → 8.300); nenhum registro apagado. Classificação manual e reabertura explícita sobrevivem.
+
+### 10.5 Pipeline: remover atualiza o quadro na hora
+O Kanban (`streamlit-sortables`) guarda estado no navegador; com chave fixa, o cartão removido só sumia após F5. A chave agora inclui uma
+assinatura do conteúdo (`assinatura_do_quadro`): mudou o conteúdo → o componente é remontado (≈ 3 s). Validado no navegador. A remoção
+continua sendo arquivamento com restauração.
+
+### 10.6 Tema claro/escuro e visual
+`paginas/_shared.py`: `TOKENS_TEMA` (mesmo conjunto de tokens semânticos nos dois temas), `tema_atual()` (`st.context.theme.type`),
+`tokens_do_tema()`; o CSS só usa `var(--iorm-*)` (teste garante que não há cor fixa fora do bloco de tokens, exceto a faixa do cabeçalho).
+`.streamlit/config.toml` define `[theme.light]` e `[theme.dark]` alinhados aos tokens para os componentes nativos. O Kanban (iframe) recebe as
+cores do tema como valores. Contraste WCAG dos pares texto/fundo testado nos dois temas. Visual: cabeçalho mais sóbrio, ícones de seção em
+"chip", métricas planas, sem hover animado, botões com texto legível.
+
+### 10.7 Limites reais desta rodada
+- A busca por API depende do índice do buscador (página nova pode não aparecer) e da cota gratuita; cobertura efetiva medida = 11 consultas /
+  70 resultados brutos / 66 únicos / 22 editais novos salvos (execução real de 23/09/2026); não se afirma cobertura total.
+- "Atualizar busca" só foi testado com provedor simulado (contagem de chamadas), para não gastar cota real.
+- Teste de contraste no navegador usa análise do DOM (fundo por elementos ancestrais); a faixa do cabeçalho (gradiente) e o rótulo do controle
+  deslizante são falsos positivos conhecidos. Tabelas (canvas do Streamlit) seguem o tema nativo e não foram medidas.

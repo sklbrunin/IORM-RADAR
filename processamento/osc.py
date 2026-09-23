@@ -311,6 +311,16 @@ def adicionar_palavra_chave(conexao: sqlite3.Connection, osc_id: int, palavra: s
     conexao.commit()
 
 
+def _reconciliar_apos_mudar_programas(conexao: sqlite3.Connection) -> None:
+    """Programas do Cérebro da OSC mudaram: quem apoiou o novo programa passa a ser Linha Cruzada."""
+    from processamento import relacionamento  # import tardio: evita ciclo osc <-> relacionamento
+
+    try:
+        relacionamento.reconciliar_relacionamentos(conexao)
+    except sqlite3.OperationalError:  # banco de teste sem as tabelas de empresas/incentivos
+        pass
+
+
 def adicionar_programa(conexao: sqlite3.Connection, osc_id: int, dados: dict) -> int:
     agora = _agora()
     cursor = conexao.execute(
@@ -338,6 +348,7 @@ def adicionar_programa(conexao: sqlite3.Connection, osc_id: int, dados: dict) ->
         ),
     )
     conexao.commit()
+    _reconciliar_apos_mudar_programas(conexao)
     return cursor.lastrowid
 
 

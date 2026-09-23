@@ -24,7 +24,7 @@ import requests
 RAIZ_PROJETO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(RAIZ_PROJETO))
 
-from processamento import banco, relatorio, transformacao  # noqa: E402
+from processamento import banco, relacionamento, relatorio, transformacao  # noqa: E402
 
 BASE_URL = "https://api.salic.cultura.gov.br/api/v1/incentivadores"
 FONTE_NOME = "SALIC - Sistema de Apoio às Leis de Incentivo à Cultura (Lei Rouanet)"
@@ -128,6 +128,8 @@ def coletar(uf: str, max_paginas: int | None, conexao) -> dict:
         },
     )
     conexao.commit()
+    # Incentivos novos podem tornar empresas "apoiadoras do IORM": reconcilia a Linha Cruzada.
+    relacionamento.reconciliar_relacionamentos(conexao)
     return resumo
 
 

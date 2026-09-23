@@ -30,7 +30,7 @@ import requests
 RAIZ_PROJETO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(RAIZ_PROJETO))
 
-from processamento import banco, transformacao  # noqa: E402
+from processamento import banco, relacionamento, transformacao  # noqa: E402
 
 BASE_URL = "https://api.salic.cultura.gov.br/api/v1/incentivadores"
 FONTE_NOME = "SALIC - Lei Rouanet (detalhamento por doação individual)"
@@ -138,6 +138,8 @@ def main():
         },
     )
     conexao.commit()
+    # Incentivos novos podem tornar empresas "apoiadoras do IORM": reconcilia a Linha Cruzada.
+    relacionamento.reconciliar_relacionamentos(conexao)
 
     print("\nDetalhamento concluído.")
     print(f"Empresas com detalhamento por projeto/ano encontrado: {resumo['detalhadas']}")

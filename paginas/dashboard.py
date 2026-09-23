@@ -25,6 +25,16 @@ def _abrir_edital(edital_id: int) -> None:
     _shared.ir_para_pagina("radar_editais")
 
 
+def _lista_curta(texto: str | None, maximo: int = 5) -> str | None:
+    """Lista separada por vírgulas encurtada de forma EXPLÍCITA ("e mais 10 na ficha") — o texto completo fica na ficha."""
+    if not texto:
+        return texto
+    itens = [i.strip() for i in texto.split(",") if i.strip()]
+    if len(itens) <= maximo:
+        return texto
+    return ", ".join(itens[:maximo]) + f" e mais {len(itens) - maximo} (lista completa na ficha)"
+
+
 def _cartao_edital(edital: dict) -> None:
     with st.container(border=True):
         if st.button(edital["titulo"], key=f"dash_edital_titulo_{edital['id']}", type="tertiary",
@@ -40,7 +50,7 @@ def _cartao_edital(edital: dict) -> None:
         linhas = [
             ("Instituição", edital.get("organizacao_promotora") or nd),
             ("Prazo", _shared.formatar_data(edital.get("data_encerramento"))),
-            ("Área temática", edital.get("area_tematica") or nd),
+            ("Área temática", _lista_curta(edital.get("area_tematica")) or nd),
             ("Valor", valor),
             ("Localização", edital.get("territorio") or nd),
         ]
@@ -89,7 +99,7 @@ def render() -> None:
     )
 
     valor_potencial = crm.valor_potencial_total(oportunidades_crm)
-    follow_ups = crm.classificar_follow_ups(oportunidades_crm, hoje=date.today())
+    follow_ups = crm.classificar_follow_ups(oportunidades_crm, hoje=editais.hoje_brasil())
     sem_proxima_acao = crm.oportunidades_sem_proxima_acao(oportunidades_crm)
     contagem_estagios = crm.contar_por_estagio(oportunidades_crm)
     contadores = metricas.contadores_empresas(df_mesclado)
@@ -116,7 +126,7 @@ def render() -> None:
     # ============================================================ 2. OPORTUNIDADES ABERTAS
     _shared.secao(
         "Editais com alta aderência", "🏆",
-        f"Somente editais ABERTOS (prazo real ainda vigente) com aderência ≥ {_shared.formatar_nota(LIMIAR_ADERENCIA_ALTA).replace('/10', '')}. "
+        f"Somente editais ABERTOS (prazo real ainda vigente) com aderência ≥ {_shared.formatar_nota(LIMIAR_ADERENCIA_ALTA).replace('/10', '')}, "
         f"calculada com pelo menos {CRITERIOS_MINIMOS} dos 6 critérios. Clique no título para abrir a ficha completa.",
     )
     if not perfil_osc:

@@ -14,25 +14,29 @@ from streamlit_sortables import sort_items
 from processamento import crm, osc
 from paginas import _shared
 
-_ESTILO_KANBAN = """
-.sortable-component { display: flex; gap: 0.7rem; overflow-x: auto; padding-bottom: 0.5rem; }
-.sortable-container {
-    background: #FAFBFC; border: 1px solid #E3E8ED;
-    border-radius: 12px; min-width: 210px; flex: 1 1 0;
-}
-.sortable-container-header {
-    font-weight: 800; color: #132A3A !important; font-size: 0.74rem; text-transform: uppercase;
-    letter-spacing: 0.03em; padding: 0.6rem 0.7rem 0.5rem 0.7rem; border-bottom: 2px solid #E3E8ED;
-}
-.sortable-container-body { padding: 0.5rem; min-height: 120px; }
-.sortable-item {
-    background: white !important; color: #132A3A !important; border: 1px solid #E3E8ED; border-left: 4px solid #29ABE2;
+def _estilo_kanban() -> str:
+    """CSS do quadro Kanban. O componente roda num iframe: ele NÃO enxerga as variáveis CSS da página, então as cores do
+    tema ativo (claro/escuro) são injetadas aqui como valores."""
+    c = _shared.tokens_do_tema()
+    return f"""
+.sortable-component {{ display: flex; gap: 0.7rem; overflow-x: auto; padding-bottom: 0.5rem; }}
+.sortable-container {{
+    background: {c['superficie-alt']}; border: 1px solid {c['borda']};
+    border-radius: 10px; min-width: 210px; flex: 1 1 0;
+}}
+.sortable-container-header {{
+    font-weight: 800; color: {c['navy']} !important; font-size: 0.74rem; text-transform: uppercase;
+    letter-spacing: 0.03em; padding: 0.6rem 0.7rem 0.5rem 0.7rem; border-bottom: 2px solid {c['borda']};
+}}
+.sortable-container-body {{ padding: 0.5rem; min-height: 120px; }}
+.sortable-item {{
+    background: {c['superficie']} !important; color: {c['navy']} !important; border: 1px solid {c['borda']}; border-left: 4px solid {c['azul-claro']};
     border-radius: 8px; padding: 0.55rem 0.65rem; margin-bottom: 0.5rem; font-size: 0.82rem; cursor: grab;
-    box-shadow: 0 1px 2px rgba(19,42,58,0.05); text-align: left; white-space: normal; line-height: 1.35;
-}
-.sortable-item:hover { box-shadow: 0 3px 8px rgba(19,42,58,0.12); color: #132A3A !important; }
-.sortable-item:focus { color: #132A3A !important; }
-.sortable-item.dragging { opacity: 0.6; }
+    text-align: left; white-space: normal; line-height: 1.35;
+}}
+.sortable-item:hover {{ border-color: {c['azul']}; color: {c['navy']} !important; }}
+.sortable-item:focus {{ color: {c['navy']} !important; }}
+.sortable-item.dragging {{ opacity: 0.6; }}
 """
 
 _PADRAO_ID_CARTAO = re.compile(r"^#(\d+)")
@@ -140,6 +144,16 @@ def _secao_removidas(conexao) -> None:
                 st.rerun()
 
 
+def assinatura_do_quadro(oportunidades: list[dict]) -> str:
+    """Identifica o CONTEÚDO do quadro (quais cartões, em qual coluna e com qual título). É parte da chave do
+    componente Kanban: o componente guarda o próprio estado no navegador e, com chave fixa, continuava mostrando
+    o cartão removido até recarregar a página. Mudou o conteúdo → chave nova → o quadro é remontado na hora."""
+    import hashlib
+
+    bruto = "|".join(f"{op['id']}:{op['estagio']}:{_rotulo_cartao(op)}" for op in sorted(oportunidades, key=lambda o: o["id"]))
+    return hashlib.md5(bruto.encode("utf-8")).hexdigest()[:10]
+
+
 def _kanban(conexao, oportunidades: list[dict]) -> None:
     _shared.secao(
         "Pipeline de Captação", "🔀",
@@ -154,7 +168,7 @@ def _kanban(conexao, oportunidades: list[dict]) -> None:
 
     resultado = sort_items(
         estrutura, multi_containers=True, direction="horizontal",
-        custom_style=_ESTILO_KANBAN, key="kanban_pipeline",
+        custom_style=_estilo_kanban(), key=f"kanban_pipeline_{assinatura_do_quadro(oportunidades)}",
     )
 
     # Compara com o estado salvo: qualquer cartão que apareça agora sob um header

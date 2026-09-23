@@ -75,274 +75,286 @@ CORES = {
 }
 
 
+# --------------------------------------------------------------------------- tema (claro/escuro)
+# Tokens SEMÂNTICOS: as páginas só usam var(--iorm-*) — nunca uma cor fixa. Cada tema define o mesmo conjunto de
+# nomes; o tema ativo (st.context.theme.type) decide quais valores são injetados. Marca: azul (primária), laranja
+# (ação/destaque) e verde (positivo), extraídos da logo do IORM; neutros próprios, sóbrios.
+TOKENS_TEMA: dict[str, dict[str, str]] = {
+    "light": {
+        "azul": "#136A9A", "azul-claro": "#29ABE2", "azul-escuro": "#0D4E73", "azul-bg": "#E8F3FA",
+        "laranja": "#E58A0C", "laranja-escuro": "#B8690A", "laranja-bg": "#FDF1DC",
+        "verde": "#5E9B22", "verde-escuro": "#3F7212", "verde-bg": "#ECF6DF",
+        "vermelho": "#C0392B", "vermelho-bg": "#FBEAE8",
+        "navy": "#12263A", "fundo": "#F3F5F8", "superficie": "#FFFFFF", "superficie-alt": "#F8FAFC",
+        "borda": "#E1E7ED", "borda-forte": "#C9D3DC", "cinza": "#55666F", "cinza-claro": "#7C8B95", "cinza-bg": "#EDF0F3",
+        "badge-laranja-texto": "#8F5208", "badge-vermelho-texto": "#9B2F22", "aviso-texto": "#5C3F08",
+        "limitacao-texto": "#7A2E2E", "info-texto": "#0E4666", "destaque-fim": "#FFF8EC", "destaque-borda": "#F1D6A2",
+        "on-azul": "#FFFFFF", "sidebar-marca": "#FFFFFF",
+        "sombra-sm": "0 1px 2px rgba(18,38,58,0.05)", "sombra-md": "0 2px 8px rgba(18,38,58,0.08)",
+        "sombra-lg": "0 6px 20px rgba(18,38,58,0.10)", "grafico": "#1F5F8B",
+    },
+    "dark": {
+        "azul": "#5DB7E8", "azul-claro": "#7CC6F0", "azul-escuro": "#9CD3F2", "azul-bg": "#12314A",
+        "laranja": "#F0A030", "laranja-escuro": "#FFB95C", "laranja-bg": "#3B2A0E",
+        "verde": "#8CC94B", "verde-escuro": "#A9DC70", "verde-bg": "#1E3316",
+        "vermelho": "#F0776A", "vermelho-bg": "#3D1C1C",
+        "navy": "#E9EFF6", "fundo": "#0D1520", "superficie": "#16212F", "superficie-alt": "#1A2839",
+        "borda": "#2A3A4D", "borda-forte": "#3B5068", "cinza": "#AAB8C6", "cinza-claro": "#8B9BAC", "cinza-bg": "#223245",
+        "badge-laranja-texto": "#FFC670", "badge-vermelho-texto": "#FF9F94", "aviso-texto": "#F3D9A6",
+        "limitacao-texto": "#F5BDBD", "info-texto": "#BFE4F8", "destaque-fim": "#2F2410", "destaque-borda": "#5B4519",
+        "on-azul": "#08131C", "sidebar-marca": "#16212F",
+        "sombra-sm": "0 1px 2px rgba(0,0,0,0.35)", "sombra-md": "0 2px 10px rgba(0,0,0,0.40)",
+        "sombra-lg": "0 8px 24px rgba(0,0,0,0.45)", "grafico": "#5DB7E8",
+    },
+}
+
+
+def tema_atual() -> str:
+    """"light" ou "dark", conforme o tema ativo do Streamlit (escolha do usuário no menu ou do sistema)."""
+    try:
+        return "dark" if st.context.theme.type == "dark" else "light"
+    except Exception:  # versões sem st.context.theme, ou fora de execução (testes)
+        return "light"
+
+
+def tokens_do_tema(tema: str | None = None) -> dict[str, str]:
+    return TOKENS_TEMA.get(tema or tema_atual(), TOKENS_TEMA["light"])
+
+
 def injetar_css() -> None:
+    tema = tema_atual()
+    variaveis = "\n".join(f"            --iorm-{nome}: {valor};" for nome, valor in TOKENS_TEMA[tema].items())
     st.markdown(
-        """
+        f"""
         <style>
         @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
 
-        :root {
-            /* Marca — extraída da logo real do IORM */
-            --iorm-azul: #136A9A;          /* primária: navegação, links, dados-chave */
-            --iorm-azul-claro: #29ABE2;
-            --iorm-azul-escuro: #0D4E73;
-            --iorm-azul-bg: #EAF5FB;
-            --iorm-laranja: #F0900F;       /* destaque/ação: CTA, prioridade, alerta suave */
-            --iorm-laranja-escuro: #C97207;
-            --iorm-laranja-bg: #FEF2DF;
-            --iorm-verde: #6FA82E;         /* secundária: sucesso, aderência alta, positivo */
-            --iorm-verde-escuro: #4C7A1B;
-            --iorm-verde-bg: #EEF8E1;
-            --iorm-vermelho: #C0392B;      /* erro/crítico */
-            --iorm-vermelho-bg: #FDECEC;
-            --iorm-navy: #132A3A;          /* texto de destaque, títulos */
-
-            /* Neutros — escala própria, não cinza genérico de framework */
-            --iorm-fundo: #F4F6F8;
-            --iorm-superficie: #FFFFFF;
-            --iorm-superficie-alt: #FAFBFC;
-            --iorm-borda: #E3E8ED;
-            --iorm-borda-forte: #CBD5DD;
-            --iorm-cinza: #5A6B72;
-            --iorm-cinza-claro: #8B99A3;
-
-            /* Elevação — mesma "física" de sombra em todo o produto */
-            --iorm-sombra-sm: 0 1px 2px rgba(19,42,58,0.05);
-            --iorm-sombra-md: 0 2px 10px rgba(19,42,58,0.08);
-            --iorm-sombra-lg: 0 10px 30px rgba(19,42,58,0.14);
-            --iorm-raio: 12px;
+        :root {{
+{variaveis}
+            --iorm-raio: 10px;
             --iorm-raio-sm: 8px;
-        }
+            color-scheme: {tema};
+        }}
 
-        html, body, [class*="css"] { font-family: 'Manrope', -apple-system, sans-serif; }
-        .stApp { background-color: var(--iorm-fundo); }
-        h1, h2, h3, h4 { color: var(--iorm-navy); font-weight: 700; letter-spacing: -0.012em; }
-        h1 { font-weight: 800; }
-        p, span, label, div { letter-spacing: 0; }
-        [data-testid="stAppViewContainer"] .block-container { padding-top: 1.6rem; max-width: 1280px; }
+        html, body, [class*="css"] {{ font-family: 'Manrope', -apple-system, sans-serif; }}
+        .stApp {{ background-color: var(--iorm-fundo); color: var(--iorm-navy); }}
+        h1, h2, h3, h4, h5 {{ color: var(--iorm-navy); font-weight: 700; letter-spacing: -0.012em; }}
+        h1 {{ font-weight: 800; }}
+        p, span, label, div {{ letter-spacing: 0; }}
+        [data-testid="stAppViewContainer"] .block-container {{ padding-top: 1.6rem; max-width: 1500px; }}
+        [data-testid="stCaptionContainer"] {{ color: var(--iorm-cinza); }}
+        a {{ color: var(--iorm-azul); }}
 
         /* ---------- sidebar ---------- */
-        [data-testid="stSidebar"] {
+        [data-testid="stSidebar"] {{
             background-color: var(--iorm-superficie); border-right: 1px solid var(--iorm-borda);
-        }
-        [data-testid="stSidebar"] .stMarkdown p { color: var(--iorm-cinza); }
-        [data-testid="stSidebarNav"] { padding-top: 0.25rem; }
-
-        .iorm-marca-sidebar {
+        }}
+        [data-testid="stSidebar"] .stMarkdown p {{ color: var(--iorm-cinza); }}
+        [data-testid="stSidebarNav"] {{ padding-top: 0.25rem; }}
+        .iorm-marca-sidebar {{
             display: flex; align-items: center; gap: 0.65rem; padding: 1rem 0.9rem 1rem 0.9rem;
             border-bottom: 1px solid var(--iorm-borda); margin: -1rem -1rem 0.8rem -1rem; width: calc(100% + 2rem);
-            background: linear-gradient(180deg, #FFFFFF 0%, #FBFDFE 100%);
-        }
-        .iorm-marca-sidebar img { display: block; }
-        .iorm-marca-nome { font-weight: 800; color: var(--iorm-navy); font-size: 1.02rem; line-height: 1.15; letter-spacing: -0.01em; }
-        .iorm-marca-sub { color: var(--iorm-azul); font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+            background: var(--iorm-sidebar-marca);
+        }}
+        .iorm-marca-sidebar img {{ display: block; background: #FFFFFF; border-radius: 8px; padding: 3px; }}
+        .iorm-marca-nome {{ font-weight: 800; color: var(--iorm-navy); font-size: 1.02rem; line-height: 1.15; letter-spacing: -0.01em; }}
+        .iorm-marca-sub {{ color: var(--iorm-azul); font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }}
+        [data-testid="stSidebarNav"] > ul, [data-testid="stSidebarNavItems"] {{ gap: 0.05rem; }}
 
-        /* Grupos de navegação (Visão Geral / Inteligência / Captação / Sistema) */
-        [data-testid="stSidebarNav"] > ul, [data-testid="stSidebarNavItems"] { gap: 0.05rem; }
-        [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p:has(> strong) { }
-
-        /* ---------- cabeçalho de página ---------- */
-        .iorm-header {
-            background: linear-gradient(120deg, var(--iorm-navy) 0%, var(--iorm-azul-escuro) 55%, var(--iorm-azul) 100%);
-            border-radius: 16px; padding: 1.5rem 1.8rem; margin-bottom: 1.7rem;
-            display: flex; align-items: center; gap: 1.2rem; position: relative; overflow: hidden;
-            box-shadow: var(--iorm-sombra-lg);
-        }
-        .iorm-header::after {
-            content: ''; position: absolute; right: -60px; top: -60px; width: 220px; height: 220px;
-            border-radius: 50%; background: radial-gradient(circle, rgba(240,144,15,0.18) 0%, rgba(240,144,15,0) 70%);
-        }
-        .iorm-header-logo {
-            background: rgba(255,255,255,0.96); border-radius: 12px; padding: 8px 10px;
-            display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-            position: relative; z-index: 1;
-        }
-        .iorm-header-texto { position: relative; z-index: 1; }
-        .iorm-header h1 { color: white; margin: 0; font-size: 1.6rem; }
-        .iorm-header p { color: #CFE7F5; margin: 0.2rem 0 0 0; font-size: 0.93rem; }
-        .iorm-header-eyebrow {
-            color: var(--iorm-laranja); font-size: 0.7rem; font-weight: 800; text-transform: uppercase;
+        /* ---------- cabeçalho de página (mesmo visual nos dois temas: faixa escura com a marca) ---------- */
+        .iorm-header {{
+            background: linear-gradient(120deg, #10283C 0%, #0D4E73 60%, #136A9A 100%);
+            border-radius: 12px; padding: 1.25rem 1.6rem; margin-bottom: 1.5rem;
+            display: flex; align-items: center; gap: 1.1rem; position: relative; overflow: hidden;
+            box-shadow: var(--iorm-sombra-md); border: 1px solid rgba(255,255,255,0.06);
+        }}
+        .iorm-header-logo {{
+            background: #FFFFFF; border-radius: 10px; padding: 7px 9px;
+            display: flex; align-items: center; justify-content: center; position: relative; z-index: 1;
+        }}
+        .iorm-header-texto {{ position: relative; z-index: 1; }}
+        .iorm-header h1 {{ color: #FFFFFF; margin: 0; font-size: 1.5rem; }}
+        .iorm-header p {{ color: #CFE4F2; margin: 0.2rem 0 0 0; font-size: 0.92rem; }}
+        .iorm-header-eyebrow {{
+            color: #FFB95C; font-size: 0.68rem; font-weight: 800; text-transform: uppercase;
             letter-spacing: 0.08em; margin-bottom: 0.15rem; display: block;
-        }
+        }}
 
         /* ---------- cards / métricas ---------- */
-        div[data-testid="stMetric"] {
+        div[data-testid="stMetric"] {{
             background-color: var(--iorm-superficie); border: 1px solid var(--iorm-borda); border-radius: var(--iorm-raio);
-            padding: 1rem 1.15rem 0.8rem 1.15rem; box-shadow: var(--iorm-sombra-sm);
-            transition: box-shadow 0.15s ease, transform 0.15s ease;
-        }
-        div[data-testid="stMetric"]:hover { box-shadow: var(--iorm-sombra-md); transform: translateY(-1px); }
-        div[data-testid="stMetricLabel"] { color: var(--iorm-cinza); font-weight: 600; font-size: 0.8rem; }
-        div[data-testid="stMetricValue"] { color: var(--iorm-navy); font-weight: 800; }
+            padding: 0.95rem 1.1rem 0.8rem 1.1rem; box-shadow: var(--iorm-sombra-sm);
+        }}
+        div[data-testid="stMetricLabel"] {{ color: var(--iorm-cinza); font-weight: 600; font-size: 0.8rem; }}
+        div[data-testid="stMetricValue"] {{ color: var(--iorm-navy); font-weight: 800; }}
 
         /* ---------- seções ---------- */
-        .iorm-secao {
-            display: flex; align-items: center; gap: 0.5rem; margin: 1.7rem 0 0.7rem 0;
-            padding-bottom: 0.45rem; border-bottom: 2px solid var(--iorm-borda);
-        }
-        .iorm-secao-icone { font-size: 1.1rem; }
-        .iorm-secao h3 { margin: 0; font-size: 1.08rem; }
-        .iorm-secao-desc { color: var(--iorm-cinza); font-size: 0.84rem; margin: -0.3rem 0 0.8rem 0; }
+        .iorm-secao {{
+            display: flex; align-items: center; gap: 0.6rem; margin: 1.7rem 0 0.7rem 0;
+            padding-bottom: 0.5rem; border-bottom: 1px solid var(--iorm-borda);
+        }}
+        .iorm-secao-icone {{
+            display: inline-flex; align-items: center; justify-content: center; width: 1.8rem; height: 1.8rem;
+            border-radius: 8px; background: var(--iorm-azul-bg); font-size: 0.95rem; flex: 0 0 auto;
+        }}
+        .iorm-secao h3 {{ margin: 0; font-size: 1.05rem; color: var(--iorm-navy); }}
+        .iorm-secao-desc {{ color: var(--iorm-cinza); font-size: 0.84rem; margin: -0.3rem 0 0.8rem 0; }}
 
         /* ---------- cartão genérico reutilizável ---------- */
-        .iorm-cartao {
+        .iorm-cartao {{
             background: var(--iorm-superficie); border: 1px solid var(--iorm-borda); border-radius: var(--iorm-raio);
-            padding: 1.1rem 1.25rem; box-shadow: var(--iorm-sombra-sm); margin-bottom: 0.9rem;
-        }
-        .iorm-cartao-titulo {
+            padding: 1.1rem 1.25rem; box-shadow: var(--iorm-sombra-sm); margin-bottom: 0.9rem; color: var(--iorm-navy);
+        }}
+        .iorm-cartao-titulo {{
             font-weight: 800; color: var(--iorm-navy); font-size: 0.95rem; margin-bottom: 0.6rem;
             display: flex; align-items: center; gap: 0.4rem;
-        }
+        }}
 
         /* ---------- badges / pills ---------- */
-        .iorm-badge {
-            display: inline-block; padding: 0.2rem 0.68rem; border-radius: 999px;
+        .iorm-badge {{
+            display: inline-block; padding: 0.2rem 0.65rem; border-radius: 999px;
             font-size: 0.73rem; font-weight: 700; margin-right: 0.3rem; margin-bottom: 0.25rem; white-space: nowrap;
-        }
-        .iorm-badge-azul { background: var(--iorm-azul-bg); color: var(--iorm-azul); }
-        .iorm-badge-laranja { background: var(--iorm-laranja-bg); color: #A9640A; }
-        .iorm-badge-verde { background: var(--iorm-verde-bg); color: var(--iorm-verde-escuro); }
-        .iorm-badge-cinza { background: #EEF1F4; color: var(--iorm-cinza); }
-        .iorm-badge-vermelho { background: var(--iorm-vermelho-bg); color: #A03426; }
-
-        .iorm-status { font-weight: 700; font-size: 0.85rem; }
+        }}
+        .iorm-badge-azul {{ background: var(--iorm-azul-bg); color: var(--iorm-azul); }}
+        .iorm-badge-laranja {{ background: var(--iorm-laranja-bg); color: var(--iorm-badge-laranja-texto); }}
+        .iorm-badge-verde {{ background: var(--iorm-verde-bg); color: var(--iorm-verde-escuro); }}
+        .iorm-badge-cinza {{ background: var(--iorm-cinza-bg); color: var(--iorm-cinza); }}
+        .iorm-badge-vermelho {{ background: var(--iorm-vermelho-bg); color: var(--iorm-badge-vermelho-texto); }}
+        .iorm-status {{ font-weight: 700; font-size: 0.85rem; }}
 
         /* ---------- estados vazios ---------- */
-        .iorm-card-vazio {
+        .iorm-card-vazio {{
             background: var(--iorm-superficie-alt); border: 1.5px dashed var(--iorm-borda-forte); border-radius: var(--iorm-raio);
-            padding: 1.9rem 1.4rem; text-align: center; color: var(--iorm-cinza-claro);
-        }
-        .iorm-card-vazio-icone { font-size: 1.7rem; display: block; margin-bottom: 0.4rem; }
+            padding: 1.6rem 1.4rem; text-align: center; color: var(--iorm-cinza);
+        }}
+        .iorm-card-vazio-icone {{ font-size: 1.5rem; display: block; margin-bottom: 0.4rem; }}
 
         /* ---------- fluxo / diagrama ---------- */
-        .iorm-fluxo-linha { display: flex; flex-direction: column; align-items: center; gap: 2px; margin: 1rem 0; }
-        .iorm-fluxo-caixa {
-            background-color: var(--iorm-azul); color: white; padding: 0.45rem 1.1rem;
+        .iorm-fluxo-linha {{ display: flex; flex-direction: column; align-items: center; gap: 2px; margin: 1rem 0; }}
+        .iorm-fluxo-caixa {{
+            background-color: var(--iorm-azul); color: var(--iorm-on-azul); padding: 0.45rem 1.1rem;
             border-radius: var(--iorm-raio-sm); font-weight: 600; text-align: center; min-width: 300px; font-size: 0.88rem;
-        }
-        .iorm-fluxo-seta { color: var(--iorm-laranja); font-size: 1.2rem; line-height: 1; }
+        }}
+        .iorm-fluxo-seta {{ color: var(--iorm-laranja); font-size: 1.2rem; line-height: 1; }}
 
         /* ---------- avisos ---------- */
-        .iorm-aviso {
+        .iorm-aviso {{
             background-color: var(--iorm-laranja-bg); border-left: 4px solid var(--iorm-laranja);
-            padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.88rem; color: #6B4A0B; margin: 0.6rem 0;
-        }
-        .iorm-limitacao {
+            padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.88rem; color: var(--iorm-aviso-texto); margin: 0.6rem 0;
+        }}
+        .iorm-limitacao {{
             background-color: var(--iorm-vermelho-bg); border-left: 4px solid var(--iorm-vermelho);
-            padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.86rem; color: #7A2E2E; margin: 0.6rem 0;
-        }
-        .iorm-info {
+            padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.86rem; color: var(--iorm-limitacao-texto); margin: 0.6rem 0;
+        }}
+        .iorm-info {{
             background-color: var(--iorm-azul-bg); border-left: 4px solid var(--iorm-azul-claro);
-            padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.88rem; color: #0F4C6B; margin: 0.6rem 0;
-        }
+            padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.88rem; color: var(--iorm-info-texto); margin: 0.6rem 0;
+        }}
 
         /* ---------- próxima ação (CTA de destaque) ---------- */
-        .iorm-proxima-acao {
-            background: linear-gradient(120deg, var(--iorm-laranja-bg) 0%, #FFF8EC 100%);
-            border: 1.5px solid #F5D9A8; border-radius: var(--iorm-raio); padding: 1.1rem 1.3rem;
+        .iorm-proxima-acao {{
+            background: linear-gradient(120deg, var(--iorm-laranja-bg) 0%, var(--iorm-destaque-fim) 100%);
+            border: 1px solid var(--iorm-destaque-borda); border-radius: var(--iorm-raio); padding: 1.1rem 1.3rem;
             margin: 0.8rem 0 1rem 0; display: flex; align-items: flex-start; gap: 0.8rem;
-        }
-        .iorm-proxima-acao-icone { font-size: 1.4rem; line-height: 1; }
-        .iorm-proxima-acao-rotulo { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: var(--iorm-laranja-escuro); }
-        .iorm-proxima-acao-texto { color: var(--iorm-navy); font-weight: 700; font-size: 0.98rem; margin-top: 0.1rem; }
+        }}
+        .iorm-proxima-acao-icone {{ font-size: 1.4rem; line-height: 1; }}
+        .iorm-proxima-acao-rotulo {{ font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: var(--iorm-laranja-escuro); }}
+        .iorm-proxima-acao-texto {{ color: var(--iorm-navy); font-weight: 700; font-size: 0.98rem; margin-top: 0.1rem; }}
 
-        /* ---------- kanban ---------- */
-        .iorm-kanban-coluna {
+        /* ---------- kanban (cartões do Dashboard) ---------- */
+        .iorm-kanban-coluna {{
             background: var(--iorm-superficie-alt); border: 1px solid var(--iorm-borda); border-radius: var(--iorm-raio);
             padding: 0.7rem; min-height: 140px;
-        }
-        .iorm-kanban-titulo {
+        }}
+        .iorm-kanban-titulo {{
             font-weight: 800; color: var(--iorm-navy); font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.03em;
             padding-bottom: 0.4rem; border-bottom: 2px solid var(--iorm-borda); margin-bottom: 0.3rem;
-        }
-        .iorm-kanban-cartao {
+        }}
+        .iorm-kanban-cartao {{
             background: var(--iorm-superficie); border: 1px solid var(--iorm-borda); border-left: 4px solid var(--iorm-azul-claro);
             border-radius: var(--iorm-raio-sm); padding: 0.6rem 0.7rem; margin: 0.5rem 0; font-size: 0.83rem;
-            box-shadow: var(--iorm-sombra-sm); transition: box-shadow 0.15s ease;
-        }
-        .iorm-kanban-cartao:hover { box-shadow: var(--iorm-sombra-md); }
-        .iorm-kanban-cartao b { color: var(--iorm-navy); }
-        .iorm-kanban-cartao-valor { color: var(--iorm-verde-escuro); font-weight: 700; }
+            box-shadow: var(--iorm-sombra-sm); color: var(--iorm-navy);
+        }}
+        .iorm-kanban-cartao b {{ color: var(--iorm-navy); }}
+        .iorm-kanban-cartao-valor {{ color: var(--iorm-verde-escuro); font-weight: 700; }}
 
         /* ---------- timeline (CRM) ---------- */
-        .iorm-timeline-item {
+        .iorm-timeline-item {{
             display: flex; gap: 0.8rem; padding: 0.55rem 0; border-left: 2px solid var(--iorm-borda);
             margin-left: 0.5rem; padding-left: 1rem; position: relative;
-        }
-        .iorm-timeline-item::before {
+        }}
+        .iorm-timeline-item::before {{
             content: ''; position: absolute; left: -6px; top: 0.75rem; width: 10px; height: 10px;
             border-radius: 50%; background: var(--iorm-azul-claro); box-shadow: 0 0 0 3px var(--iorm-azul-bg);
-        }
-        .iorm-timeline-data { font-weight: 700; color: var(--iorm-azul); font-size: 0.82rem; min-width: 88px; }
-        .iorm-timeline-texto { font-size: 0.86rem; color: var(--iorm-navy); }
-        .iorm-timeline-meta { font-size: 0.78rem; color: var(--iorm-cinza); }
+        }}
+        .iorm-timeline-data {{ font-weight: 700; color: var(--iorm-azul); font-size: 0.82rem; min-width: 88px; }}
+        .iorm-timeline-texto {{ font-size: 0.86rem; color: var(--iorm-navy); }}
+        .iorm-timeline-meta {{ font-size: 0.78rem; color: var(--iorm-cinza); }}
 
         /* ---------- botões ---------- */
-        .stButton > button {
+        .stButton > button, [data-testid^="stBaseLinkButton"], .stDownloadButton > button {{
             border-radius: var(--iorm-raio-sm); font-weight: 700; border: 1px solid var(--iorm-borda-forte);
-            transition: all 0.12s ease;
-        }
-        .stButton > button[kind="primary"] {
-            background: var(--iorm-laranja); border-color: var(--iorm-laranja); box-shadow: 0 2px 6px rgba(240,144,15,0.3);
-        }
-        .stButton > button[kind="primary"]:hover { background: var(--iorm-laranja-escuro); border-color: var(--iorm-laranja-escuro); }
+            transition: background-color 0.12s ease, border-color 0.12s ease;
+        }}
+        .stButton > button[kind="primary"], [data-testid="stBaseLinkButton-primary"] {{
+            background: var(--iorm-laranja); border-color: var(--iorm-laranja); color: #1A1204;
+        }}
+        .stButton > button[kind="primary"]:hover {{ background: var(--iorm-laranja-escuro); border-color: var(--iorm-laranja-escuro); color: #FFFFFF; }}
 
         /* ---------- tabs ---------- */
-        .stTabs [data-baseweb="tab"] { font-weight: 700; font-size: 0.9rem; }
-        .stTabs [aria-selected="true"] { color: var(--iorm-azul) !important; }
+        .stTabs [data-baseweb="tab"] {{ font-weight: 700; font-size: 0.9rem; }}
+        .stTabs [aria-selected="true"] {{ color: var(--iorm-azul) !important; }}
 
         /* ---------- dataframe ---------- */
-        [data-testid="stDataFrame"] { border-radius: 10px; overflow: hidden; border: 1px solid var(--iorm-borda); }
+        [data-testid="stDataFrame"] {{ border-radius: 8px; overflow: hidden; border: 1px solid var(--iorm-borda); }}
 
         /* ---------- LEGIBILIDADE: nada de "..." em informação importante ---------- */
-        [data-testid="stAppViewContainer"] .block-container { max-width: 1500px; }
-        div[data-testid="stMetric"] { min-height: 104px; height: 100%; }
-        div[data-testid="stMetricLabel"], div[data-testid="stMetricLabel"] * {
+        div[data-testid="stMetric"] {{ min-height: 104px; height: 100%; }}
+        div[data-testid="stMetricLabel"], div[data-testid="stMetricLabel"] * {{
             white-space: normal !important; overflow: visible !important; text-overflow: clip !important; line-height: 1.25;
-        }
-        div[data-testid="stMetricValue"], div[data-testid="stMetricValue"] * {
+        }}
+        div[data-testid="stMetricValue"], div[data-testid="stMetricValue"] * {{
             white-space: normal !important; overflow: visible !important; text-overflow: clip !important;
             overflow-wrap: anywhere; line-height: 1.15; font-size: clamp(1.1rem, 1.9vw, 1.9rem);
-        }
-        div[data-testid="stMetricDelta"] { white-space: normal !important; }
-        .stButton > button, [data-testid^="stBaseLinkButton"], .stDownloadButton > button, [data-testid="stFormSubmitButton"] > button {
+        }}
+        div[data-testid="stMetricDelta"] {{ white-space: normal !important; }}
+        .stButton > button, [data-testid^="stBaseLinkButton"], .stDownloadButton > button, [data-testid="stFormSubmitButton"] > button {{
             white-space: normal !important; height: auto !important; min-height: 2.5rem; line-height: 1.25; padding-top: 0.45rem; padding-bottom: 0.45rem;
-        }
-        [data-testid="stExpander"] summary p, [data-testid="stExpander"] summary span {
+        }}
+        [data-testid="stExpander"] summary p, [data-testid="stExpander"] summary span {{
             white-space: normal !important; overflow: visible !important; text-overflow: clip !important;
-        }
-        .stTabs [data-baseweb="tab"] { white-space: normal; height: auto; padding-top: 0.5rem; padding-bottom: 0.5rem; }
-        [data-testid="stCaptionContainer"], [data-testid="stMarkdownContainer"] { overflow-wrap: anywhere; }
-        [data-baseweb="select"] > div { height: auto; min-height: 2.5rem; }
-        [data-baseweb="select"] [class*="ValueContainer"], [data-baseweb="select"] div[value] {
+        }}
+        .stTabs [data-baseweb="tab"] {{ white-space: normal; height: auto; padding-top: 0.5rem; padding-bottom: 0.5rem; }}
+        [data-testid="stCaptionContainer"], [data-testid="stMarkdownContainer"] {{ overflow-wrap: anywhere; }}
+        [data-baseweb="select"] > div {{ height: auto; min-height: 2.5rem; }}
+        [data-baseweb="select"] [class*="ValueContainer"], [data-baseweb="select"] div[value] {{
             white-space: normal !important; overflow: visible !important; text-overflow: clip !important;
-        }
-        .iorm-cartao, .iorm-proxima-acao-texto, .iorm-kanban-cartao { overflow-wrap: anywhere; }
-        .iorm-cartao { min-height: 118px; }
+        }}
+        .iorm-cartao, .iorm-proxima-acao-texto, .iorm-kanban-cartao {{ overflow-wrap: anywhere; }}
+        .iorm-cartao {{ min-height: 118px; }}
 
         /* aderência explicada: um critério por linha, badge + explicação sempre completos */
-        .iorm-crit { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.35rem 0.8rem; margin: 0.28rem 0; }
-        .iorm-crit-texto { color: var(--iorm-cinza); font-size: 0.86rem; line-height: 1.4; flex: 1 1 260px; min-width: 0; }
+        .iorm-crit {{ display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.35rem 0.8rem; margin: 0.28rem 0; }}
+        .iorm-crit-texto {{ color: var(--iorm-cinza); font-size: 0.86rem; line-height: 1.4; flex: 1 1 260px; min-width: 0; }}
         /* cartão de edital do Dashboard */
-        .iorm-edital-linha { color: var(--iorm-cinza); font-size: 0.84rem; line-height: 1.45; margin: 0.12rem 0; overflow-wrap: anywhere; }
-        .iorm-edital-linha b { color: var(--iorm-navy); }
-        .iorm-edital-resumo { color: var(--iorm-navy); font-size: 0.86rem; line-height: 1.45; margin-top: 0.4rem; overflow-wrap: anywhere; }
-        [data-testid="stVerticalBlockBorderWrapper"] .stButton > button[kind="tertiary"] {
-            text-align: left; justify-content: flex-start; font-weight: 800; color: var(--iorm-azul-escuro);
-            padding-left: 0; font-size: 1rem;
-        }
+        .iorm-edital-linha {{ color: var(--iorm-cinza); font-size: 0.84rem; line-height: 1.45; margin: 0.12rem 0; overflow-wrap: anywhere; }}
+        .iorm-edital-linha b {{ color: var(--iorm-navy); }}
+        .iorm-edital-resumo {{ color: var(--iorm-navy); font-size: 0.86rem; line-height: 1.45; margin-top: 0.4rem; overflow-wrap: anywhere; }}
+        [data-testid="stVerticalBlockBorderWrapper"] .stButton > button[kind="tertiary"] {{
+            text-align: left; justify-content: flex-start; font-weight: 800; color: var(--iorm-azul);
+            padding-left: 0; font-size: 1rem; border: none;
+        }}
 
         /* ---------- expander (usado como "cartão clicável" em editais etc.) ---------- */
-        [data-testid="stExpander"] {
+        [data-testid="stExpander"] {{
             border: 1px solid var(--iorm-borda) !important; border-radius: var(--iorm-raio) !important;
             box-shadow: var(--iorm-sombra-sm); background: var(--iorm-superficie);
-        }
-        [data-testid="stExpander"] summary { font-weight: 700; color: var(--iorm-navy); }
+        }}
+        [data-testid="stExpander"] summary {{ font-weight: 700; color: var(--iorm-navy); }}
         </style>
         """,
         unsafe_allow_html=True,
     )
-
 
 def _logo_base64() -> str | None:
     """Prefere a versão com fundo transparente (fica bem sobre qualquer
@@ -446,12 +458,13 @@ def estado_vazio(mensagem: str, icone: str = "🗂️") -> None:
     )
 
 
-def grafico_barras(serie: pd.Series, rotulo_valor: str = "Quantidade", cor: str = "#1F5F8B", moeda: bool = False) -> None:
+def grafico_barras(serie: pd.Series, rotulo_valor: str = "Quantidade", cor: str | None = None, moeda: bool = False) -> None:
     """Barras horizontais com o texto COMPLETO de cada categoria (st.bar_chart corta rótulos
     longos com "…"). Mantém a ordem recebida; a altura cresce com o número de barras.
     `moeda=True`: eixo e dica em reais no padrão brasileiro (R$ 1.000.000,00)."""
     import altair as alt
 
+    cor = cor or tokens_do_tema()["grafico"]  # azul legível no tema ativo
     dados = serie.rename(rotulo_valor).rename_axis("Categoria").reset_index()
     if moeda:
         dados["Valor"] = dados[rotulo_valor].apply(formatar_moeda)

@@ -54,8 +54,9 @@ class SearchProvider(ABC):
         (ex: chave de API presente no ambiente)."""
 
     @abstractmethod
-    def buscar(self, query: str, num_resultados: int = 5) -> list[ResultadoBusca]:
-        """Executa uma busca e devolve resultados reais. Nunca inventa
+    def buscar(self, query: str, num_resultados: int = 5, inicio: int = 0, recencia: str | None = None) -> list[ResultadoBusca]:
+        """Executa uma busca e devolve resultados reais. `inicio` = deslocamento (paginação: 0, 10, 20…);
+        `recencia` = "d"/"w"/"m"/"y" para só resultados recentes (quando o provedor suporta). Nunca inventa
         resultado — se a API falhar, não retornar nada ou o provider não
         estiver disponível, devolve lista vazia e registra o motivo em
         `ultimo_erro` para a UI poder mostrar uma mensagem amigável."""
@@ -75,7 +76,7 @@ class SerpApiProvider(SearchProvider):
     def disponivel(self) -> bool:
         return bool(self._api_key)
 
-    def buscar(self, query: str, num_resultados: int = 5) -> list[ResultadoBusca]:
+    def buscar(self, query: str, num_resultados: int = 5, inicio: int = 0, recencia: str | None = None) -> list[ResultadoBusca]:
         self.ultimo_erro = None
         if not self.disponivel():
             self.ultimo_erro = "Nenhuma chave SERPAPI_API_KEY configurada."
@@ -88,6 +89,10 @@ class SerpApiProvider(SearchProvider):
             "hl": "pt-br",
             "num": num_resultados,
         }
+        if inicio:
+            parametros["start"] = inicio  # paginação do Google: 10, 20, …
+        if recencia in ("d", "w", "m", "y"):
+            parametros["tbs"] = f"qdr:{recencia}"  # só resultados indexados/atualizados no período
         try:
             resposta = requests.get(self._URL, params=parametros, timeout=20)
         except requests.Timeout:
@@ -110,6 +115,11 @@ class SerpApiProvider(SearchProvider):
             self.ultimo_erro = f"A SerpApi respondeu com um erro inesperado (HTTP {resposta.status_code})."
             return []
 
+        erro_api = str(dados.get("error") or "")
+        if "hasn't returned any results" in erro_api.lower():
+            # Não é falha: a SerpApi usa o campo "error" para dizer "consulta sem resultados". Zero resultados é uma resposta válida
+            # (e cacheável) — tratar como erro interromperia a busca inteira por causa de uma consulta vazia.
+            return []
         if dados.get("error"):
             # A SerpApi às vezes devolve HTTP 200 com um campo "error" no corpo
             # (ex: chave inválida, parâmetro rejeitado) — sem isso, um erro real
@@ -146,7 +156,7 @@ class FilaManualProvider(SearchProvider):
     def disponivel(self) -> bool:
         return True
 
-    def buscar(self, query: str, num_resultados: int = 5) -> list[ResultadoBusca]:
+    def buscar(self, query: str, num_resultados: int = 5, inicio: int = 0, recencia: str | None = None) -> list[ResultadoBusca]:
         return []
 
 

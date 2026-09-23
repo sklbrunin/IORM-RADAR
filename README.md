@@ -52,6 +52,15 @@ Federal/BrasilAPI para CNAE/situação cadastral) estão cadastradas como
 mecanismos "ainda não disponíveis" na aba Mecanismos de Incentivo de
 Configurações — ver `processamento/mecanismos.py`.
 
+## Novidades da v8
+
+- **Busca de editais persistente:** o que a busca acha é SALVO e aparece em Abertos / Não confirmados / Encerrados e histórico. Resultados
+  ficam em cache (7 dias): "Buscar editais" não gasta a API para reexibir; só "Atualizar busca" refaz as chamadas. Consultas por município
+  e por fonte, com paginação e teto configurável (`.env.example`).
+- **Cadastrar edital pelo link** (aba Buscar e cadastrar): cole o endereço (ex.: Prosas) e o sistema lê título, prazo e valor da página.
+- **Linha Cruzada corrigida:** projetos do IORM (ex.: "IORM CULTURAL 2026") agora vêm do Cérebro da OSC e da sigla da OSC; quem apoiou sai dos prospects.
+- **Pipeline:** remover atualiza o quadro na hora. **Tema claro/escuro** legível em todas as páginas; visual mais sóbrio.
+
 ## Novidades da v7
 
 - **Dashboard** separa cinco números (empresas na base, prospects, Linha Cruzada, pesquisados, não pesquisados) e traz

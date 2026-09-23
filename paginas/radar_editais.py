@@ -130,7 +130,7 @@ def _mostrar_aderencia(resultado: dict) -> None:
 def _prazo_texto(edital) -> str:
     texto = _shared.formatar_data(_v(edital, "data_encerramento"))
     try:
-        dias = (datetime.fromisoformat(str(edital["data_encerramento"])[:10]).date() - date.today()).days
+        dias = (datetime.fromisoformat(str(edital["data_encerramento"])[:10]).date() - editais.hoje_brasil()).days
     except (KeyError, TypeError, ValueError):
         return texto
     if dias > 1:
@@ -285,14 +285,50 @@ def _formulario_novo_edital(conexao) -> None:
                 st.rerun()
 
 
+def _mostrar_relatorio_busca(relatorio: dict) -> None:
+    """Números REAIS da última busca (nada de "achamos tudo"): consultas, chamadas à API, cache, resultados
+    brutos/únicos, o que foi descartado e por quê, e o que foi salvo por município/fonte/situação."""
+    quando = _shared.formatar_data(relatorio.get("iniciada_em"))
+    st.markdown(f"**Última busca:** {quando} — {'atualização forçada' if relatorio.get('forcada') else 'busca normal (reaproveita resultados salvos)'}")
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric("Consultas", relatorio.get("consultas_planejadas", 0), help="Consultas do plano (município × fonte, e gerais por fonte).")
+    c2.metric("Chamadas à API", relatorio.get("chamadas_api", 0), help="Chamadas reais ao provedor de busca (gastam cota).")
+    c3.metric("Vindas do cache", relatorio.get("consultas_do_cache", 0), help="Consultas respondidas por resultados já salvos — sem gastar API.")
+    c4.metric("Resultados brutos", relatorio.get("resultados_brutos", 0))
+    c5, c6, c7, c8 = st.columns(4)
+    c5.metric("Resultados únicos", relatorio.get("resultados_unicos", 0), help="Depois de remover URLs repetidas entre as consultas.")
+    c6.metric("Novos salvos", relatorio.get("novos", 0), help="Viraram registros em Editais (aparecem nas abas por situação).")
+    c7.metric("Já existiam", relatorio.get("ja_existentes", 0))
+    c8.metric("Páginas verificadas", relatorio.get("verificados", 0), help="Páginas de edital abertas (HTTP, sem custo de API) para ler prazo e dados.")
+    rotulos_descarte = {"portal_generico": "portal/lista genérica", "perfil_de_osc": "perfil de outra OSC (Mapa das OSC)",
+                        "nao_parece_edital": "não parece edital/chamada", "url_invalida": "endereço inválido",
+                        "outra_uf": "domínio de outro estado", "outro_tipo_de_edital": "concurso/licitação/seleção de alunos"}
+    if relatorio.get("descartados"):
+        st.caption("Descartados: " + "; ".join(f"{n} — {rotulos_descarte.get(m, m)}" for m, n in relatorio["descartados"].items()))
+    situacoes = relatorio.get("novos_por_situacao") or {}
+    if situacoes:
+        st.caption("Novos por situação: " + "; ".join(f"{n} {editais.ROTULOS_SITUACAO_EFETIVA.get(s, s).lower()}" for s, n in situacoes.items())
+                   + " (encerrados ficam em “Encerrados e histórico”, nunca em Abertos).")
+    if relatorio.get("por_municipio"):
+        st.caption("Por município: " + "; ".join(f"{m}: {n}" for m, n in relatorio["por_municipio"].items()))
+    if relatorio.get("por_fonte"):
+        st.caption("Por fonte: " + "; ".join(f"{h}: {n}" for h, n in relatorio["por_fonte"].items()))
+    for erro in dict.fromkeys(relatorio.get("erros") or []):
+        st.warning(erro)
+    with st.expander("Consultas executadas"):
+        for c in relatorio.get("por_consulta", []):
+            st.markdown(f"- `{c['consulta']}` — página {c['pagina']} — **{'cache' if c['origem'] == 'cache' else 'API'}** — {c['resultados']} resultado(s)")
+
+
 def _secao_busca_automatica(conexao, perfil: dict, perfil_osc_row) -> None:
     provider = busca_providers.obter_provider_ativo()
     usa_busca_ao_vivo = isinstance(provider, busca_providers.SerpApiProvider)
 
     _shared.secao(
         "Buscar oportunidades reais", "🔍",
-        "Pesquisa em fontes públicas (governo, Mapa das OSC/IPEA, Prosas) usando o território e os "
-        "temas cadastrados no Cérebro da OSC — nunca inventa edital.",
+        "Consultas por município e por fonte (Prosas, gov.br, Mapa das OSC e fontes cadastradas) usando o território e os "
+        "temas do Cérebro da OSC. Tudo que parece edital é SALVO e aparece nas abas Abertos, Não confirmados e "
+        "Encerrados e histórico — nunca inventa edital e não depende desta tela para continuar visível.",
     )
     if not usa_busca_ao_vivo:
         st.markdown(
@@ -303,50 +339,58 @@ def _secao_busca_automatica(conexao, perfil: dict, perfil_osc_row) -> None:
         )
         return
 
-    if st.button(f"🔍 Buscar oportunidades agora (via {provider.nome})", key="buscar_editais_auto"):
-        with st.spinner("Pesquisando em fontes públicas..."):
-            resultado_busca = busca_editais.buscar_editais(perfil, provider=provider)
-        st.session_state["candidatos_editais"] = resultado_busca
+    from processamento import fila_enriquecimento
 
-    resultado_busca = st.session_state.get("candidatos_editais")
-    if not resultado_busca:
-        return
+    limite, _ = fila_enriquecimento.limites_serpapi()
+    usadas = fila_enriquecimento.uso_mes(conexao, "SerpApi")
+    cache = busca_editais.situacao_do_cache(conexao)
+    st.caption(
+        f"Cota da SerpApi neste mês: {usadas} de {limite} chamadas usadas. "
+        f"Resultados salvos: {cache['consultas_validas']} consulta(s) com resultado válido"
+        + (f" (última chamada em {_shared.formatar_data(cache['ultima_chamada'])})" if cache["ultima_chamada"] else "")
+        + f"; ficam valendo por {busca_editais.CACHE_DIAS} dias."
+    )
+    fontes_extra = [dict(f) for f in fontes_dados.listar(conexao, somente_ativas=True) if f["tipo"] == "Editais"]
+    col_a, col_b = st.columns(2)
+    executar = None
+    if col_a.button("🔍 Buscar editais (reaproveita resultados salvos)", key="buscar_editais_auto", use_container_width=True,
+                    help="Só chama a API para consultas que ainda não têm resultado salvo."):
+        executar = False
+    if col_b.button("🔄 Atualizar busca (refaz as chamadas e gasta cota)", key="atualizar_busca_editais", use_container_width=True,
+                    help="Ignora os resultados salvos e consulta o provedor de novo."):
+        executar = True
+    if executar is not None:
+        with st.spinner("Buscando, salvando e verificando as páginas dos editais..."):
+            busca_editais.executar_busca(conexao, perfil, provider, forcar=executar, paginas=1, fontes_extra=fontes_extra)
+        _shared.limpar_cache()
+        st.rerun()  # os números do topo e as abas por situação passam a refletir o que foi salvo
 
-    if resultado_busca["erros"]:
-        st.error("A busca não pôde ser concluída: " + " ".join(set(resultado_busca["erros"])))
-        return
+    ultimo = busca_editais.ultima_execucao(conexao)
+    if ultimo:
+        _mostrar_relatorio_busca(ultimo)
+    else:
+        st.info("Nenhuma busca automática foi feita ainda.")
 
-    candidatos = resultado_busca["candidatos"]
-    urls_ja_cadastradas = {e["url"] for e in editais.listar_editais(conexao) if e["url"]}
-    candidatos_novos = [c for c in candidatos if c["url"] not in urls_ja_cadastradas]
-
-    if not candidatos:
-        st.warning(
-            "Busca concluída, mas nenhum resultado foi encontrado nas fontes pesquisadas para o "
-            "território/temas cadastrados no momento."
-        )
-        return
-
-    st.success(f"{len(candidatos)} resultado(s) encontrado(s), {len(candidatos_novos)} ainda não cadastrado(s).")
-    for i, candidato in enumerate(candidatos_novos):
-        resultado_aderencia = editais.calcular_aderencia(candidato, perfil)
-        situacao, motivo = editais.situacao_efetiva(candidato)
-        with st.expander(f"{candidato['titulo']}  ·  Aderência {_shared.formatar_nota(resultado_aderencia['nota_final'])}"):
-            st.markdown(_badge_situacao(situacao), unsafe_allow_html=True)
-            st.caption(motivo)
-            if candidato["descricao"]:
-                st.markdown(f"**Trecho encontrado:** {candidato['descricao']}")
-            st.caption(f"Fonte: {candidato['fonte']} · URL: {candidato['url']}")
-            _bloco_links(candidato, f"cand_{i}", candidato=True)
-            _mostrar_aderencia(resultado_aderencia)
-            if st.button("➕ Importar para oportunidades cadastradas", key=f"importar_edital_{i}"):
-                edital_id = editais.criar_edital(conexao, candidato)
-                editais.salvar_aderencia(conexao, edital_id, perfil_osc_row["id"], resultado_aderencia)
-                with st.spinner("Verificando o link do edital..."):
-                    editais.verificar_e_registrar(conexao, edital_id)
-                st.success(f"Importado e link verificado (nº {edital_id}). Ele entra em Abertos só se a fonte trouxer um prazo futuro.")
-                _shared.limpar_cache()
-                st.rerun()
+def _secao_cadastro_por_link(conexao, perfil: dict) -> None:
+    """Recebeu um edital por e-mail/WhatsApp? Cole o link: o sistema abre a página, lê título, prazo e valor (quando a
+    página os traz), salva e mostra em qual aba ele entrou. Não depende de o Google já ter indexado a página."""
+    _shared.secao("Cadastrar edital pelo link", "🔗",
+                  "Cole o endereço da página do edital (ex.: Prosas, prefeitura). Nada é inventado: só o que a página traz.")
+    with st.form("form_edital_por_link", clear_on_submit=False):
+        url = st.text_input("Endereço (URL) da página do edital", placeholder="https://prosas.com.br/editais/...")
+        enviar = st.form_submit_button("Cadastrar pelo link")
+    if enviar:
+        try:
+            with st.spinner("Abrindo a página do edital..."):
+                r = busca_editais.cadastrar_por_url(conexao, url, perfil)
+        except ValueError as erro:
+            st.error(str(erro))
+        else:
+            _shared.limpar_cache()
+            aba = {"ABERTO": "Abertos", "ENCERRADO": "Encerrados e histórico"}.get(r["situacao"], "Não confirmados")
+            st.success(f"{'Cadastrado' if r['novo'] else 'Já estava cadastrado (verificação atualizada)'}: {r['titulo']}. "
+                       f"Situação: {editais.ROTULOS_SITUACAO_EFETIVA[r['situacao']]} — {r['motivo']} Veja na aba “{aba}”.")
+            st.session_state["edital_em_foco"] = r["id"]
 
 
 def _secao_fontes_cadastradas(conexao) -> None:
@@ -437,6 +481,7 @@ def render() -> None:
         st.caption("Histórico: não são oportunidades ativas. Ficam guardados para consulta.")
         _lista(_filtrar(historico, termo, tipo), perfil, conexao, foco, "Nenhum edital encerrado ainda.", "en")
     with aba_busca:
+        _secao_cadastro_por_link(conexao, perfil)
         _secao_busca_automatica(conexao, perfil, perfil_osc_row)
         _secao_fontes_cadastradas(conexao)
         _formulario_novo_edital(conexao)

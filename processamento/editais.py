@@ -16,7 +16,8 @@ from __future__ import annotations
 import re
 import sqlite3
 import unicodedata
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
+from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
 
 STATUS_VALIDOS = [
     "ENCONTRADO",
@@ -54,6 +55,17 @@ def _agora() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
+def hoje_brasil() -> date:
+    """Data de HOJE no Brasil (São Paulo), sem valor fixo no código. Usa o fuso IANA quando o sistema tem
+    o banco de fusos; senão UTC-3 (o Brasil não tem horário de verão desde 2019)."""
+    try:
+        from zoneinfo import ZoneInfo
+
+        return datetime.now(ZoneInfo("America/Sao_Paulo")).date()
+    except Exception:  # sem tzdata (ex.: Windows sem o pacote tzdata)
+        return datetime.now(timezone(timedelta(hours=-3))).date()
+
+
 def _remover_acentos(texto: str) -> str:
     return "".join(c for c in unicodedata.normalize("NFD", texto) if unicodedata.category(c) != "Mn")
 
@@ -87,6 +99,31 @@ def criar_tabelas(conexao: sqlite3.Connection) -> None:
             coletado_em TEXT NOT NULL,
             criado_em TEXT NOT NULL,
             atualizado_em TEXT NOT NULL
+        );
+
+        -- Cache PERSISTENTE da busca automática: uma linha por (consulta, página, parâmetros). Serve para não
+        -- gastar a API de novo só para reexibir resultados já obtidos, e para auditar quando/como cada chamada ocorreu.
+        CREATE TABLE IF NOT EXISTS busca_editais_cache (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            chave TEXT NOT NULL UNIQUE,
+            provider TEXT NOT NULL,
+            consulta TEXT NOT NULL,
+            fonte_alvo TEXT,
+            municipio TEXT,
+            inicio INTEGER NOT NULL DEFAULT 0,
+            parametros TEXT,
+            executada_em TEXT NOT NULL,
+            expira_em TEXT NOT NULL,
+            n_resultados INTEGER NOT NULL DEFAULT 0,
+            resultados_json TEXT NOT NULL,
+            chamadas_api INTEGER NOT NULL DEFAULT 1
+        );
+
+        CREATE TABLE IF NOT EXISTS busca_editais_execucoes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            iniciada_em TEXT NOT NULL,
+            forcada INTEGER NOT NULL DEFAULT 0,
+            relatorio_json TEXT NOT NULL
         );
 
         CREATE TABLE IF NOT EXISTS editais_aderencia (
@@ -128,6 +165,9 @@ _COLUNAS_MIGRACAO = {
     "prazo_sugerido": "TEXT",
     "prazo_sugerido_trecho": "TEXT",
     "prazo_origem": "TEXT",
+    "municipios_detectados": "TEXT",
+    "consulta_origem": "TEXT",
+    "areas_fonte": "TEXT",
 }
 
 
@@ -139,6 +179,51 @@ def migrar_colunas_novas(conexao: sqlite3.Connection) -> None:
         if coluna not in colunas:
             conexao.execute(f"ALTER TABLE editais ADD COLUMN {coluna} {definicao}")
     conexao.commit()
+
+
+def _campos_de_dados_estruturados(conexao: sqlite3.Connection, edital_id: int, dados: dict | None) -> dict:
+    """Traduz os dados estruturados lidos da página (links_editais.extrair_dados_estruturados) em colunas.
+    Só preenche o que está vazio (nunca sobrescreve o que a equipe digitou) e o prazo só vira
+    `data_encerramento` quando a página traz uma data de fim sem prorrogação pendente — do contrário vira sugestão."""
+    if not dados:
+        return {}
+    atual = conexao.execute(
+        """SELECT data_encerramento, data_abertura, prazo_origem, descricao, requisitos, valor_texto, valor_numerico,
+                  area_tematica, publico, areas_fonte FROM editais WHERE id = ?""", (edital_id,)
+    ).fetchone()
+    campos: dict = {}
+    equipe_definiu = atual is not None and atual["prazo_origem"] == "CONFIRMADO_PELA_EQUIPE"
+    if dados.get("encerramento") and not equipe_definiu:
+        if dados.get("prorrogada"):
+            campos["prazo_sugerido"] = dados["encerramento"]
+            campos["prazo_sugerido_trecho"] = "A página informa que o prazo foi prorrogado — confira a data vigente na fonte."
+        else:
+            campos["data_encerramento"] = dados["encerramento"]
+            campos["prazo_origem"] = "FONTE_ESTRUTURADA"
+            campos["prazo_sugerido"] = None
+            campos["prazo_sugerido_trecho"] = None
+    if dados.get("inicio") and not (atual and atual["data_abertura"]):
+        campos["data_abertura"] = dados["inicio"]
+    if dados.get("encerrada"):
+        campos["situacao_inscricao"] = "ENCERRADO"
+    elif dados.get("em_andamento") and not dados.get("encerrada"):
+        campos["situacao_inscricao"] = "ABERTO"  # o marcador da própria página; a situação efetiva ainda confere as datas
+    if atual is not None:
+        if dados.get("descricao") and not atual["descricao"]:
+            campos["descricao"] = dados["descricao"]
+        if dados.get("elegibilidade") and not atual["requisitos"]:
+            campos["requisitos"] = dados["elegibilidade"]
+        if dados.get("valor_total_texto") and not atual["valor_texto"] and not atual["valor_numerico"]:
+            campos["valor_texto"] = f"R$ {dados['valor_total_texto']} (valor total do edital, conforme a página)"
+            try:
+                campos["valor_numerico"] = float(dados["valor_total_texto"].replace(".", "").replace(",", "."))
+            except ValueError:
+                pass
+        if dados.get("areas") and not atual["area_tematica"]:
+            campos["area_tematica"] = ", ".join(dados["areas"])
+        if dados.get("publicos") and not atual["publico"]:
+            campos["publico"] = ", ".join(dados["publicos"])
+    return campos
 
 
 def registrar_verificacao(conexao: sqlite3.Connection, edital_id: int, verificacao: dict,
@@ -163,7 +248,8 @@ def registrar_verificacao(conexao: sqlite3.Connection, edital_id: int, verificac
     if verificacao.get("prazo_sugerido"):  # a página verificada vale mais que o trecho da busca; sem data nova, mantém
         campos["prazo_sugerido"] = verificacao["prazo_sugerido"]
         campos["prazo_sugerido_trecho"] = verificacao.get("prazo_sugerido_trecho")
-    if verificacao.get("indicio_encerrado"):
+    campos.update(_campos_de_dados_estruturados(conexao, edital_id, verificacao.get("dados_estruturados")))
+    if verificacao.get("indicio_encerrado") and "situacao_inscricao" not in campos:
         campos["situacao_inscricao"] = "ENCERRADO"
     campos["atualizado_em"] = _agora()
     atribuicoes = ", ".join(f"{k} = ?" for k in campos)
@@ -204,7 +290,7 @@ def classificar_situacao_inscricao(data_publicacao: str | None, data_encerrament
                                      hoje: date | None = None) -> str:
     """Nunca afirma "aberto" sem uma data real que confirme isso — sem
     data de encerramento, a situação fica sempre NAO_CONFIRMADO."""
-    hoje = hoje or datetime.now(timezone.utc).date()
+    hoje = hoje or hoje_brasil()
     if not data_encerramento:
         return "NAO_CONFIRMADO"
     try:
@@ -252,6 +338,14 @@ def _data(texto) -> date | None:
         return None
 
 
+def ano_de_referencia(edital) -> int | None:
+    """Maior ano (20xx) escrito no TÍTULO ou na URL do edital (ex.: "Edital 001/2025"). Só esses dois lugares:
+    trecho de busca traz datas de tudo. Sem ano → None."""
+    texto = f"{_valor(edital, 'titulo', '')} {urlparse(str(_valor(edital, 'url', '')) ).path}"
+    anos = [int(a) for a in re.findall(r"(?<!\d)(20\d{2})(?!\d)", texto)]
+    return max(anos) if anos else None
+
+
 def situacao_efetiva(edital, hoje: date | None = None) -> tuple[str, str]:
     """Devolve (situação, motivo) — situação ∈ ABERTO / ENCERRADO / NAO_CONFIRMADO.
 
@@ -259,26 +353,35 @@ def situacao_efetiva(edital, hoje: date | None = None) -> tuple[str, str]:
     (URL) da fonte para conferir, e nenhum sinal contrário (página que diz que encerrou, status
     interno "Encerrado", inscrições que ainda não abriram, registro de teste).
     Edital sem data, ou sem link, nunca é tratado como aberto."""
-    hoje = hoje or datetime.now(timezone.utc).date()
+    hoje = hoje or hoje_brasil()
     if _valor(edital, "origem_descoberta") == ORIGEM_TESTE:
         return SITUACAO_NAO_CONFIRMADO, "Registro de teste (não é um edital real)."
 
     encerramento = _data(_valor(edital, "data_encerramento"))
     if encerramento is not None and encerramento < hoje:
         return SITUACAO_ENCERRADO, f"Data de encerramento ({encerramento.strftime('%d/%m/%Y')}) já passou."
-    if _valor(edital, "situacao_inscricao") == "ENCERRADO":
+    confirmado_pela_equipe = _valor(edital, "prazo_origem") == "CONFIRMADO_PELA_EQUIPE" and encerramento is not None
+    if _valor(edital, "situacao_inscricao") == "ENCERRADO" and not confirmado_pela_equipe:
         return SITUACAO_ENCERRADO, "A página oficial indica que as inscrições foram encerradas."
     if _valor(edital, "status") == "ENCERRADO":
         return SITUACAO_ENCERRADO, "Marcado como encerrado pela equipe."
 
     if encerramento is None:
+        ano = ano_de_referencia(edital)
+        if ano is not None and ano < hoje.year:
+            return SITUACAO_ENCERRADO, (
+                f"O edital é de {ano} (ano anterior) e não há prazo vigente confirmado — tratado como histórico. "
+                "Se ele ainda estiver aberto, confirme o prazo na ficha."
+            )
         return SITUACAO_NAO_CONFIRMADO, "A fonte não informa data de encerramento — não dá para afirmar que está aberto."
     abertura = _data(_valor(edital, "data_abertura")) or _data(_valor(edital, "data_publicacao"))
     if abertura is not None and abertura > hoje:
         return SITUACAO_NAO_CONFIRMADO, f"Inscrições só abrem em {abertura.strftime('%d/%m/%Y')}."
     if not _valor(edital, "url"):
         return SITUACAO_NAO_CONFIRMADO, "Tem prazo futuro, mas não há link da fonte para conferir."
-    return SITUACAO_ABERTO, f"Prazo até {encerramento.strftime('%d/%m/%Y')} (informado pela fonte)."
+    origem = {"CONFIRMADO_PELA_EQUIPE": "confirmado pela equipe", "FONTE_ESTRUTURADA": "dado estruturado da página do edital"}.get(
+        _valor(edital, "prazo_origem"), "informado pela fonte")
+    return SITUACAO_ABERTO, f"Prazo até {encerramento.strftime('%d/%m/%Y')} ({origem})."
 
 
 def agrupar_por_situacao(lista, hoje: date | None = None) -> dict[str, list]:
@@ -315,7 +418,13 @@ def abertos_com_aderencia(lista, perfil_osc: dict, nota_minima: float = 0.0, hoj
         if resultado["criterios_avaliados"] < criterios_minimos:
             continue
         itens.append({**dados, "nota_final": nota, "aderencia": resultado})
-    return sorted(itens, key=lambda e: (e["nota_final"] is not None, e["nota_final"] or 0), reverse=True)
+    # Primeiro os editais com dados suficientes (>= 3 critérios avaliados), depois pela nota: um 10 baseado em 1 ou 2
+    # critérios não deve passar na frente de um 8 calculado com os 6.
+    return sorted(
+        itens,
+        key=lambda e: (e["aderencia"]["criterios_avaliados"] >= 3, e["nota_final"] is not None, e["nota_final"] or 0),
+        reverse=True,
+    )
 
 
 def criar_edital(conexao: sqlite3.Connection, dados: dict) -> int:

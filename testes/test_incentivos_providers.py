@@ -59,7 +59,7 @@ def test_registro_sem_nome_ou_url_e_descartado_nunca_completado():
 def test_ingerir_grava_empresa_incentivo_e_mecanismo(conexao):
     resumo = ip.ingerir(conexao, _provider(PAGINAS), "SP")
     assert resumo == {"mecanismo": "LEI_ROUANET", "lidos": 2, "empresas_novas": 2, "empresas_existentes": 0,
-                      "incentivos_novos": 2, "incentivos_atualizados": 0}
+                      "incentivos_novos": 2, "incentivos_atualizados": 0, "relacionamento": 0}
     linhas = conexao.execute("SELECT mecanismo, fonte, valor FROM incentivos ORDER BY valor").fetchall()
     assert [l["mecanismo"] for l in linhas] == ["LEI_ROUANET", "LEI_ROUANET"]
     assert conexao.execute("SELECT COUNT(*) FROM empresas").fetchone()[0] == 2

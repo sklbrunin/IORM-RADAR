@@ -11,7 +11,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from processamento import regiao
+from processamento import programas_iorm, regiao
 
 CIDADES_IORM = ["Ipuã", "Guaíra", "Miguelópolis", "Orlândia"]
 
@@ -61,11 +61,9 @@ def estatisticas_gerais(conexao: sqlite3.Connection, cidades_estrategicas: list[
         f"SELECT COUNT(*) FROM empresas WHERE cidade IN ({marcadores_cidades})", cidades
     ).fetchone()[0] if cidades else 0
 
-    condicoes_programas = " OR ".join("LOWER(projeto) LIKE ?" for _ in PROGRAMAS_IORM)
-    parametros_programas = [f"%{p}%" for p in PROGRAMAS_IORM]
+    programas_iorm.registrar(conexao)
     projetos_iorm = conexao.execute(
-        f"SELECT COUNT(DISTINCT projeto) FROM incentivos WHERE {condicoes_programas}",
-        parametros_programas,
+        "SELECT COUNT(DISTINCT projeto) FROM incentivos WHERE eh_projeto_iorm(projeto)"
     ).fetchone()[0]
 
     return {
@@ -79,10 +77,8 @@ def estatisticas_gerais(conexao: sqlite3.Connection, cidades_estrategicas: list[
 
 
 def _projeto_ligado_iorm(projetos_concatenados) -> bool:
-    if not projetos_concatenados:
-        return False
-    texto = str(projetos_concatenados).lower()
-    return any(programa in texto for programa in PROGRAMAS_IORM)
+    """Fonte única: processamento/programas_iorm.py (lista-base + programas do Cérebro da OSC + sigla da OSC)."""
+    return programas_iorm.projeto_e_do_iorm(projetos_concatenados)
 
 
 def _calcular_score(linha: pd.Series) -> int:
@@ -146,6 +142,7 @@ def carregar_empresas(
     Região IORM (processamento/regiao.py) em vez do binário antigo.
     Sem nenhum dos dois, cai no padrão histórico das 4 cidades do IORM."""
     cidades = cidades_estrategicas or CIDADES_IORM
+    programas_iorm.registrar(conexao)  # termos atuais do Cérebro da OSC (não uma lista antiga fixa no código)
     linhas = conexao.execute(
         """
         SELECT
@@ -244,17 +241,15 @@ def doacoes_ligadas_ao_iorm(conexao: sqlite3.Connection) -> pd.DataFrame:
     "Linha Cruzada": empresas com relação direta e já comprovada com o
     IORM, tratadas à parte da lista de prospecção (nunca removidas da
     base — só apresentadas separadamente, ver paginas/oportunidades.py)."""
-    condicoes = " OR ".join("LOWER(i.projeto) LIKE ?" for _ in PROGRAMAS_IORM)
-    parametros = [f"%{p}%" for p in PROGRAMAS_IORM]
+    programas_iorm.registrar(conexao)
     linhas = conexao.execute(
-        f"""
+        """
         SELECT e.id AS empresa_id, e.razao_social AS empresa, e.cidade, e.estado,
                i.ano, i.projeto, i.valor, i.url_fonte AS fonte
         FROM incentivos i JOIN empresas e ON e.id = i.empresa_id
-        WHERE {condicoes}
+        WHERE eh_projeto_iorm(i.projeto)
         ORDER BY e.razao_social, i.ano DESC
-        """,
-        parametros,
+        """
     ).fetchall()
     return pd.DataFrame([dict(linha) for linha in linhas])
 

@@ -1,3 +1,22 @@
 [server]
 # Alinhado ao limite do repositorio de documentos (processamento/documentos.py)
 maxUploadSize = 25
+
+# Temas claro e escuro definidos juntos: o Streamlit escolhe pelo menu do usuario ou pelo sistema.
+# Os valores acompanham os tokens de paginas/_shared.py (TOKENS_TEMA) para que os componentes nativos
+# (campos, listas, tabelas, barra lateral) fiquem legiveis nos dois temas.
+[theme.light]
+primaryColor = "#136A9A"
+backgroundColor = "#F3F5F8"
+secondaryBackgroundColor = "#FFFFFF"
+textColor = "#12263A"
+linkColor = "#136A9A"
+borderColor = "#C9D3DC"
+
+[theme.dark]
+primaryColor = "#5DB7E8"
+backgroundColor = "#0D1520"
+secondaryBackgroundColor = "#16212F"
+textColor = "#E9EFF6"
+linkColor = "#7CC6F0"
+borderColor = "#3B5068"

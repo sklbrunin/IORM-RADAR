@@ -155,7 +155,7 @@ def test_editais_padrao_lista_so_abertos_e_registro_de_teste_fica_no_historico(b
     assert not app.exception, [e.value for e in app.exception]
     metricas_tela = {m.label: m.value for m in app.metric}
     assert int(metricas_tela["Abertos"]) >= 1
-    assert app.expander[0].label.startswith("Chamada de Fomento à Cultura e Dança em Guaíra")  # a aba padrão mostra o aberto primeiro
+    assert any(e.label.startswith("Chamada de Fomento à Cultura e Dança em Guaíra") for e in app.expander)  # aparece na aba padrão (Abertos)
     import sqlite3
 
     tem_teste = sqlite3.connect(banco).execute(

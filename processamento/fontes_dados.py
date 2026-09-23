@@ -185,8 +185,14 @@ def buscar_http(url: str) -> tuple[int, str, str]:
 
     resposta = requests.get(url, headers={"User-Agent": "Mozilla/5.0 IORM-Radar/1.0 (fonte cadastrada pela equipe)"},
                             timeout=25, stream=True)
-    conteudo = resposta.raw.read(LIMITE_BYTES + 1, decode_content=True)
+    partes, lidos = [], 0
+    for bloco in resposta.iter_content(65536):  # laço: um único read pode devolver só parte do corpo
+        partes.append(bloco)
+        lidos += len(bloco)
+        if lidos > LIMITE_BYTES:
+            break
     resposta.close()
+    conteudo = b"".join(partes)
     texto = conteudo[:LIMITE_BYTES].decode(resposta.encoding or "utf-8", errors="replace")
     return resposta.status_code, resposta.headers.get("content-type", ""), texto
 

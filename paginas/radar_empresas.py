@@ -5,7 +5,9 @@ from __future__ import annotations
 import pandas as pd
 import streamlit as st
 
-from processamento import busca_providers, crm, enriquecimento, filtros, geografia, metricas, pesquisa_empresa, regiao, relacionamento
+from processamento import (
+    busca_providers, crm, enriquecimento, filtros, geografia, metricas, pesquisa_empresa, programas_iorm, regiao, relacionamento,
+)
 from paginas import _shared
 
 
@@ -44,18 +46,10 @@ def _tabela_para_exibicao(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def _projetos_do_iorm(projetos) -> str:
-    """Só os programas do IORM que a empresa apoiou (sem repetir variações de ano) — a lista completa de
-    projetos de qualquer tipo fica na ficha."""
-    if not isinstance(projetos, str) or not projetos:
-        return "Não disponível"
-    vistos, saida = set(), []
-    for projeto in projetos.split(","):
-        projeto = projeto.strip()
-        for programa in metricas.PROGRAMAS_IORM:
-            if programa in projeto.lower() and programa not in vistos:
-                vistos.add(programa)
-                saida.append(programa.title().replace("Da ", "da ").replace("Do ", "do "))
-    return ", ".join(saida) if saida else "Não disponível"
+    """Só os projetos que são do IORM (programas do Cérebro da OSC + projetos com a sigla do IORM) — a lista
+    completa de projetos de qualquer tipo fica na ficha."""
+    ligados = sorted(set(programas_iorm.projetos_do_iorm(projetos)))
+    return ", ".join(ligados) if ligados else "Não disponível"
 
 
 def _tabela_linha_cruzada(df: pd.DataFrame) -> pd.DataFrame:
