@@ -75,6 +75,11 @@ _COLUNAS_RELACIONAMENTO = {
     "relacionamento_em": "TEXT",
     "reabrir_prospeccao": "INTEGER NOT NULL DEFAULT 0",
     "reabrir_justificativa": "TEXT",
+    # v9 — descoberta nacional (processamento/descoberta_empresas.py). Empresas antigas ficam CONFIRMADA (default).
+    "dominio": "TEXT",
+    "estagio_cadastro": "TEXT NOT NULL DEFAULT 'CONFIRMADA'",
+    "possivel_duplicata_de": "INTEGER",
+    "origem_descoberta": "TEXT",
 }
 
 

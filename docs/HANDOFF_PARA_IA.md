@@ -186,3 +186,18 @@ Validado: 435 testes (inclui AppTest que renderiza todas as páginas e o fluxo D
   vários encerrados/não confirmados vindos da busca de 23/09), `fontes_dados` 6, cota SerpApi 15/100 no mês.
 - Pendências: `git push` (v6, v7 e v8 ainda não foram enviados); confirmar elegibilidade do edital de Miguelópolis; `Atualizar busca` só foi testado com
   provedor simulado; documentos na nuvem continuam efêmeros.
+
+---
+
+## ATUALIZAÇÃO v9 (23/09/2026)
+
+Detalhes completos em `docs/decisoes.md` seção 11. Resumo para outra IA:
+- **Módulos novos:** `processamento/projetos_editais.py` (projetos × edital, determinístico), `processamento/descoberta_empresas.py` (provedores de
+  descoberta, deduplicação, proveniência, cotas), `processamento/rotina_etapas.py` (Descoberta/Enriquecimento/Contatos/Editais com status).
+- **Regras invioláveis mantidas:** nunca inventar dado/CNPJ; descoberta nunca marca relacionamento com o IORM; empresa sem CNPJ = `CANDIDATA`
+  (fora dos prospects até validação humana); fuzzy só sinaliza duplicata; chaves só no `.env`.
+- **Conector MCP ≠ recurso do app.** Apollo/Lusha/Snov.io do Claude Code não são acessíveis pelo Streamlit. Provedores do app só com chave própria
+  e só SALIC e SerpApi Maps foram validados contra serviço real; os três pagos foram testados com respostas simuladas.
+- **Dashboard:** a regra de alta aderência (ABERTO, nota ≥ 7,0, ≥ 3 critérios) não mudou; o "só 1" vinha de extração incompleta do edital Funarte.
+- **Armadilha aprendida:** a URL de incentivo da SALIC muda a cada consulta; nunca deduplicar incentivo só por `url_fonte` ao reler páginas.
+- Testes: 634+ (ver `python -m pytest testes`). Nada foi enviado ao GitHub (sem push).

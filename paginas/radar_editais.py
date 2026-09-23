@@ -10,7 +10,7 @@ from datetime import date, datetime
 
 import streamlit as st
 
-from processamento import busca_editais, busca_providers, editais, fontes_dados, links_editais, osc
+from processamento import busca_editais, busca_providers, editais, fontes_dados, links_editais, osc, projetos_editais
 from paginas import _shared
 
 _ROTULOS_STATUS = {
@@ -177,7 +177,57 @@ def _bloco_confirmar_prazo(edital, conexao) -> None:
             st.rerun()
 
 
-def _ficha_edital(edital, resultado: dict, conexao) -> None:
+_COR_NIVEL_PROJETO = {"ALTA": "iorm-badge-verde", "MEDIA": "iorm-badge-laranja", "BAIXA": "iorm-badge-cinza", "NAO_IDENTIFICADA": "iorm-badge-cinza"}
+
+
+def _cartao_projeto(projeto: dict) -> None:
+    rotulo = projetos_editais.ROTULOS_NIVEL[projeto["nivel"]]
+    st.markdown(
+        f"<div class='iorm-crit'><span class='iorm-badge {_COR_NIVEL_PROJETO[projeto['nivel']]}'>{rotulo}</span>"
+        f"<span class='iorm-crit-texto'><b>{projeto['nome']}</b> — {projeto['justificativa']}</span></div>",
+        unsafe_allow_html=True,
+    )
+    with st.expander("Ver como foi calculado", expanded=False):
+        for criterio in projeto["criterios"]:
+            st.markdown(f"**{criterio['criterio']}:** {criterio['resultado']} — {criterio['detalhe']}")
+        if projeto["dados_insuficientes"]:
+            st.caption("Dados insuficientes: complete o projeto no Cérebro da OSC (tema, descrição, público) para uma análise melhor.")
+        st.caption(f"Regra v{projeto['versao']} · calculado em {_shared.formatar_data(projeto['calculado_em'])} · "
+                   "determinística (sem IA generativa): mesmas informações, mesmo resultado.")
+
+
+def _mostrar_projetos_relacionados(edital, perfil: dict, conexao) -> None:
+    """Quais projetos do IORM combinam com o edital (adequação TEMÁTICA) e, separado, o que o texto diz sobre quem pode se inscrever."""
+    analise = projetos_editais.garantir_analise(conexao, edital, perfil)
+    st.markdown("### Projetos do IORM relacionados")
+    st.caption("Adequação temática entre o edital e os projetos do Cérebro da OSC. Não diz se a OSC pode se inscrever — isso está em "
+               "“Elegibilidade da OSC”, logo abaixo.")
+    if not perfil.get("programas"):
+        _shared.estado_vazio("Cadastre os projetos no Cérebro da OSC para relacioná-los aos editais.", "🧠")
+    elif analise["relacionados"]:
+        for projeto in analise["relacionados"]:
+            _cartao_projeto(projeto)
+        st.caption("Não foram identificados outros projetos com aderência suficiente." if analise["outros"] else "")
+    else:
+        st.info("Não foram identificados projetos do IORM com aderência suficiente a este edital.")
+    if analise["outros"]:
+        with st.expander(f"Outros projetos avaliados ({len(analise['outros'])}) — aderência baixa ou não identificada"):
+            for projeto in analise["outros"]:
+                _cartao_projeto(projeto)
+
+    eleg = analise["elegibilidade"]
+    if eleg:
+        cor = {"RESTRICAO_IDENTIFICADA": "iorm-limitacao", "MENCIONA_PESSOA_JURIDICA": "iorm-aviso"}.get(eleg["status"], "iorm-aviso")
+        alertas = "".join(f"<li>{a}</li>" for a in eleg["alertas"])
+        trecho = f"<br><i>Trecho do edital: “{eleg['trecho'][:280]}{'…' if len(eleg['trecho']) > 280 else ''}”</i>" if eleg.get("trecho") else ""
+        st.markdown(
+            f"<div class='{cor}'><b>Elegibilidade da OSC</b> — {eleg['resumo']}{trecho}"
+            f"{'<ul>' + alertas + '</ul>' if alertas else ''}<b>{eleg['aviso']}</b></div>",
+            unsafe_allow_html=True,
+        )
+
+
+def _ficha_edital(edital, resultado: dict, conexao, perfil: dict | None = None) -> None:
     """Ficha completa: situação (com o motivo), dados, requisitos, links, aderência e fonte."""
     situacao, motivo = editais.situacao_efetiva(edital)
     st.markdown(_badge_situacao(situacao), unsafe_allow_html=True)
@@ -211,6 +261,7 @@ def _ficha_edital(edital, resultado: dict, conexao) -> None:
     st.caption(f"Fonte: {edital['fonte']} · Coletado em {_shared.formatar_data(edital['coletado_em'])}")
 
     _mostrar_aderencia(resultado)
+    _mostrar_projetos_relacionados(edital, perfil or {}, conexao)
 
     novo_status = st.selectbox(
         "Acompanhamento interno (status)", list(_ROTULOS_STATUS.keys()),
@@ -239,7 +290,7 @@ def _lista(itens: list, perfil: dict, conexao, foco: int | None, vazio: str, cha
         if dados.get("data_encerramento"):
             partes.append(f"até {_shared.formatar_data(dados['data_encerramento'])}")
         with st.expander("  ·  ".join(partes), expanded=(dados["id"] == foco)):
-            _ficha_edital(dados, resultado, conexao)
+            _ficha_edital(dados, resultado, conexao, perfil)
 
 
 # --------------------------------------------------------------------------- cadastro e busca

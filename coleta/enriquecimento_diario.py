@@ -28,7 +28,7 @@ from dotenv import load_dotenv  # noqa: E402
 load_dotenv(RAIZ_PROJETO / ".env")
 
 from processamento import (  # noqa: E402
-    banco, contact_providers, fila_enriquecimento, metricas, osc, relacionamento,
+    banco, contact_providers, descoberta_empresas, fila_enriquecimento, metricas, osc, relacionamento, rotina_etapas,
 )
 
 CAMINHO_DB = RAIZ_PROJETO / "dados" / "iorm_radar.db"
@@ -61,6 +61,9 @@ def main() -> int:
     parser.add_argument("--sem-web", action="store_true", help="Não usa a busca web (não gasta cota da SerpApi).")
     parser.add_argument("--pausa", type=float, default=1.0, help="Segundos entre empresas (respeito a limites de API).")
     parser.add_argument("--agendada", action="store_true", help="Marca a execução como vinda do Agendador de Tarefas.")
+    parser.add_argument("--sem-descoberta", action="store_true", help="Pula a etapa de descoberta de empresas novas.")
+    parser.add_argument("--novas", type=int, default=None, help="Meta de empresas NOVAS na descoberta (padrão: EMPRESAS_NOVAS_POR_DIA, 50).")
+    parser.add_argument("--com-editais", action="store_true", help="Inclui a etapa de busca de editais (gasta cota da SerpApi).")
     args = parser.parse_args()
 
     if not CAMINHO_DB.exists():
@@ -77,23 +80,32 @@ def main() -> int:
         providers.append(contact_providers.WebSearchContactProvider(conexao))
     providers.append(contact_providers.HunterContactProvider())  # só age com HUNTER_API_KEY e site conhecido
 
-    resumo = fila_enriquecimento.executar(
-        conexao, carregar_df(conexao), providers, meta=args.meta,
-        origem="AGENDADA" if args.agendada else "MANUAL",
-        incluir_fora_da_regiao=not args.somente_regiao, pausa_entre_empresas=args.pausa,
+    principal = osc.obter_osc_principal(conexao)
+    perfil = osc.carregar_perfil_completo(conexao, principal["id"]) if principal else {"cidades": [], "estados": [], "territorios": []}
+    origem = "AGENDADA" if args.agendada else "MANUAL"
+
+    def buscar_editais():
+        from processamento import busca_editais, busca_providers
+
+        return busca_editais.executar_busca(conexao, perfil, busca_providers.obter_provider_ativo())
+
+    resumo_etapas = rotina_etapas.executar_rotina(
+        conexao, perfil=perfil, carregar_df=lambda: carregar_df(conexao),
+        providers_descoberta=descoberta_empresas.providers_padrao(), providers_contato=providers,
+        meta_descoberta=args.novas, meta_enriquecimento=args.meta, incluir_fora_da_regiao=not args.somente_regiao,
+        pausa=args.pausa, com_descoberta=not args.sem_descoberta, com_editais=args.com_editais, buscar_editais=buscar_editais,
+        origem=origem,
     )
+    etapas = rotina_etapas.etapas_do_dia(conexao)
     conexao.close()
 
     CAMINHO_LOG.parent.mkdir(parents=True, exist_ok=True)
     with CAMINHO_LOG.open("a", encoding="utf-8") as arquivo:
-        arquivo.write(json.dumps({"em": datetime.now(timezone.utc).isoformat(), "backup": str(backup) if backup else None, **resumo},
-                                 ensure_ascii=False) + "\n")
+        arquivo.write(json.dumps({"em": datetime.now(timezone.utc).isoformat(), "backup": str(backup) if backup else None,
+                                  "etapas": {e["etapa"]: e["status"] for e in etapas}}, ensure_ascii=False) + "\n")
 
-    print(f"Execução #{resumo['execucao_id']}: {resumo['processadas']} empresa(s) — "
-          f"{resumo['sucesso']} sucesso, {resumo['parcial']} parcial, {resumo['falha']} falha "
-          f"({resumo['chamadas_serpapi']} chamada(s) SerpApi).")
-    if resumo["observacao"]:
-        print(resumo["observacao"])
+    for e in etapas:
+        print(f"[{e['etapa']}] {rotina_etapas.ROTULOS_STATUS[e['status']]} — {e['detalhe']}")
     return 0
 
 

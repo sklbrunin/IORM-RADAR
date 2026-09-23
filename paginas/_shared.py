@@ -19,8 +19,8 @@ if str(RAIZ_PROJETO) not in sys.path:
     sys.path.insert(0, str(RAIZ_PROJETO))
 
 from processamento import (  # noqa: E402
-    banco, crm, documentos, editais, enriquecimento, filtros, fontes_dados, formatacao, geografia, incentivos_providers,
-    metricas, osc, relacionamento,
+    banco, crm, descoberta_empresas, documentos, editais, enriquecimento, filtros, fontes_dados, formatacao, geografia, incentivos_providers,
+    metricas, osc, projetos_editais, relacionamento,
 )
 
 # IORM_RADAR_DB permite apontar para OUTRO banco (cópia para testes/validação); sem ela, usa o banco do projeto.
@@ -580,6 +580,11 @@ def garantir_tabelas_novas() -> None:
     crm.migrar_colunas_novas(conexao)
     osc.semear_organizacao_padrao(conexao)
     relacionamento.sincronizar(conexao)
+    descoberta_empresas.criar_tabelas(conexao)
+    projetos_editais.criar_tabelas(conexao)
+    principal = osc.obter_osc_principal(conexao)
+    if principal is not None:  # só recalcula o que mudou (hash do edital + Cérebro da OSC): barato quando nada mudou
+        projetos_editais.reanalisar_todos(conexao, osc.carregar_perfil_completo(conexao, principal["id"]))
     conexao.commit()
     conexao.close()
 

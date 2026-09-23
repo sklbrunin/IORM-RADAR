@@ -9,7 +9,7 @@ from datetime import datetime
 import pandas as pd
 import streamlit as st
 
-from processamento import busca_providers, contact_providers, fontes_dados, incentivos_providers, mecanismos
+from processamento import busca_providers, contact_providers, descoberta_empresas, fontes_dados, incentivos_providers, mecanismos
 from paginas import _shared
 
 
@@ -155,6 +155,95 @@ def _aba_busca() -> None:
     )
     st.caption("Só o nome da variável aparece aqui — os valores ficam no arquivo `.env` (fora do Git). "
                "Avaliação completa dos provedores em `docs/decisoes.md`.")
+
+
+_ROTULO_ESTADO_PROVEDOR = {
+    descoberta_empresas.STATUS_DISPONIVEL: "✅ Disponível", descoberta_empresas.STATUS_SEM_CREDENCIAL: "🔑 Sem credencial",
+    descoberta_empresas.STATUS_SEM_COTA: "🟠 Sem cota", descoberta_empresas.STATUS_INDISPONIVEL: "⛔ Indisponível",
+}
+_ROTULO_ULTIMO = {"CONCLUIDO": "✅ Concluído", "DISPONIVEL": "—", "SEM_CREDENCIAL": "🔑 Sem credencial", "SEM_COTA": "🟠 Sem cota",
+                   "INDISPONIVEL": "⛔ Indisponível", "ERRO": "🔴 Erro", "DESABILITADO": "⏸ Desligado"}
+
+
+def _alternar_provedor(nome: str) -> None:
+    conexao = _shared.conectar()
+    descoberta_empresas.criar_tabelas(conexao)
+    descoberta_empresas.definir_habilitado(conexao, nome, bool(st.session_state.get(f"descob_hab_{nome}")))
+    conexao.close()
+
+
+def _aba_descoberta() -> None:
+    conexao = _shared.conectar()
+    descoberta_empresas.criar_tabelas(conexao)
+    _shared.secao(
+        "Provedores de descoberta de empresas", "🌎",
+        "Encontram empresas NOVAS em todo o Brasil. A Região IORM vem primeiro (nível 1: cidades do IORM → 2: estado → 3: outros estados → "
+        "4: Brasil), mas não é restrição. Descobrir uma empresa não a torna prospect nem parceira do IORM.")
+    linhas = descoberta_empresas.situacao_providers(conexao)
+    tabela = pd.DataFrame([{
+        "Provedor": l["rotulo"], "Situação": _ROTULO_ESTADO_PROVEDOR.get(l["estado"], l["estado"]),
+        "Ligado": "Sim" if l["habilitado"] else "Não", "Custo": l["custo"], "Como o app acessa": l["acesso"],
+        "Última execução": _fmt_dt(l["ultima_execucao"]) if l["ultima_execucao"] else "Nunca",
+        "Resultado da última": _ROTULO_ULTIMO.get(l["ultimo_status"], "—"),
+        "Origens registradas": l["origens_registradas"], "Duplicatas (existentes)": l["existentes"],
+        "Possíveis duplicatas": l["possiveis_duplicatas"], "Erros": l["erros"],
+        "Créditos no mês": l["creditos_no_mes"],
+        "Validado com serviço real": "Sim" if l["validado"] else "Não (sem chave/plano)",
+    } for l in linhas])
+    st.dataframe(tabela, hide_index=True, use_container_width=True, column_config={
+        "Provedor": st.column_config.TextColumn(width=200), "Situação": st.column_config.TextColumn(width=160),
+        "Custo": st.column_config.TextColumn(width=420), "Como o app acessa": st.column_config.TextColumn(width=420),
+        "Última execução": st.column_config.TextColumn(width=170), "Resultado da última": st.column_config.TextColumn(width=160),
+        "Validado com serviço real": st.column_config.TextColumn(width=190)})
+    for l in linhas:
+        if l["estado"] != descoberta_empresas.STATUS_DISPONIVEL and l["motivo"]:
+            st.caption(f"**{l['rotulo']}:** {l['motivo']}")
+        if l["observacao_validacao"] and not l["validado"]:
+            st.caption(f"**{l['rotulo']} — atenção:** {l['observacao_validacao']}")
+
+    st.markdown("**Ligar / desligar provedores**")
+    colunas = st.columns(len(linhas))
+    for coluna, l in zip(colunas, linhas):
+        coluna.toggle(l["rotulo"], value=l["habilitado"], key=f"descob_hab_{l['provider']}", on_change=_alternar_provedor, args=(l["provider"],))
+    st.caption(
+        f"Meta diária: **{descoberta_empresas.empresas_novas_por_dia()} empresas novas** (`EMPRESAS_NOVAS_POR_DIA`) · limite por provedor por "
+        f"execução: **{descoberta_empresas.limite_por_provider('') or descoberta_empresas.LIMITE_POR_PROVIDER_PADRAO}** (`LIMITE_POR_PROVIDER` ou "
+        "`LIMITE_POR_PROVIDER_<NOME>`) · teto mensal opcional por provedor: `DESCOBERTA_LIMITE_MENSAL_<NOME>`. "
+        "A SerpApi Maps vem desligada porque divide a cota mensal com o enriquecimento.")
+
+    with st.expander("Conectores do Claude (Apollo, Lusha, Snov.io) × este aplicativo — o que é verdade"):
+        st.markdown(
+            "- **Os conectores (MCP) que aparecem no Claude Code funcionam só dentro do Claude**, para o desenvolvedor consultar contas. "
+            "O aplicativo Streamlit e a rotina diária **não conseguem chamá-los**.\n"
+            "- Para o app descobrir empresas sozinho, cada serviço precisa de **chave/credencial de API própria** no `.env` "
+            f"(Apollo: `APOLLO_API_KEY` · Lusha: `LUSHA_API_KEY` · Snov.io: `SNOV_CLIENT_ID` e `SNOV_CLIENT_SECRET`).\n"
+            "- **Apollo:** a documentação oficial informa que a busca de organizações pela API é exclusiva de planos pagos (a conta gratuita recebe HTTP 403).\n"
+            "- **Lusha e Snov.io:** planos gratuitos/trial têm poucos créditos (Lusha: 1 crédito por 25 empresas; Snov.io gratuito: 1 página por busca).\n"
+            "- **Sem chave, o provedor aparece como “Sem credencial” e é pulado** — nunca é dado como funcionando.")
+
+    _shared.secao("Candidatas sem CNPJ — aguardando validação", "🕵️",
+                  "Empresas achadas por provedores que não informam CNPJ. Ficam fora dos prospects e da fila de enriquecimento até a equipe validar.")
+    candidatas = pd.read_sql_query(
+        """SELECT e.id, e.razao_social AS Empresa, e.cidade AS Cidade, e.estado AS UF, e.dominio AS Site, e.origem_descoberta AS Origem,
+                  e.possivel_duplicata_de AS "Possível duplicata de (id)"
+           FROM empresas e WHERE e.estagio_cadastro = 'CANDIDATA' ORDER BY e.id DESC LIMIT 200""", conexao)
+    if candidatas.empty:
+        _shared.estado_vazio("Nenhuma candidata aguardando validação.", "🕵️")
+    else:
+        st.dataframe(candidatas.drop(columns=["id"]), hide_index=True, use_container_width=True)
+        opcoes = {f"{r.Empresa} — {r.Cidade or '?'}/{r.UF or '?'} (#{r.id})": int(r.id) for r in candidatas.itertuples()}
+        escolha = st.selectbox("Validar candidata", list(opcoes), key="descob_cand_escolha")
+        cnpj = st.text_input("CNPJ confirmado (14 dígitos)", key="descob_cand_cnpj")
+        justificativa = st.text_input("Ou justificativa da validação manual (sem CNPJ)", key="descob_cand_just")
+        if st.button("Confirmar como empresa validada", key="descob_cand_confirmar"):
+            r = descoberta_empresas.promover_candidata(conexao, opcoes[escolha], cnpj or None, justificativa)
+            if r["ok"]:
+                _shared.limpar_cache()
+                st.success("Empresa validada — agora entra na base de prospects.")
+                st.rerun()
+            else:
+                st.error(r["motivo"])
+    conexao.close()
 
 
 def _aba_mecanismos() -> None:
@@ -344,8 +433,8 @@ def _aba_fontes() -> None:
 def render() -> None:
     _shared.cabecalho("Configurações", "Como o sistema funciona, os scores, as fontes e a fila de pesquisa.")
 
-    aba_sobre, aba_scores, aba_busca, aba_mecanismos, aba_fila, aba_fontes = st.tabs(
-        ["Sobre", "Scores", "Inteligência de Contatos", "Mecanismos de Incentivo", "Fila de Pesquisa", "Fontes de Dados"],
+    aba_sobre, aba_scores, aba_busca, aba_descoberta, aba_mecanismos, aba_fila, aba_fontes = st.tabs(
+        ["Sobre", "Scores", "Inteligência de Contatos", "Descoberta de Empresas", "Mecanismos de Incentivo", "Fila de Pesquisa", "Fontes de Dados"],
         key="aba_configuracoes",
     )
     with aba_sobre:
@@ -354,6 +443,8 @@ def render() -> None:
         _aba_scores()
     with aba_busca:
         _aba_busca()
+    with aba_descoberta:
+        _aba_descoberta()
     with aba_mecanismos:
         _aba_mecanismos()
     with aba_fila:

@@ -8,11 +8,12 @@ from __future__ import annotations
 import json
 import subprocess
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 
 import pandas as pd
 import streamlit as st
 
+from processamento import descoberta_empresas, rotina_etapas
 from processamento import fila_enriquecimento as fila
 from paginas import _shared
 
@@ -63,7 +64,8 @@ def render() -> None:
     ultima = resumo["ultima_execucao"]
     agenda = _status_agendamento()
 
-    _shared.cabecalho("Rotina diária", "Enriquecimento automático de empresas — meta de 30 por dia, dentro dos limites de cada API.")
+    descoberta_empresas.criar_tabelas(conexao)
+    _shared.cabecalho("Rotina diária", "Descoberta de empresas novas, enriquecimento e contatos — cada etapa dentro dos limites de cada API.")
 
     # ------------------------------------------------ agendamento (a verdade sobre estar automatizada ou não)
     if agenda["instalado"]:
@@ -75,6 +77,31 @@ def render() -> None:
             f"<div class='iorm-limitacao'><b>Ainda não está agendada.</b> {agenda['motivo']} Enquanto a tarefa não for "
             "instalada, a rotina só roda quando alguém a inicia (botão abaixo ou linha de comando). "
             "Passo a passo para instalar está no fim desta página.</div>", unsafe_allow_html=True)
+
+    # ------------------------------------------------ etapas de hoje (v9)
+    _shared.secao("Etapas de hoje", "🧭",
+                  "Descoberta (achar empresas novas) e Enriquecimento (completar as que já existem) são etapas separadas, cada uma com seu status.")
+    etapas = rotina_etapas.etapas_do_dia(conexao)
+    for coluna, etapa in zip(st.columns(4), etapas):
+        with coluna:
+            with st.container(border=True):
+                st.markdown(f"**{etapa['etapa']}**")
+                st.markdown(rotina_etapas.ROTULOS_STATUS[etapa["status"]])
+                st.caption(etapa["detalhe"] or "Ainda não executada hoje.")
+    resumo_desc = descoberta_empresas.situacao_providers(conexao)
+    novas_hoje = conexao.execute(
+        "SELECT COUNT(*) FROM empresas_origens WHERE resultado != 'EXISTENTE' AND substr(descoberto_em, 1, 10) = ?",
+        (datetime.now(timezone.utc).strftime("%Y-%m-%d"),)).fetchone()[0]
+    d1, d2, d3 = st.columns(3)
+    d1.metric("Meta de empresas novas/dia", descoberta_empresas.empresas_novas_por_dia(), help="Variável `EMPRESAS_NOVAS_POR_DIA` (padrão 50).")
+    d2.metric("Descobertas hoje", novas_hoje)
+    d3.metric("Candidatas sem CNPJ", descoberta_empresas.contar_candidatas(conexao),
+              help="Achadas por provedores sem CNPJ; ficam fora dos prospects até a equipe validar (Configurações → Descoberta de Empresas).")
+    st.dataframe(
+        pd.DataFrame([{"Provedor": l["rotulo"], "Situação": "✅ Disponível" if l["estado"] == "DISPONIVEL" else
+                       {"SEM_CREDENCIAL": "🔑 Sem credencial", "SEM_COTA": "🟠 Sem cota"}.get(l["estado"], l["estado"]),
+                       "Ligado": "Sim" if l["habilitado"] else "Não", "Créditos no mês": l["creditos_no_mes"]} for l in resumo_desc]),
+        hide_index=True, use_container_width=True)
 
     # ------------------------------------------------ indicadores
     _shared.secao("Situação", "📊")

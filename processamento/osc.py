@@ -319,6 +319,20 @@ def _reconciliar_apos_mudar_programas(conexao: sqlite3.Connection) -> None:
         relacionamento.reconciliar_relacionamentos(conexao)
     except sqlite3.OperationalError:  # banco de teste sem as tabelas de empresas/incentivos
         pass
+    _reanalisar_editais(conexao)
+
+
+def _reanalisar_editais(conexao: sqlite3.Connection) -> None:
+    """O Cérebro da OSC mudou: a relação projeto × edital é recalculada (só o que mudou, por hash)."""
+    from processamento import projetos_editais  # import tardio: evita ciclo
+
+    principal = obter_osc_principal(conexao)
+    if principal is None:
+        return
+    try:
+        projetos_editais.reanalisar_todos(conexao, carregar_perfil_completo(conexao, principal[0]))
+    except sqlite3.OperationalError:  # banco de teste sem a tabela de editais
+        pass
 
 
 def adicionar_programa(conexao: sqlite3.Connection, osc_id: int, dados: dict) -> int:

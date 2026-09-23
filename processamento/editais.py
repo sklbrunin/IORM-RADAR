@@ -189,7 +189,7 @@ def _campos_de_dados_estruturados(conexao: sqlite3.Connection, edital_id: int, d
         return {}
     atual = conexao.execute(
         """SELECT data_encerramento, data_abertura, prazo_origem, descricao, requisitos, valor_texto, valor_numerico,
-                  area_tematica, publico, areas_fonte FROM editais WHERE id = ?""", (edital_id,)
+                  area_tematica, publico, areas_fonte, territorio FROM editais WHERE id = ?""", (edital_id,)
     ).fetchone()
     campos: dict = {}
     equipe_definiu = atual is not None and atual["prazo_origem"] == "CONFIRMADO_PELA_EQUIPE"
@@ -213,6 +213,8 @@ def _campos_de_dados_estruturados(conexao: sqlite3.Connection, edital_id: int, d
             campos["descricao"] = dados["descricao"]
         if dados.get("elegibilidade") and not atual["requisitos"]:
             campos["requisitos"] = dados["elegibilidade"]
+        if dados.get("territorio_trecho") and not atual["territorio"]:
+            campos["territorio"] = f"Nacional — \"{dados['territorio_trecho']}\" (trecho da página do edital)"
         if dados.get("valor_total_texto") and not atual["valor_texto"] and not atual["valor_numerico"]:
             campos["valor_texto"] = f"R$ {dados['valor_total_texto']} (valor total do edital, conforme a página)"
             try:
@@ -494,6 +496,7 @@ PESOS_CRITERIOS = {
 _TERMOS_ELEGIBILIDADE_POSITIVOS = [
     "osc", "organizacao da sociedade civil", "organizacao sem fins lucrativos",
     "terceiro setor", "associacao sem fins lucrativos", "instituicao sem fins lucrativos",
+    "com ou sem fins lucrativos", "pessoas juridicas de direito privado",
 ]
 _TERMOS_ELEGIBILIDADE_NEGATIVOS = [
     "somente empresas", "apenas empresas privadas", "pessoa fisica apenas",

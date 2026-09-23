@@ -140,14 +140,20 @@ def render() -> None:
         if st.button("Ver Radar de Editais →", key="dash_ir_editais"):
             _shared.ir_para_pagina("radar_editais")
     else:
-        mostrados = editais_alta_aderencia[:MAX_CARTOES_EDITAL]
+        total_alta = len(editais_alta_aderencia)
+        ver_todos = bool(st.session_state.get("dash_editais_ver_todos"))
+        mostrados = editais_alta_aderencia if ver_todos else editais_alta_aderencia[:MAX_CARTOES_EDITAL]
+        st.caption(f"{total_alta} edital(is) aberto(s) com alta aderência" + (f" — mostrando {len(mostrados)} de {total_alta}." if len(mostrados) < total_alta else "."))
         for inicio in range(0, len(mostrados), 3):
             colunas = st.columns(3)
             for coluna, edital in zip(colunas, mostrados[inicio:inicio + 3]):
                 with coluna:
                     _cartao_edital(edital)
-        if len(editais_alta_aderencia) > MAX_CARTOES_EDITAL:
-            st.caption(f"Mais {len(editais_alta_aderencia) - MAX_CARTOES_EDITAL} edital(is) com alta aderência no Radar de Editais.")
+        if total_alta > MAX_CARTOES_EDITAL:
+            rotulo = "Mostrar menos" if ver_todos else f"Ver todos os {total_alta} editais"
+            if st.button(rotulo, key="dash_editais_alternar_lista"):
+                st.session_state["dash_editais_ver_todos"] = not ver_todos
+                st.rerun()
 
     # ============================================================ 3. CAPTAÇÃO E AÇÃO
     _shared.secao("Captação", "📊")

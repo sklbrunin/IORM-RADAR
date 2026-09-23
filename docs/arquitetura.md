@@ -121,3 +121,22 @@ de teste) nasça no formato atual sem precisar de migração nenhuma.
   gratuito foi encontrado nesta etapa — pesquisa documentada em
   `docs/decisoes.md` item 7.4).
 - Migração para Postgres (schema não impede, mas segue em SQLite).
+
+## v9 — projetos × edital e descoberta nacional
+
+**Projetos × edital** (`processamento/projetos_editais.py`): `analisar(edital, perfil)` compara o texto do edital com `osc_programas` e devolve, por
+projeto, nível (Alta/Média/Baixa/Não identificada), evidências, justificativa e o detalhamento (área/tema, território, público); a elegibilidade
+é calculada à parte por `avaliar_elegibilidade`. Fica salva em `editais_projetos` e `editais_analise` com hash da base (edital + Cérebro da OSC +
+versão da regra); `garantir_analise`/`reanalisar_todos` recalculam só o que mudou. Sem IA generativa.
+
+**Alta aderência no Dashboard:** `editais.abertos_com_aderencia` → filtro `situação = ABERTO ∧ nota ≥ 7,0 ∧ critérios ≥ 3` em `paginas/dashboard.py`.
+Todos os que passam são exibidos (paginação explícita acima de 6). Os critérios dependem de o extrator preencher território/requisitos/valor/público
+a partir da página do edital.
+
+**Descoberta de empresas** (`processamento/descoberta_empresas.py`): `CompanyDiscoveryProvider` (SALIC, SerpApi Maps, Apollo, Lusha, Snov.io);
+`executar_descoberta` percorre os níveis 1→4 respeitando meta diária, limite por provedor, teto de chamadas e cota; `ingerir` aplica a deduplicação
+(CNPJ → domínio → id externo → nome+local → parecido só sinaliza) e grava a proveniência em `empresas_origens`. Empresa sem CNPJ =
+`estagio_cadastro = CANDIDATA` (fora dos prospects). **Rotina em etapas** em `processamento/rotina_etapas.py` (`rotina_etapas`).
+Tabelas novas: `empresas_origens`, `descoberta_execucoes`, `descoberta_itens`, `descoberta_estado`, `descoberta_providers`, `uso_api_eventos`,
+`rotina_etapas`, `editais_projetos`, `editais_analise`; colunas novas em `empresas`: `dominio`, `estagio_cadastro`, `possivel_duplicata_de`,
+`origem_descoberta`. Conectores MCP (Apollo/Lusha/Snov.io) ≠ provedores do app: ver `docs/decisoes.md` 11.3.

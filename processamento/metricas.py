@@ -143,9 +143,12 @@ def carregar_empresas(
     Sem nenhum dos dois, cai no padrão histórico das 4 cidades do IORM."""
     cidades = cidades_estrategicas or CIDADES_IORM
     programas_iorm.registrar(conexao)  # termos atuais do Cérebro da OSC (não uma lista antiga fixa no código)
+    tem_estagio = "estagio_cadastro" in {l[1] for l in conexao.execute("PRAGMA table_info(empresas)")}
+    coluna_estagio = "COALESCE(e.estagio_cadastro, 'CONFIRMADA') AS estagio_cadastro," if tem_estagio else "'CONFIRMADA' AS estagio_cadastro,"
     linhas = conexao.execute(
-        """
+        f"""
         SELECT
+            {coluna_estagio}
             e.id, e.cnpj, e.razao_social, e.nome_fantasia, e.cidade, e.estado, e.status,
             COALESCE(SUM(i.valor), 0) AS valor_total,
             COUNT(i.id) AS num_incentivos,
@@ -183,7 +186,10 @@ def carregar_empresas(
     df["linha_cruzada"] = (df["relacionamento_iorm"].fillna(0).astype(int) == 1) | (df["projeto_iorm"] & ~manual)
     df["reabrir_prospeccao"] = df["reabrir_prospeccao"].fillna(0).astype(int) == 1
     # Única definição de prospect (ver processamento/relacionamento.py::eh_prospect).
-    df["eh_prospect"] = ~df["linha_cruzada"] | df["reabrir_prospeccao"]
+    # Empresa CANDIDATA (descoberta por provedor SEM CNPJ, ainda não validada pela equipe) não é prospect: existir num
+    # provedor não a qualifica. Ela aparece em "candidatas" até a validação (processamento/descoberta_empresas.py).
+    df["candidata"] = df["estagio_cadastro"] == "CANDIDATA"
+    df["eh_prospect"] = (~df["linha_cruzada"] | df["reabrir_prospeccao"]) & ~df["candidata"]
     df["tipo_dado"] = df["tem_detalhe"].map({True: "Detalhado", False: "Agregado"})
     df["score"] = df.apply(_calcular_score, axis=1)
 

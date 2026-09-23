@@ -52,6 +52,17 @@ Federal/BrasilAPI para CNAE/situação cadastral) estão cadastradas como
 mecanismos "ainda não disponíveis" na aba Mecanismos de Incentivo de
 Configurações — ver `processamento/mecanismos.py`.
 
+## Novidades da v9
+
+- **Projetos do IORM relacionados** (ficha do edital): quais projetos do Cérebro da OSC combinam com o edital, com nível, motivo e "Ver como foi
+  calculado". A **elegibilidade** aparece separada e sempre diz que precisa ser conferida no edital.
+- **Dashboard:** "Editais com alta aderência" mostra TODOS os que cumprem a regra (aberto + nota ≥ 7,0 + ≥ 3 critérios) e pagina com aviso claro.
+  A causa do "só 1" era um edital cujos dados (território/quem pode se inscrever) estavam no texto da página e não eram lidos.
+- **Descoberta nacional de empresas:** Configurações → *Descoberta de Empresas* lista os provedores (SALIC, SerpApi Maps, Apollo, Lusha, Snov.io)
+  e sua situação real. A **Rotina diária** tem 4 etapas (Descoberta, Enriquecimento, Contatos, Editais) com status. Meta: `EMPRESAS_NOVAS_POR_DIA`
+  (50). Empresa achada sem CNPJ vira *candidata* e só entra nos prospects depois de validada pela equipe. Apollo, Lusha e Snov.io só funcionam
+  com chave própria no `.env` (os conectores do Claude não são acessíveis pelo aplicativo).
+- Rotina pela linha de comando: `python coleta/enriquecimento_diario.py --novas 50` (`--sem-descoberta`, `--com-editais`).
 ## Novidades da v8
 
 - **Busca de editais persistente:** o que a busca acha é SALVO e aparece em Abertos / Não confirmados / Encerrados e histórico. Resultados

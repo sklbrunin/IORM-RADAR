@@ -254,6 +254,18 @@ def extrair_dados_estruturados(html_pagina: str, url: str | None = None) -> dict
     descricao = " ".join(re.sub(r"<[^>]+>", " ", _html.unescape(descricao_html)).split())
     valor = re.search(r"valor\s+total\s+(?:deste|do)\s+edital[^0-9]{0,40}(?:R\$\s*)?(\d{1,3}(?:\.\d{3})*,\d{2})", descricao, re.I)
     elegibilidade = re.search(r"(Para se inscrever neste Edital[^.]{0,400}\.)", descricao)
+    if not elegibilidade:
+        elegibilidade = re.search(r"(Poder(?:ão|ao) ser proponentes?:[^.]{0,500}\.)", descricao, re.I)
+    territorio = re.search(r"\b(?:todo o territ[óo]rio nacional|todo o Brasil|todo o pa[íi]s)\b", descricao, re.I)
+    trecho_territorio = None
+    if territorio:
+        ini, fim = max(0, territorio.start() - 80), min(len(descricao), territorio.end() + 40)
+        recorte = descricao[ini:fim]
+        if ini > 0 and " " in recorte:  # não começar/terminar no meio de uma palavra
+            recorte = recorte.split(" ", 1)[1]
+        if fim < len(descricao) and " " in recorte:
+            recorte = recorte.rsplit(" ", 1)[0]
+        trecho_territorio = f"…{recorte.strip()}…"
     return {
         "nome": (oportunidade.get("nome") or "").strip() or None,
         "descricao": descricao or None,
@@ -267,6 +279,8 @@ def extrair_dados_estruturados(html_pagina: str, url: str | None = None) -> dict
         "publicos": [p.get("nome") for p in (oportunidade.get("publico_alvos") or []) if p.get("nome")],
         "valor_total_texto": valor.group(1) if valor else None,
         "elegibilidade": elegibilidade.group(1) if elegibilidade else None,
+        # trecho literal da página que afirma abrangência nacional (nada é deduzido: sem a frase, fica None)
+        "territorio_trecho": trecho_territorio,
         "instituicao": (oportunidade.get("nome_empresa") or "").strip() or None,
     }
 

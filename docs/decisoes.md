@@ -463,3 +463,81 @@ cores do tema como valores. Contraste WCAG dos pares texto/fundo testado nos doi
 - "Atualizar busca" só foi testado com provedor simulado (contagem de chamadas), para não gastar cota real.
 - Teste de contraste no navegador usa análise do DOM (fundo por elementos ancestrais); a faixa do cabeçalho (gradiente) e o rótulo do controle
   deslizante são falsos positivos conhecidos. Tabelas (canvas do Streamlit) seguem o tema nativo e não foram medidas.
+
+## 11. Rodada v9 — projetos × edital, Dashboard, descoberta nacional de empresas
+
+### 11.1 Projetos do IORM × edital (`processamento/projetos_editais.py`)
+Para cada edital o sistema diz QUAIS projetos do Cérebro da OSC combinam com ele, sem IA generativa (mesma entrada, mesma saída).
+- **Duas perguntas separadas.** *Adequação temática* (por projeto: Alta / Média / Baixa / Não identificada) e *Elegibilidade da OSC* (por edital).
+  A elegibilidade só extrai o que o texto diz (ex.: "pessoas físicas", "CNAE", "residência") e SEMPRE termina em "Elegibilidade precisa ser
+  conferida no edital." — o sistema nunca escreve "pode participar".
+- **Como o nível é calculado.** Temas (dança, música, teatro, literatura, cinema, geração de renda, qualificação profissional, educação) são
+  procurados no texto do edital e nos campos do projeto (`tema`, `nome`, `objetivos`, `descricao`). Tema *declarado* (título / áreas do edital)
+  ou recorrente (≥ 3× no corpo) pesa; citação isolada no corpo ("músicos, escritores, dançarinos…") só vale como evidência fraca (Baixa).
+  **Alta** = tema declarado em comum + evidência de apoio (território compatível, público coincidente ou mesma grande área cultural) ou 2+ temas
+  em comum. **Média** = tema em comum sem apoio, ou projeto generalista de arte/cultura (nome "Artes e Cultura") em edital cultural.
+  **Baixa** = só a grande área (arte/cultura) coincide. **Não identificada** = nada liga, ou faltam dados. Território incompatível reduz um degrau.
+- **Edital multiárea** (mais de 3 temas declarados, como os 15 do Prosas) aceita quase qualquer projeto cultural; casar com UMA linguagem é
+  evidência mais fraca → só Média. Foi o que impediu Miguelópolis de mostrar "tudo Alta".
+- **Dados esparsos são tratados como esparsos.** Os 8 programas reais têm quase só `nome` + `tema`; programa sem nenhum dado vira
+  "Não identificada / dados insuficientes" em vez de conclusão inventada. Nada no código é específico de um edital ou projeto (há teste).
+- **Persistência.** `editais_projetos` (edital → projeto → nível, evidências, justificativa, critérios, versão da regra, data; UNIQUE por
+  edital+projeto) e `editais_analise` (elegibilidade + hash). O hash cobre o edital, os programas/áreas/palavras-chave/territórios e a versão da
+  regra: recalcula sozinho quando algo muda (ao abrir o app, ao mudar programas, ao abrir a ficha). Projeto removido do Cérebro sai da análise.
+- **Resultado real (banco de 23/09/2026).** Miguelópolis: Artes e Cultura = Alta (teatro e literatura declarados + território); Usina da Dança,
+  Cia. da Dança, Música, Cine Energia e Nossas Bibliotecas = Média (edital multiárea); Profissionalizando Pessoas e Tramas do Interior = Não
+  identificada. Elegibilidade: "só pessoas físicas residentes" → participação da OSC duvidosa, conferir no edital.
+
+### 11.2 Dashboard: por que só aparecia 1 edital de alta aderência
+Auditoria com os dados reais: havia 2 editais ABERTOS — Miguelópolis (nota 8,0, 6 critérios) e Funarte Aberta (nota 10,0, mas só **2** critérios).
+O filtro (ABERTO + nota ≥ 7,0 + ≥ 3 critérios) estava correto e nenhuma linha do código cortava a lista além do teto de 6 cartões. A causa
+era de **extração**: a página do Funarte diz "propostas … de todo o território nacional" e "Poderão ser proponentes: Pessoas Jurídicas de direito
+privado, com ou sem fins lucrativos…", mas o extrator só lia campos estruturados (vazios) e deixava território/elegibilidade sem dado.
+- `links_editais.extrair_dados_estruturados` agora lê, do texto da página, o trecho literal de abrangência nacional e a frase "Poderão ser
+  proponentes"; `editais._campos_de_dados_estruturados` preenche território/requisitos só quando vazios (nunca sobrescreve a equipe).
+  Funarte passou a 9,6 com 4 critérios — dados reais, a regra **não** foi afrouxada (teste trava 7,0 e 3 critérios).
+- Elegibilidade reconhece "com ou sem fins lucrativos" e "pessoas jurídicas de direito privado" como menção a entidade.
+- O corte silencioso em 6 virou paginação explícita: "N editais… mostrando X de N" + botão "Ver todos". Chaves únicas `dash_edital_titulo_{id}`.
+- Um edital com poucos critérios continua fora da alta aderência (teste).
+
+### 11.3 Descoberta nacional de empresas (`processamento/descoberta_empresas.py`)
+- **Níveis:** 1 cidades do IORM → 2 estado(s) do IORM → 3 demais estados → 4 Brasil. A região é prioridade, não restrição.
+- **Provedores** (`CompanyDiscoveryProvider`, mesmo padrão de SearchProvider/ContactProvider/IncentivoProvider): SALIC, SerpApi Google Maps,
+  Apollo, Lusha, Snov.io. Cada um informa situação, ligado/desligado, credencial, custo, níveis, última execução, descobertas, erros, créditos.
+- **Conector do Claude ≠ recurso do aplicativo.** As ferramentas Apollo/Lusha/Snov que aparecem no Claude Code só funcionam dentro do Claude.
+  O Streamlit e a rotina não as alcançam; o app precisa de chave própria (`APOLLO_API_KEY`, `LUSHA_API_KEY`, `SNOV_CLIENT_ID`/`SNOV_CLIENT_SECRET`).
+  Auditoria das contas em 23/09/2026 (só leitura): Apollo — créditos de lead disponíveis, mas a documentação oficial diz que a busca de
+  organizações pela API é exclusiva de planos pagos (HTTP 403 no gratuito); Lusha — plano gratuito, 49/50 créditos, 1 crédito por 25 empresas,
+  limite diário; Snov.io — trial gratuito de 50 créditos (expira 14/10/2026), busca de empresas com 1 página no plano gratuito.
+- **O que está realmente validado:** SALIC (real, gratuito, também em produção pela coleta antiga) e SerpApi Google Maps (uma chamada real em
+  23/09/2026: 20 empresas de Orlândia/SP). Apollo, Lusha e Snov.io foram implementados a partir da documentação pública e testados só com
+  respostas simuladas: sem chave/plano ficam "Sem credencial" e são pulados. O corpo/resposta do Lusha e o fluxo assíncrono do Snov.io NÃO estão
+  validados; o Snov.io se declara "indisponível" se o formato do resultado não for reconhecido, em vez de inventar dados.
+- **Descoberta ≠ relacionamento.** Nada marca `relacionamento_iorm`. Empresa já existente (inclusive Linha Cruzada) nunca volta como "nova": só
+  ganha uma nova *origem* em `empresas_origens` (proveniência múltipla, nunca sobrescreve) e tem campos vazios preenchidos.
+- **Deduplicação, em ordem:** CNPJ → domínio/site → id externo → nome normalizado + cidade + UF → nome muito parecido no mesmo estado, que só
+  SINALIZA `possivel_duplicata_de` (nunca funde nem apaga). Dois CNPJs diferentes nunca são fundidos por um critério mais fraco.
+- **Sem CNPJ (`estagio_cadastro = CANDIDATA`).** Nunca se inventa CNPJ (o inválido é descartado). Candidata fica fora dos prospects e da fila de
+  enriquecimento até a equipe validar em Configurações → Descoberta de Empresas (CNPJ válido e único, ou justificativa registrada). Empresas
+  antigas ficam `CONFIRMADA`. Aparece em `metricas.carregar_empresas` como `candidata`; `contadores_empresas` manteve o formato.
+- **Créditos e cota.** Cada chamada grava um evento em `uso_api_eventos` (provedor, operação, quantidade, créditos, sucesso) e soma em `uso_api`.
+  Teto mensal opcional `DESCOBERTA_LIMITE_MENSAL_<NOME>`; a SerpApi respeita a reserva para uso manual e vem desligada (divide cota com o
+  enriquecimento). Provedor sem cota fica "Sem cota" e os demais continuam; erro/bug de um provedor não derruba a rotina.
+- **Configuração:** `EMPRESAS_NOVAS_POR_DIA` (50), `LIMITE_POR_PROVIDER` / `LIMITE_POR_PROVIDER_<NOME>` (25 empresas novas por provedor por
+  execução), `DESCOBERTA_MAX_CHAMADAS` (40 por provedor por execução).
+- **Rotina diária em etapas** (`processamento/rotina_etapas.py`): Descoberta → Enriquecimento → Contatos → Editais, cada uma com status
+  Pendente / Executando / Concluído / Parcial / Sem cota / Falhou (tabela `rotina_etapas`). Descoberta e enriquecimento são separados.
+  A etapa Editais só roda com `--com-editais` (gasta cota SerpApi); do contrário fica "Pendente" com o motivo.
+- **Erro real encontrado e corrigido na validação:** na primeira execução real a SALIC devolveu, para empresas já existentes, um hash de link
+  diferente do gravado antes, e a deduplicação por URL inseriu 999 incentivos repetidos (o valor doado seria contado em dobro). Foram removidos
+  (só os ausentes do backup feito minutos antes; soma de valores idêntica à do backup) e a causa foi corrigida: incentivo = mesma empresa +
+  fonte + tipo + valor + projeto + ano, independentemente da URL (teste de regressão). Também o "UF concluída" da coleta antiga passou a ser herdado.
+- **Execução real (23/09/2026):** meta 10 → 10 empresas novas de Minas Gerais (com CNPJ) vindas do SALIC; nada duplicado; Linha Cruzada
+  continuou em 11; `PRAGMA integrity_check` = ok.
+
+### 11.4 Limites reais desta rodada
+- Apollo/Lusha/Snov.io: dependem de credencial própria e, no caso do Apollo, de plano pago; nada foi chamado contra a API real desses três.
+- Lookalike (empresas parecidas) existe só como ferramenta do Claude; o aplicativo não implementa nem pode chamar — nenhuma "hipótese" é gravada.
+- Empresas sem CNPJ não são enriquecidas até serem validadas (a fila exige CNPJ).
+- Projetos × edital depende do texto do edital e do cadastro dos projetos: com projetos só com nome + tema o resultado é grosso por natureza.
+- A rotina só roda sozinha se a tarefa do Windows estiver instalada (a página Rotina diária mostra se está).
