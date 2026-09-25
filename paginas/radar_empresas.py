@@ -529,6 +529,34 @@ def _renderizar_ficha(df_mesclado: pd.DataFrame, empresa_id: int) -> None:
     conexao.close()
 
 
+OPCAO_BRASIL_TODO = "Brasil todo"
+OPCAO_TODAS_CIDADES = "Todas as cidades"
+
+
+def aplicar_filtro_geografico(df: pd.DataFrame, estado: str, cidade: str) -> pd.DataFrame:
+    """Recorte de EXIBIÇÃO por Estado e Cidade. Só devolve uma visão do DataFrame: não altera o banco, os contadores nem as regras."""
+    if estado != OPCAO_BRASIL_TODO:
+        df = df[df["estado"] == estado]
+    if cidade != OPCAO_TODAS_CIDADES:
+        df = df[df["cidade"] == cidade]
+    return df
+
+
+def _filtros_geograficos(df: pd.DataFrame, chave: str = "geo") -> pd.DataFrame:
+    """Estado e Cidade logo acima da tabela. As listas nascem do próprio DataFrame; a cidade depende do estado escolhido."""
+    col_estado, col_cidade = st.columns(2)
+    estados = [OPCAO_BRASIL_TODO] + sorted(df["estado"].dropna().unique().tolist())
+    if st.session_state.get(f"{chave}_estado") not in estados:  # o estado escolhido deixou de existir nos dados filtrados
+        st.session_state[f"{chave}_estado"] = OPCAO_BRASIL_TODO
+    estado = col_estado.selectbox("Estado", estados, key=f"{chave}_estado")
+    base_cidades = df if estado == OPCAO_BRASIL_TODO else df[df["estado"] == estado]
+    cidades = [OPCAO_TODAS_CIDADES] + sorted(base_cidades["cidade"].dropna().unique().tolist())
+    if st.session_state.get(f"{chave}_cidade") not in cidades:  # trocou de estado: a cidade antiga não pertence mais à lista
+        st.session_state[f"{chave}_cidade"] = OPCAO_TODAS_CIDADES
+    cidade = col_cidade.selectbox("Cidade", cidades, key=f"{chave}_cidade")
+    return aplicar_filtro_geografico(df, estado, cidade)
+
+
 def render() -> None:
     dados = _shared.carregar_dados_salic(str(_shared.CAMINHO_DB))
     df_mesclado = dados["df_mesclado"]
@@ -559,9 +587,10 @@ def render() -> None:
         df_filtrado = _renderizar_filtros(df_prospects)
         _shared.secao(
             "Empresas candidatas à prospecção", "📋",
-            f"{_shared.formatar_numero(len(df_filtrado))} empresa(s) após os filtros da barra lateral. Empresas que já apoiaram "
-            "o IORM ficam na aba Linha Cruzada — continuam na base, só não aparecem aqui como prospect novo.",
+            "Empresas que já apoiaram o IORM ficam na aba Linha Cruzada — continuam na base, só não aparecem aqui como prospect novo.",
         )
+        df_filtrado = _filtros_geograficos(df_filtrado)
+        st.caption(f"{_shared.formatar_numero(len(df_filtrado))} empresa(s) após os filtros (barra lateral e Estado/Cidade).")
         empresa_id = tabela_selecionavel(df_filtrado, "prospeccao", vazio="Nenhuma empresa encontrada com os filtros atuais.")
         if not df_filtrado.empty:
             csv = _tabela_para_exibicao(df_filtrado).to_csv(index=False).encode("utf-8-sig")
